@@ -13,28 +13,12 @@
 
 {% block content %}
 
-			<a href="{% url 'handshape_list' %}" class="mb-5"><i class="fas fa-arrow-left"></i> Back to inventory</a><br><br>
-
-			<div class="row">
-				<div class="col-5">
-					<div class="card text-center">
-						<h5 class="card-header">Animation</h5>
-							<!-- Animation Box -->
-							<div class="card-body mb-3">
-								This feature is under development.
-							</div>
-							<div class="card-footer bg-transparent text-muted">JASign App 2019</div>
-					</div>
-				</div>
-				<div class="col-7">
-
-						<h4>
-						{{handshape.name}}
-						<!-- Edit + Delete Buttons -->
+			<a href="{% url 'handshape_list' %}" class="mb-5"><i class="fas fa-arrow-left"></i> Back to inventory</a>
+			<!-- Edit + Delete Buttons -->
 						{% if user.is_authenticated %}
 						&emsp;
-						<a href="{% url 'handshape_edit' pk=handshape.pk %}" class="btn btn-info"><i class="fas fa-edit"></i> Edit</a>
-						<a href="#" class="btn btn-danger" data-toggle="modal" data-target="#delete-modal"><i class="fas fa-trash-alt"></i> Delete</a>
+						<a href="{% url 'handshape_edit' pk=handshape.pk %}" class="btn btn-sm btn-info"><i class="fas fa-edit"></i> Edit</a>
+						<a href="#" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#delete-modal"><i class="fas fa-trash-alt"></i> Delete</a>
 						<div class="modal fade" id="delete-modal" tabindex="-1" role="dialog" aria-labelledby="delete-modal" aria-hidden="true">
 							<div class="modal-dialog" role="document">
 								<div class="modal-content">
@@ -57,6 +41,22 @@
 							</div>
 						</div>
 						{% endif %}
+			<br>
+			<div class="detail">
+				<div class="detail-1">
+					<div class="card text-center">
+						<h5 class="card-header">Animation</h5>
+							<!-- Animation Box -->
+							<div class="card-body mb-3">
+								This feature is under development.
+							</div>
+							<div class="card-footer bg-transparent text-muted">JASign App 2019</div>
+					</div>
+				</div>
+				<div class="detail-2">
+
+						<h4>
+						{{handshape.name}}
 						</h4>
 						<p>{{handshape.description}}</p>
 						<!-- Nav Items -->
@@ -71,22 +71,12 @@
 						<div class="tab-content" id="pills-tabContent">
 							<div class="tab-pane fade show active" id="pills-ham" role="tabpanel" aria-labelledby="pills-ham-tab">
 
-								<h1 class="ham"><span class="ham-base">{{ handshape.base }}</span><span class="ham-fingerspecs">{{ handshape.fingerspecs }}</span></h1>
-
-									<strong>Base form: </strong>
-									<span class="ham ham-base" style="font-size: 50px;">{{ handshape.base }}</span><br>
-
-									<strong>Finger specifications: </strong>
-									{% if handshape.fingerspecs %}
-									<span class="ham ham-base" style="font-size: 50px;">{{ handshape.fingerspecs }}</span>
-									{% else %}<em>None specified.</em>{% endif %}
-
+								<h1 class="ham" style="background-color: aliceblue; padding: 20px;"><span class="ham-base">{{ handshape.base }}</span><span class="ham-fingerspecs">{{ handshape.fingerspecs }}</span></h1>
 
 
 							</div>
 							<div class="tab-pane fade" id="pills-sigml" role="tabpanel" aria-labelledby="pills-sigml-tab">
-								<p>You can copy and edit the SiGML for this handshape to feed to signing avatar.</p>
-								<textarea id="sigml" rows="5" cols="60" style="color: navy;border-color: aliceblue;background-color: aliceblue; padding: 20px;">{{ sigml }}</textarea> 
+								<textarea id="sigml" rows="10">{{ sigml }}</textarea> 
 							</div>
 						</div>
 				</div>

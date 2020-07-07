@@ -7,8 +7,9 @@
 
 
 .container {
-	padding-top: 125px;
+	padding-top: 100px;
 	padding-bottom: 100px;
+	font-size: 0.85rem;
 }
 
 #equation {
@@ -119,6 +120,33 @@ input, label {
 }
 
 #sigml {
-	color: navy !important;
-	background-color: white !important;
+	color: navy;
+	background-color: aliceblue;
+	padding: 20px;
+}
+
+@media (min-width: 900px) {
+	.detail {
+		display: flex;
+		align-items: flex-start;
+		justify-content: flex-start;
+	}	
+}
+
+.detail-1, .detail-2 {
+	margin: 20px;
+}
+
+.detail-1 {
+	flex: 1;
+}
+
+.detail-2 {
+	flex: 2;
+}
+
+textarea {
+	font-family: monospace;
+	width: 100%;
+	resize: none;
 }
