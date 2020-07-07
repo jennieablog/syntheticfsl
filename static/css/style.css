@@ -150,3 +150,8 @@ textarea {
 	width: 100%;
 	resize: none;
 }
+
+.canvasAv {
+	width: 200px;
+	height: 500px;
+}

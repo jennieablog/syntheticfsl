@@ -47,8 +47,10 @@
 					<div class="card text-center">
 						<h5 class="card-header">{{handshape.name}}</h5>
 							<!-- Animation Box -->
-							<div class="card-body mb-3">
-								<em>Synthetic animation module is under development.</em>
+							<div class="card-body" style="padding:0px !important;">
+      							<div class="CWASAAvatar av0" align="center" style="background-color: aliceblue;">
+      							</div>
+      							<div class="CWASAAvMenu av0" style="display: block;"></div>
 							</div>
 							<div class="card-footer bg-transparent">{{handshape.description}}</div>
 					</div>
@@ -63,15 +65,22 @@
 								<a class="nav-link" id="pills-sigml-tab" data-toggle="pill" href="#pills-sigml" role="tab" aria-controls="pills-sigml" aria-selected="false">SiGML</a>
 							</li>
 						</ul>
+						<div class="ham-details" style="padding: 20px 0 0 10px !important;">
+							<h4>{{handshape.name}}</h4>
+							<p>{{handshape.description}}</p>
+							<div style="display: inline-flex;">
+								<a href="#" type="button" class="btn btn-info bttnPlaySiGMLText av0" style="flex: auto;"><i class="fas fa-hand-sparkles"></i> Animate</a>
+								
+							</div>
+						</div>
 						<div class="tab-content" id="pills-tabContent">
 							<div class="tab-pane fade show active" id="pills-ham" role="tabpanel" aria-labelledby="pills-ham-tab">
-
-								<h1 class="ham" style="background-color: aliceblue; padding: 20px;"><span class="ham-base">{{ handshape.base }}</span><span class="ham-fingerspecs">{{ handshape.fingerspecs }}</span></h1>
+								<h1 class="ham" style="background-color: aliceblue;padding: 20px;border-style: solid !important;line-height: 40px;border-width: thin;border-color: gray;"><span class="ham-base"></span><span class="ham-fingerspecs"></span></h1>
 
 
 							</div>
 							<div class="tab-pane fade" id="pills-sigml" role="tabpanel" aria-labelledby="pills-sigml-tab">
-								<textarea id="sigml" rows="10">{{ sigml }}</textarea> 
+								<textarea id="sigml" rows="10" class="txtaSiGMLText av0">{{ sigml }}</textarea>
 							</div>
 						</div>
 				</div>
