@@ -1,0 +1,48 @@
+{% extends 'inventory/base.html' %}
+
+{% block navbar %}
+            <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'handshape_list' %}">Handshape Inventory</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-item nav-link" href="#">Lexicon</a>
+                </li>
+            </ul>
+{% endblock %}
+
+{% block content %}
+
+{% if form.errors %}
+    <div class="alert alert-danger" role="alert">
+        Your username and password didn't match. Please try again.
+    </div>
+{% endif %}
+
+{% if next %}
+    {% if user.is_authenticated %}
+        <div class="alert alert-warning">
+            Your account doesn't have access to this page. To proceed, please sign in with an account that has access.
+        </div>
+    {% else %}
+        <div class="alert alert-warning">
+            Please sign in as administrator to see this page.
+        </div>
+    {% endif %}
+{% endif %}
+
+<form method="post" action="{% url 'login' %}" class="col-md-5">
+    {% csrf_token %}
+    <div class="form-group">
+        <label for="id_username">Username</label>
+        <input type="text" class="form-control" name="username" autofocus="" autocapitalize="none" autocomplete="username" maxlength="150" required="" id="id_username">
+    </div>
+    <div class="form-group">
+        <label for="id_password">Password</label>
+        <input type="password" class="form-control" name="password" autocomplete="current-password" required="" id="id_password">
+    </div>
+    <button type="submit" value="login" class="btn btn-primary">Sign in</button>
+    <input type="hidden" name="next" value="{{ next }}" />
+</form>
+
+{% endblock %}

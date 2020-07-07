@@ -1,0 +1,124 @@
+@font-face {
+    font-family: 'hamnosysunicoderegular';
+    src: url('HamNoSysUnicode.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+
+.container {
+	padding-top: 125px;
+	padding-bottom: 100px;
+}
+
+#equation {
+	margin-bottom: 20px;
+}
+
+.label-btn {
+  pointer-events: none;
+}
+
+.ham {
+	font-family:"hamnosysunicoderegular";
+}
+
+.ham-base {
+	color: navy;
+}
+.ham-fingerspecs {
+	color: grey;
+}
+
+h1.ham {
+	line-height: 20px;
+    margin-bottom: 50px;
+    font-size: 80px;
+    margin-top: 20px;
+	color: navy;
+}
+
+input.ham {
+	line-height: 22px;
+	font-size:40px;
+	color: blue;
+	text-align: center;
+}
+
+button.ham {
+	width:1.4em;
+	height:1.4em;
+	font-size:40px;
+		display: inline-block;
+	position: relative;
+	text-decoration: none;
+	text-align: center;
+	padding: 8px 12px;
+	font-weight: 1000;
+	border-radius: 4px;
+	border: 1px solid #bcbcbc;
+	line-height: 22px;
+}
+
+.alert-warning {
+	margin-bottom: 2rem;
+}
+
+.alert-primary {
+	font-weight: 400;
+}
+
+td {
+	text-align: center;
+}
+
+small {
+	font-size: 1.2rem;
+}
+
+.save-btn {
+	padding: 12px;
+}
+
+.footer {
+	font-size: 0.8rem;
+	position: relative;
+	left: 0;
+	bottom: 0;
+	width: 100%;
+	color: black;
+	text-align: center;
+}
+
+input, label {
+    display:block;
+}
+
+.tab-pane {
+	padding: 10px;
+}
+
+.bg-primary, .btn-primary, .nav-link.active {
+	background-color: #0f4c81 !important;
+}
+
+.btn-primary, .border-primary {
+	border-color: #0f4c81 !important;
+}
+
+.text-primary{
+	color: #0f4c81 !important;
+}
+
+.transcription-tool {
+	margin-bottom: 0px;
+}
+
+.hamkeys {
+	padding: 10px;
+}
+
+#sigml {
+	color: navy !important;
+	background-color: white !important;
+}
