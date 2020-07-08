@@ -6,7 +6,7 @@
 					<a class="nav-link" href="{% url 'index' %}">Home</a>
 				</li>
 				<li class="nav-item active">
-					<a class="nav-link" href="{% url 'handshape_list' %}">Handshape Inventory</a>
+					<a class="nav-link" href="{% url 'handshape_list' %}">Handshapes</a>
 				</li>
 				<li class="nav-item">
 					<a class="nav-item nav-link" href="#">Lexicon</a>
@@ -16,10 +16,11 @@
 
 
 {% block content %}
-<p class="font-italic text-right">A list of recognizable handshapes in the Filipino Sign Language.</p>
-            			{% if user.is_authenticated %}
-    			<a href="{% url 'handshape_new' %}"><button type="button" class="btn btn-sm btn-success">Click here to add a new handshape.</button></a>
-			{% endif %}
+				<p class="font-italic text-right">A list of recognizable handshapes in the Filipino Sign Language.</p>
+				{% if user.is_authenticated %}
+					<a href="{% url 'handshape_new' %}"><button type="button" class="btn btn-sm btn-success">Click here to add a new handshape.</button></a>
+					<hr>
+				{% endif %}
 
 				<div class="card-columns">
 				{% for handshape in handshapes %}

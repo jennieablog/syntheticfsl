@@ -6,7 +6,7 @@
 					<a class="nav-link" href="{% url 'index' %}">Home</a>
 				</li>
 				<li class="nav-item active">
-					<a class="nav-link" href="{% url 'handshape_list' %}">Handshape Inventory</a>
+					<a class="nav-link" href="{% url 'handshape_list' %}">Handshapes</a>
 				</li>
 				<li class="nav-item">
 					<a class="nav-item nav-link" href="#">Lexicon</a>
@@ -34,7 +34,7 @@
 
 			<div id="equation" class="card border border-primary">
 				<div class="card-header bg-primary text-white">
-					<strong>HamNoSys Handshape Transcription Tool</strong>
+					<h6>Editing handshape :: {{handshape.name}}</h6>
 					
 				</div>
 				<div class="card-body">
@@ -46,7 +46,7 @@
 						<div class="form-group col-md-12">
 							
 							<!-- Name -->
-							<div class="input-group mb-3 col-md-12" style="padding: 0px;">
+							<div class="input-group input-group-sm mb-3 col-md-12" style="padding: 0px;">
 								<div class="input-group-prepend">
 								<span class="input-group-text bg-primary text-white border border-primary" id="name-box">Name</span>
 								</div>
@@ -54,7 +54,7 @@
 							</div>
 							
 							<!-- Description -->
-							<div class="input-group mb-3 col-md-12" style="padding: 0px;">
+							<div class="input-group input-group-sm mb-3 col-md-12" style="padding: 0px;">
 								<div class="input-group-prepend">
 								<span class="input-group-text bg-primary text-white border border-primary" id="description-box">Description</span>
 								</div>
@@ -62,10 +62,7 @@
 							</div>
 							
 							<!-- Transcription -->
-							<div class="input-group">
-								<div class="input-group-prepend">
-									<span class="input-group-text bg-primary text-white border border-primary" id="description-box">Transcription</span>
-								</div>
+							<div class="input-group col-md-12">
 								<!-- Base Form Box -->
 								<input type="text" name="hs_base" class="form-control border border-primary ham col-md-6" id="handshape-box" placeholder="Base" value="{{ handshape.base }}">
 

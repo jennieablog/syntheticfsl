@@ -6,7 +6,7 @@
 					<a class="nav-link" href="{% url 'index' %}">Home</a>
 				</li>
 				<li class="nav-item active">
-					<a class="nav-link" href="{% url 'handshape_list' %}">Handshape Inventory</a>
+					<a class="nav-link" href="{% url 'handshape_list' %}">Handshapes</a>
 				</li>
 				<li class="nav-item">
 					<a class="nav-item nav-link" href="#">Lexicon</a>
@@ -49,13 +49,20 @@
 				<div class="detail-1">
 					<div class="card text-center">
 						<h5 class="card-header">{{handshape.name}}</h5>
-							<!-- Animation Box -->
-							<div class="card-body" style="padding:0px !important;">
-      							<div class="CWASAAvatar av0" align="center" style="background-color: aliceblue;">
-      							</div>
-      							<div class="CWASAAvMenu av0" style="display: block;"></div>
+						<!-- Animation Box -->
+						<div class="card-body" style="padding:0px !important;">
+							<div class="CWASAAvatar av0" align="center" style="background-color: aliceblue;">
 							</div>
-							<div class="card-footer bg-transparent">{{handshape.description}}</div>
+						</div>
+						<!-- Description -->
+						<div class="card-footer bg-transparent">
+							<span style="font-size: 0.8rem;">{{handshape.description}}</span>
+							<!-- Buttons -->
+							<div style="display: flex; align-items: center; justify-content: center; padding: 10px;">
+									<a href="#" type="button" class="btn btn-sm btn-info bttnPlaySiGMLText av0" style="flex: 1;"><i class="fas fa-hand-sparkles"></i> Animate</a>&emsp;
+									<div class="CWASAAvMenu av0 text-capitalize" style="flex:2;"></div>
+								</div>
+						</div>
 					</div>
 				</div>
 				<div class="detail-2">
@@ -68,22 +75,23 @@
 								<a class="nav-link" id="pills-sigml-tab" data-toggle="pill" href="#pills-sigml" role="tab" aria-controls="pills-sigml" aria-selected="false">SiGML</a>
 							</li>
 						</ul>
+						<!-- Repeat Details -->
 						<div class="ham-details" style="padding: 20px 0 0 10px !important;">
 							<h4>{{handshape.name}}</h4>
 							<p>{{handshape.description}}</p>
-							<div style="display: inline-flex;">
-								<a href="#" type="button" class="btn btn-info bttnPlaySiGMLText av0" style="flex: auto;"><i class="fas fa-hand-sparkles"></i> Animate</a>
-								
-							</div>
 						</div>
 						<div class="tab-content" id="pills-tabContent">
+							<!-- HamNoSys -->
 							<div class="tab-pane fade show active" id="pills-ham" role="tabpanel" aria-labelledby="pills-ham-tab">
-								<h1 class="ham" style="background-color: aliceblue;padding: 20px;border-style: solid !important;line-height: 40px;border-width: thin;border-color: gray;"><span class="ham-base"></span><span class="ham-fingerspecs"></span></h1>
-
-
+								<h1 class="ham" style="background-color: aliceblue;padding: 20px;border-style: solid !important;line-height: 40px;border-width: thin;border-color: gray;"><span class="ham-base">{{handshape.base}}</span><span class="ham-fingerspecs">{{handshape.fingerspecs}}</span></h1>
+								<hr>
+								<p>The textbox above contains the HamNoSys transcription of the current handshape. The base form is in <span style="color:navy;">navy</span> while any finger specification is in <span style="color:grey;">grey</span>.</p>
 							</div>
+							<!-- SiGML -->
 							<div class="tab-pane fade" id="pills-sigml" role="tabpanel" aria-labelledby="pills-sigml-tab">
 								<textarea id="sigml" rows="10" class="txtaSiGMLText av0">{{ sigml }}</textarea>
+								<hr>
+								<p>The textbox above contains the SiGML of the current handshape. It is editable, so whatever content it has will be animated by the signing avatar when the Animate button is pressed.</p>
 							</div>
 						</div>
 				</div>

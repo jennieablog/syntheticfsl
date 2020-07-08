@@ -1,6 +1,6 @@
 @font-face {
     font-family: 'hamnosysunicoderegular';
-    src: url('HamNoSysUnicode.ttf') format('truetype');
+    src: url("HamNoSysUnicode.4aca32e60aa4.ttf") format('truetype');
     font-weight: normal;
     font-style: normal;
 }
@@ -75,15 +75,15 @@ small {
 	padding: 12px;
 }
 
-.footer {
+/*.footer {
 	font-size: 0.6rem;
-	position: relative;
+	position: absolute;
 	left: 0;
 	bottom: 0;
 	width: 100%;
 	color: black;
 	text-align: center;
-}
+}*/
 
 input, label {
     display:block;
@@ -146,6 +146,6 @@ textarea {
 }
 
 .canvasAv {
-	width: 300px;
-	height: 400px;
+	width: 200px;
+	height: 500px;
 }

@@ -6,7 +6,7 @@
 					<a class="nav-link" href="{% url 'index' %}">Home</a>
 				</li>
 				<li class="nav-item">
-					<a class="nav-link" href="{% url 'handshape_list' %}">Handshape Inventory</a>
+					<a class="nav-link" href="{% url 'handshape_list' %}">Handshapes</a>
 				</li>
 				<li class="nav-item">
 					<a class="nav-item nav-link" href="">Lexicon</a>
@@ -16,14 +16,68 @@
 
 {% block content %}
 
-<div class="jumbotron bg-transparent">
-  <h1 class="display-5"><kbd><i class="fas fa-i-cursor"></i>&nbsp;SignTyper</kbd></h1>
-  <p class="lead">A web application for documenting signs in <strong>Filipino Sign Language (FSL)</strong></p>
-  <hr class="my-4">
-  <p style="line-height: 30px;"><kbd><i class="fas fa-i-cursor"></i>&nbsp;SignTyper</kbd> uses a multi-media approach for documenting FSL signs. Alongside <code>sign gloss</code>, it uses the <code>Hamburg Notation System (HamNoSys)</code> to describe individual signs. HamNoSys transcriptions are then converted into <code>Sign Gestural Markup Language (SiGML)</code>. Through SiGML, it is able to synthesize natural sign language performance using virtual human characters using the <code>JASigning system</code>.</p>
-  <p class="lead">
-    <a class="btn btn-primary" href="https://github.com/jennieablog/signtyper" target="#" role="button"><i class="fab fa-github"></i> Follow on GitHub</a>
-  </p>
+<!-- Jumbotron -->
+<div class="jumbotron bg-transparent" style="height: 100%;">
+	<h1 class="display-5"><kbd><i class="fas fa-i-cursor"></i>&nbsp;SignTyper</kbd></h1>
+	<p class="lead">A web application for documenting signs in <strong>Filipino Sign Language (FSL)</strong></p>
+	<hr class="my-4">
+	<p style="line-height: 30px;">
+		<kbd><i class="fas fa-i-cursor"></i>&nbsp;SignTyper</kbd> uses a multi-media approach for documenting FSL signs. Alongside <code>sign gloss</code>, it uses the <code>Hamburg Notation System (HamNoSys)</code> to describe individual signs. HamNoSys transcriptions are then converted into <code>Sign Gestural Markup Language (SiGML)</code>. Through SiGML, it is able to synthesize natural sign language performance using virtual human characters using the <code>JASigning system</code>. SignTyper offers a tool called <kbd><i class="fas fa-hand-sparkles"></i> SyntheSign</kbd> which provides a more intuitive way to transcribe signs in HamNoSys and automatically <code>convert</code> HamNoSys to <code>synthetic sign animation</code>.
+	</p>
+	<p class="lead">
+		<a class="btn btn-sm btn-info" href="#synthesign" role="button"><i class="fas fa-hand-sparkles"></i> SyntheSign</a>
+		<a class="btn btn-sm btn-dark" href="https://github.com/jennieablog/signtyper" target="#" role="button"><i class="fab fa-github"></i> Follow on GitHub</a>
+	</p>
+
 </div>
+
+<!-- SyntheSign -->
+<div class="detail">
+	<div class="detail-1">
+		<div class="card text-center">
+			<h5 class="card-header">SyntheSign</h5>
+			<!-- Animation Box -->
+			<div class="card-body" style="padding:0px !important;">
+				<div id="synthesign" class="CWASAAvatar av0" align="center" style="background-color: aliceblue;">
+				</div>
+			</div>
+			<!-- Description -->
+			<div class="card-footer bg-transparent">
+				<span style="font-size: 0.8rem;">{{handshape.description}}</span>
+				<!-- Buttons -->
+				<div style="display: flex; align-items: center; justify-content: center; padding: 10px;">
+						<button type="button" class="btn btn-sm btn-info bttnPlaySiGMLText av0" style="flex: 1;"><i class="fas fa-hand-sparkles"></i> Animate</button>&emsp;
+						<div class="CWASAAvMenu av0 text-capitalize" style="flex:2;"></div>
+					</div>
+			</div>
+		</div>
+	</div>
+	<div class="detail-2">
+			<!-- Nav Items -->
+			<ul class="nav nav-pills" id="pills-tab" role="tablist">
+				<li class="nav-item">
+					<a class="nav-link active" id="pills-ham-tab" data-toggle="pill" href="#pills-ham" role="tab" aria-controls="pills-ham" aria-selected="true">HamNoSys</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" id="pills-sigml-tab" data-toggle="pill" href="#pills-sigml" role="tab" aria-controls="pills-sigml" aria-selected="false">SiGML</a>
+				</li>
+			</ul>
+			<!-- Repeat Details -->
+			<div class="tab-content" id="pills-tabContent">
+				<!-- HamNoSys -->
+				<div class="tab-pane fade show active" id="pills-ham" role="tabpanel" aria-labelledby="pills-ham-tab">
+					HamNoSys Form
+				</div>
+				<!-- SiGML -->
+				<div class="tab-pane fade" id="pills-sigml" role="tabpanel" aria-labelledby="pills-sigml-tab">
+					<textarea id="sigml" rows="10" class="txtaSiGMLText av0">/</textarea>
+					<hr>
+					<p>The textbox above contains the SiGML of the HamNoSys transcription.</p>
+				</div>
+			</div>
+	</div>
+
+</div>
+
 
 {% endblock %}
