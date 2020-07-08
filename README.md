@@ -22,5 +22,7 @@ SyntheSign also provides **a guided HamNoSys input system** to aid the user in t
 1. An inventory of FSL handshapes is being uploaded to be used for indexing a small lexicon for FSL signs.
 2. Videos of humans signing basic FSL words are being transcribed to HamNoSys to populate the lexicon.
 
-### Translation
+## Future Work
+
+### Towards a translation system for FSL
 Resources regarding FSL grammar are being collected for the development of an automatic translation system from English to Filipino Sign Language (FSL) using the current API.
