@@ -1,0 +1,29 @@
+{% extends 'inventory/base.html' %}
+
+{% block navbar %}
+			<ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+				<li class="nav-item active">
+					<a class="nav-link" href="{% url 'index' %}">Home</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="{% url 'handshape_list' %}">Handshape Inventory</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-item nav-link" href="">Lexicon</a>
+				</li>
+			</ul>
+{% endblock %}
+
+{% block content %}
+
+<div class="jumbotron bg-transparent">
+  <h1 class="display-5"><kbd><i class="fas fa-i-cursor"></i>&nbsp;SignTyper</kbd></h1>
+  <p class="lead">A web application for documenting signs in <strong>Filipino Sign Language (FSL)</strong></p>
+  <hr class="my-4">
+  <p style="line-height: 30px;"><kbd><i class="fas fa-i-cursor"></i>&nbsp;SignTyper</kbd> uses a multi-media approach for documenting FSL signs. Alongside <code>sign gloss</code>, it uses the <code>Hamburg Notation System (HamNoSys)</code> to describe individual signs. HamNoSys transcriptions are then converted into <code>Sign Gestural Markup Language (SiGML)</code>. Through SiGML, it is able to synthesize natural sign language performance using virtual human characters using the <code>JASigning system</code>.</p>
+  <p class="lead">
+    <a class="btn btn-primary" href="https://github.com/jennieablog/signtyper" target="#" role="button"><i class="fab fa-github"></i> Follow on GitHub</a>
+  </p>
+</div>
+
+{% endblock %}

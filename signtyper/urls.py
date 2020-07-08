@@ -23,14 +23,14 @@ urlpatterns = [
 # Include paths from inventory app and auth paths
 from django.urls import include
 urlpatterns += [
-    path('inventory/', include('inventory.urls')),
+    path('', include('inventory.urls')),
     path('accounts/', include('django.contrib.auth.urls')),
 ]
 
 # Redirect base URL to inventory app
 from django.views.generic import RedirectView
 urlpatterns += [
-    path('', RedirectView.as_view(url='inventory/handshapes', permanent=True)),
+    path('', RedirectView.as_view(url='/home', permanent=True)),
 ]
 
 # Use static() to add url mapping to serve static files during development (only)

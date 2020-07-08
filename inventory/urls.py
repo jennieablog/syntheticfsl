@@ -3,6 +3,7 @@ from . import views
 
 urlpatterns = [
 	# Assign a view called handshape to the Root URL.
+	path('home/', views.index, name='index'),
 	path('handshapes/', views.handshape_list, name='handshape_list'),
 	# Assign a view called handshape_detail when displaying a handshape.
 	path('handshapes/<int:pk>/', views.handshape_detail, name='handshape_detail'),

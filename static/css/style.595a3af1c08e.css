@@ -1,10 +1,16 @@
 @font-face {
     font-family: 'hamnosysunicoderegular';
-    src: url('HamNoSysUnicode.ttf') format('truetype');
+    src: url("HamNoSysUnicode.4aca32e60aa4.ttf") format('truetype');
     font-weight: normal;
     font-style: normal;
 }
 
+
+.container {
+	padding-top: 100px;
+	font-size: 0.85rem;
+	height: 90%;
+}
 
 #equation {
 	margin-bottom: 20px;

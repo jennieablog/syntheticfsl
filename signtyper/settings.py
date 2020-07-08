@@ -23,7 +23,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '@58!z%axj)^=pt^e74=uw%i4r1*n%d%-+6uer^ho95(_@%q-_k'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['localhost', 'signtyper.herokuapp.com']
 
@@ -125,8 +125,8 @@ STATIC_URL = '/static/' # Add a path for our static files.
 STATIC_ROOT = os.path.join(BASE_DIR, 'static') # Add this line.
 
 # Redirect to home URL after login/logout (Default redirects to /accounts/profile/)
-LOGIN_REDIRECT_URL = '/inventory/handshapes'
-LOGOUT_REDIRECT_URL = '/inventory/handshapes'
+LOGIN_REDIRECT_URL = '/home'
+LOGOUT_REDIRECT_URL = '/home'
 
 # Add configuration for static files storage using whitenoise
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
