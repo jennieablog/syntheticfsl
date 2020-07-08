@@ -38,11 +38,13 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'inventory.apps.InventoryConfig',
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -126,10 +128,18 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static') # Add this line.
 LOGIN_REDIRECT_URL = '/inventory/handshapes'
 LOGOUT_REDIRECT_URL = '/inventory/handshapes'
 
-
-
 # Add configuration for static files storage using whitenoise
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 import dj_database_url
 prod_db  =  dj_database_url.config(conn_max_age=500)
 DATABASES['default'].update(prod_db)
+
+# CORS
+
+CORS_ORIGIN_WHITELIST = [
+    "http://signtyper.herokuapp.com",
+    "https://signtyper.herokuapp.com",
+    "http://localhost:5000",
+    "https://localhost:5000",
+]
+CORS_ORIGIN_ALLOW_ALL = False
