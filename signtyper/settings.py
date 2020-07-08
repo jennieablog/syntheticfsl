@@ -135,11 +135,4 @@ prod_db  =  dj_database_url.config(conn_max_age=500)
 DATABASES['default'].update(prod_db)
 
 # CORS
-
-CORS_ORIGIN_WHITELIST = [
-    "http://signtyper.herokuapp.com",
-    "https://signtyper.herokuapp.com",
-    "http://localhost:5000",
-    "https://localhost:5000",
-]
-CORS_ORIGIN_ALLOW_ALL = False
+CORS_ORIGIN_ALLOW_ALL = True
