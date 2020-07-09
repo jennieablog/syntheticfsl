@@ -6,10 +6,10 @@
 					<a class="nav-link" href="{% url 'index' %}">Home</a>
 				</li>
 				<li class="nav-item active">
-					<a class="nav-link" href="{% url 'handshape_list' %}">Handshape Inventory</a>
+					<a class="nav-link" href="{% url 'handshape_list' %}">Handshapes</a>
 				</li>
 				<li class="nav-item">
-					<a class="nav-item nav-link" href="#">Lexicon</a>
+					<a class="nav-item nav-link" href="#" class="disabled">Lexicon (developing)</a>
 				</li>
 			</ul>
 {% endblock %}
@@ -17,27 +17,15 @@
 
 {% block content %}
 
-			<!-- Alert -->
-			<div id="instructions" class="alert alert-primary alert-dismissible fade show" role="alert">
-				<h5 class="alert-heading"><i class="fas fa-edit"></i> HamNoSys Handshape Transcription Guide</h5>
-				<hr>
-				<ul>
-					<li>This tool divides HamNoSys transcription for handshapes into two steps: <strong>base form</strong> and <strong>finger specifications</strong>.</li>
-					<li>The <strong>base form</strong> is defined by: basic hand <strong>shape</strong>, <strong>thumb modification</strong>, and <strong>bending</strong>.</li>
-					<li><strong>Finger specifications</strong> are <em>optional</em> and are added only when changes are needed for the base form.</li>
-					<li>There are <strong>two separate textboxes</strong> that you can edit at each transcription step.</li>
-				</ul>
-				<button type="button" class="close" data-dismiss="alert" aria-label="Close">
-					<span aria-hidden="true">&times;</span>
-  				</button>
-			</div>
+			<p class="font-italic text-right"><strong>SignTyper's FSL Handshape Transcription Editor.</strong> Scroll down to see guide.</p>
 
+			<!-- FORM -->
 			<div id="equation" class="card border border-primary">
-				<div class="card-header bg-primary text-white">
-					<strong>HamNoSys Handshape Transcription Tool</strong>
-					
+				<div class="card-header bg-primary text-white" style="padding: 20px 20px 10px;">
+					<h6>Editing handshape :: {{handshape.name}}</h6>
 				</div>
 				<div class="card-body">
+
 					<!-- FORM START -->
 					<form method="POST" class="form-inline transcription-tool">
 						
@@ -46,7 +34,7 @@
 						<div class="form-group col-md-12">
 							
 							<!-- Name -->
-							<div class="input-group mb-3 col-md-12" style="padding: 0px;">
+							<div class="input-group input-group-sm mb-3 col-md-12" style="padding: 0px;">
 								<div class="input-group-prepend">
 								<span class="input-group-text bg-primary text-white border border-primary" id="name-box">Name</span>
 								</div>
@@ -54,7 +42,7 @@
 							</div>
 							
 							<!-- Description -->
-							<div class="input-group mb-3 col-md-12" style="padding: 0px;">
+							<div class="input-group input-group-sm mb-3 col-md-12" style="padding: 0px;">
 								<div class="input-group-prepend">
 								<span class="input-group-text bg-primary text-white border border-primary" id="description-box">Description</span>
 								</div>
@@ -62,10 +50,7 @@
 							</div>
 							
 							<!-- Transcription -->
-							<div class="input-group">
-								<div class="input-group-prepend">
-									<span class="input-group-text bg-primary text-white border border-primary" id="description-box">Transcription</span>
-								</div>
+							<div class="input-group col-md-12">
 								<!-- Base Form Box -->
 								<input type="text" name="hs_base" class="form-control border border-primary ham col-md-6" id="handshape-box" placeholder="Base" value="{{ handshape.base }}">
 
@@ -76,360 +61,370 @@
 								</div>
 							</div>
 						</div>
-					</form>
-				</div>
-			</div>
-
-			<!-- Nav Items -->
-			<ul class="nav nav-pills nav-justified" id="steps-tab" role="tablist" style="padding-bottom: 10px;">
-				<!-- Item 1: Base -->
-				<li class="nav-item">
-					<a class="nav-link active" id="handshape-tab" data-toggle="pill" href="#handshape" role="tab" aria-controls="pills-handshape" aria-selected="true"">Base Form</a>
-				</li>
-				<!-- Item 2: Finger Specifications -->
-				<li class="nav-item">
-					<a class="nav-link" id="fingerspecs-tab" data-toggle="pill" href="#fingerspecs" role="tab" aria-controls="fingerspecs" aria-selected="false">Finger Specifications</a>
-				</li>
-			</ul>
-
-			<!-- Nav Content -->
-			<div class="tab-content" id="steps-tabContent">
-
-				<!-- 1: General Shape Content (handshape) -->
-				<div class="tab-pane fade show active" id="handshape" role="tabpanel" aria-labelledby="handshape-tab">
+					</form><br>
 
 					<!-- Nav Items -->
-					<ul class="nav nav-pills mb-3" id="handshape-tab" role="tablist">
-
-						<!-- 1.1: Shape (shape) -->
+					<ul class="nav nav-pills nav-justified" id="steps-tab" role="tablist" style="padding-bottom: 10px;">
+						<!-- Item 1: Base -->
 						<li class="nav-item">
-							<a class="nav-link active" id="shape-tab" data-toggle="pill" href="#shape" role="tab" aria-controls="shape" aria-selected="true">Shape</a>
+							<a class="nav-link active" id="handshape-tab" data-toggle="pill" href="#handshape" role="tab" aria-controls="pills-handshape" aria-selected="true"">Base Form</a>
 						</li>
-						
-						<!-- 1.2: Thumb Modifications (thumbmod) -->
+						<!-- Item 2: Finger Specifications -->
 						<li class="nav-item">
-							<a class="nav-link" id="thumbmod-tab" data-toggle="pill" href="#thumbmod" role="tab" aria-controls="thumbmod" aria-selected="false">Thumb Modifications</a>
-						</li>
-						
-						<!-- 1.3: Bending (bending) -->
-						<li class="nav-item">
-							<a class="nav-link" id="bending-tab" data-toggle="pill" href="#bending" role="tab" aria-controls="bending" aria-selected="false">Bending</a>
+							<a class="nav-link" id="fingerspecs-tab" data-toggle="pill" href="#fingerspecs" role="tab" aria-controls="fingerspecs" aria-selected="false">Finger Specifications</a>
 						</li>
 					</ul>
 
 					<!-- Nav Content -->
-					<div class="tab-content" id="handshape-tabContent">
+					<div class="tab-content" id="steps-tabContent">
+						<!-- 1: General Shape Content (handshape) -->
+						<div class="tab-pane fade show active" id="handshape" role="tabpanel" aria-labelledby="handshape-tab">
 
-						<!-- 1.1: Shape (shape) -- content-->
-						<div class="tab-pane fade show active" id="shape" role="tabpanel" aria-labelledby="shape-tab">
+							<!-- Nav Items -->
+							<ul class="nav nav-pills mb-3" id="handshape-tab" role="tablist">
 
-							<!-- Basic Handshapes (basehs) -->
-							<h6>
-								<!-- Title (openhs) -->
-								Basic Handshapes
-								<a href="" data-toggle="modal" data-target="#basehs-modal">
-									<i class="fas fa-info-circle"></i>
-								</a>
-								<!-- Modal (openhs) -->
-								<div class="modal fade" id="basehs-modal" tabindex="-1" role="dialog" aria-labelledby="Basic Handshapes" aria-hidden="true">
-									<div class="modal-dialog" role="document">
-										<div class="modal-content">
-											<div class="modal-header">
-												<h5 class="modal-title" id="basehs-modal">Basic Handshapes</h5>
-												<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-													<span aria-hidden="true">&times;</span>
-												</button>
-											</div>
-											<div class="modal-body">
-												<p>There are six open basic handshapes...</p>
-												<img src="https://i.imgur.com/1uhKCIg.png" alt="hamnosys-basic-handshapes" width="100%">
-												<p>...and six connected basic handshapes.</p>
-												<img src="https://i.imgur.com/WkwmLEK.png" alt="hamnosys-connected-handshapes" width="100%">
-											</div>
-										</div>
-									</div>
-								</div>
-							</h6>
-							<!-- Buttons (openhs) -->
-							<div class="btn-group hamkeys" role="group" aria-label="Open Handshapes">
-								<button title="hamfist" class="btn btn-light ham" value="" data-toggle="tooltip" data-placement="top" onclick="input1(this);"></button>
-								<button title="hamflathand" class="btn btn-light ham" value="" data-toggle="tooltip" data-placement="top" onclick="input1(this);"></button>
-								<button title="hamfinger2" class="btn btn-light ham" value="" data-toggle="tooltip" data-placement="top" onclick="input1(this);"></button>
-								<button title="hamfinger23" class="btn btn-light ham" value="" data-toggle="tooltip" data-placement="top" onclick="input1(this);"></button>
-								<button title="hamfinger23spread" class="btn btn-light ham" value="" data-toggle="tooltip" data-placement="top" onclick="input1(this);"></button>
-								<button title="hamfinger2345" class="btn btn-light ham" value="" data-toggle="tooltip" data-placement="top" onclick="input1(this);"></button>
-							</div>
-							&emsp;
-							<!-- Buttons (connectedhs) -->
-							<div class="btn-group hamkeys" role="group" aria-label="Connected Handshapes">
-								<button title="hampinch12" class="btn btn-light ham" value="" data-toggle="tooltip" data-placement="top" onclick="input1(this);"></button>
-								<button title="hampinchall" class="btn btn-light ham" value="" data-toggle="tooltip" data-placement="top" onclick="input1(this);"></button>
-								<button title="hampinchopen" class="btn btn-light ham" value="" data-toggle="tooltip" data-placement="top" onclick="input1(this);"></button>
-								<button title="hamcee12" class="btn btn-light ham" value="" data-toggle="tooltip" data-placement="top" onclick="input1(this);"></button>
-								<button title="hamceeall" class="btn btn-light ham" value="" data-toggle="tooltip" data-placement="top" onclick="input1(this);"></button>
-								<button title="hamceeopen" class="btn btn-light ham" value="" data-toggle="tooltip" data-placement="top" onclick="input1(this);"></button>
-							</div>
-						</div>
-						<!-- endof(baseform) -->
+								<!-- 1.1: Shape (shape) -->
+								<li class="nav-item">
+									<a class="nav-link active" id="shape-tab" data-toggle="pill" href="#shape" role="tab" aria-controls="shape" aria-selected="true">Shape</a>
+								</li>
+								
+								<!-- 1.2: Thumb Modifications (thumbmod) -->
+								<li class="nav-item">
+									<a class="nav-link" id="thumbmod-tab" data-toggle="pill" href="#thumbmod" role="tab" aria-controls="thumbmod" aria-selected="false">Thumb Modifications</a>
+								</li>
+								
+								<!-- 1.3: Bending (bending) -->
+								<li class="nav-item">
+									<a class="nav-link" id="bending-tab" data-toggle="pill" href="#bending" role="tab" aria-controls="bending" aria-selected="false">Bending</a>
+								</li>
+							</ul>
 
-						<!-- 1.2: Thumb Modifications (thumbmod) -- content -->
-						<div class="tab-pane fade" id="thumbmod" role="tabpanel" aria-labelledby="thumbmod-tab">
+							<!-- Nav Content -->
+							<div class="tab-content" id="handshape-tabContent">
 
-							<!-- 1.2.1 Thumb Positions (thumbpos) -->
-							<h6>
-								<!-- Title (thumbpos) -->
-								Thumb Positions or Width of Handopening
-								<a href="" data-toggle="modal" data-target="#thumbpos-modal">
-									&nbsp;<i class="fas fa-info-circle"></i>
-								</a>
-								<!-- Modal (thumbpos) -->
-								<div class="modal fade" id="thumbpos-modal" tabindex="-1" role="dialog" aria-labelledby="Thumb Positions" aria-hidden="true">
-									<div class="modal-dialog" role="document">
-										<div class="modal-content">
-											<div class="modal-header">
-												<h5 class="modal-title">Thumb Positions and Hand Opening</h5>
-												<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-												<span aria-hidden="true">&times;</span>
-												</button>
-											</div>
-											<div class="modal-body">
-												<p>Diacritics can be added to change thumb positions in open handshapes...</p>
-												<img src="https://i.imgur.com/Q7BAUfd.png" alt="hamnosys-thumb-positions" width="100%">
-												<p>...or signify width of opening in connected handshapes.</p>
-												<img src="https://i.imgur.com/Dv72Iiv.png" alt="hamnosys-hand-opening" width="100%">
+								<!-- 1.1: Shape (shape) -- content-->
+								<div class="tab-pane fade show active" id="shape" role="tabpanel" aria-labelledby="shape-tab">
+
+									<!-- Basic Handshapes (basehs) -->
+									<h6>
+										<!-- Title (openhs) -->
+										Basic Handshapes
+										<a href="" data-toggle="modal" data-target="#basehs-modal">
+											<i class="fas fa-info-circle"></i>
+										</a>
+										<!-- Modal (openhs) -->
+										<div class="modal fade" id="basehs-modal" tabindex="-1" role="dialog" aria-labelledby="Basic Handshapes" aria-hidden="true">
+											<div class="modal-dialog" role="document">
+												<div class="modal-content">
+													<div class="modal-header">
+														<h5 class="modal-title" id="basehs-modal">Basic Handshapes</h5>
+														<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+															<span aria-hidden="true">&times;</span>
+														</button>
+													</div>
+													<div class="modal-body">
+														<p>There are six open basic handshapes...</p>
+														<img src="https://i.imgur.com/1uhKCIg.png" alt="hamnosys-basic-handshapes" width="100%">
+														<p>...and six connected basic handshapes.</p>
+														<img src="https://i.imgur.com/WkwmLEK.png" alt="hamnosys-connected-handshapes" width="100%">
+													</div>
+												</div>
 											</div>
 										</div>
+									</h6>
+									<!-- Buttons (openhs) -->
+									<div class="btn-group hamkeys" role="group" aria-label="Open Handshapes">
+										<button title="hamfist" class="btn btn-light ham" value="" data-toggle="tooltip" data-placement="top" onclick="input1(this);"></button>
+										<button title="hamflathand" class="btn btn-light ham" value="" data-toggle="tooltip" data-placement="top" onclick="input1(this);"></button>
+										<button title="hamfinger2" class="btn btn-light ham" value="" data-toggle="tooltip" data-placement="top" onclick="input1(this);"></button>
+										<button title="hamfinger23" class="btn btn-light ham" value="" data-toggle="tooltip" data-placement="top" onclick="input1(this);"></button>
+										<button title="hamfinger23spread" class="btn btn-light ham" value="" data-toggle="tooltip" data-placement="top" onclick="input1(this);"></button>
+										<button title="hamfinger2345" class="btn btn-light ham" value="" data-toggle="tooltip" data-placement="top" onclick="input1(this);"></button>
+									</div>
+									&emsp;
+									<!-- Buttons (connectedhs) -->
+									<div class="btn-group hamkeys" role="group" aria-label="Connected Handshapes">
+										<button title="hampinch12" class="btn btn-light ham" value="" data-toggle="tooltip" data-placement="top" onclick="input1(this);"></button>
+										<button title="hampinchall" class="btn btn-light ham" value="" data-toggle="tooltip" data-placement="top" onclick="input1(this);"></button>
+										<button title="hampinchopen" class="btn btn-light ham" value="" data-toggle="tooltip" data-placement="top" onclick="input1(this);"></button>
+										<button title="hamcee12" class="btn btn-light ham" value="" data-toggle="tooltip" data-placement="top" onclick="input1(this);"></button>
+										<button title="hamceeall" class="btn btn-light ham" value="" data-toggle="tooltip" data-placement="top" onclick="input1(this);"></button>
+										<button title="hamceeopen" class="btn btn-light ham" value="" data-toggle="tooltip" data-placement="top" onclick="input1(this);"></button>
 									</div>
 								</div>
-							</h6>
-							<!-- Buttons (thumbpos)-->
-							<div class="btn-group hamkeys" role="group" aria-label="Thumb Positions">
-								<button title="hamthumboutmod" class="btn btn-light ham" value="" data-toggle="tooltip" data-placement="top" onclick="input1(this);">&nbsp;</button>
-								<button title="hamthumbacrossmod" class="btn btn-light ham" value="" data-toggle="tooltip" data-placement="top" onclick="input1(this);">&nbsp;</button>
-								<button title="hamthumbopenmod" class="btn btn-light ham" value="" data-toggle="tooltip" data-placement="top" onclick="input1(this);">&nbsp;</button>
-							</div>
-						</div>
-						<!-- endof(thumbmod) -->
+								<!-- endof(baseform) -->
 
+								<!-- 1.2: Thumb Modifications (thumbmod) -- content -->
+								<div class="tab-pane fade" id="thumbmod" role="tabpanel" aria-labelledby="thumbmod-tab">
 
-						<!-- 1.3: Bending (bending) -->
-						<div class="tab-pane fade" id="bending" role="tabpanel" aria-labelledby="bending-tab">
-
-							<!-- 1.3.1: Bending of Concerned Fingers (bendingconf)-->
-							<h6>
-								<!-- Title (bendingconf) -->
-								Bending of Concerned Fingers
-								<a href="" data-toggle="modal" data-target="#bendingconf-modal">
-								 <i class="fas fa-info-circle"></i>
-								</a>
-								<!-- Modal (bendingconf)-->
-								<div class="modal fade" id="bendingconf-modal" tabindex="-1" role="dialog" aria-labelledby="Bending of Concerned Fingers" aria-hidden="true">
-									<div class="modal-dialog" role="document">
-										<div class="modal-content">
-											<div class="modal-header">
-												<h5 class="modal-title" id="bendingconf-modal">Bending of Concerned Fingers</h5>
-												<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-												<span aria-hidden="true">&times;</span>
-												</button>
-											</div>
-											<div class="modal-body">
-												<p>Diacritics can be added for bending of concerned fingers for both open and closed handshapes</p>
-												<p>Concerned fingers in open handshapes are fingers that are raised.</p>
-												<img src="https://i.imgur.com/MpRx4TZ.png" alt="hamnosys-open-bending" width="100%">
-												<p>Concerned fingers in connected handshapes are fingers in (close) contact with the thumb.</p>
-												<img src="https://i.imgur.com/6yQ9VsJ.png" alt="hamnosys-connected-bending" width="100%">
+									<!-- 1.2.1 Thumb Positions (thumbpos) -->
+									<h6>
+										<!-- Title (thumbpos) -->
+										Thumb Positions or Width of Handopening
+										<a href="" data-toggle="modal" data-target="#thumbpos-modal">
+											&nbsp;<i class="fas fa-info-circle"></i>
+										</a>
+										<!-- Modal (thumbpos) -->
+										<div class="modal fade" id="thumbpos-modal" tabindex="-1" role="dialog" aria-labelledby="Thumb Positions" aria-hidden="true">
+											<div class="modal-dialog" role="document">
+												<div class="modal-content">
+													<div class="modal-header">
+														<h5 class="modal-title">Thumb Positions and Hand Opening</h5>
+														<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+														<span aria-hidden="true">&times;</span>
+														</button>
+													</div>
+													<div class="modal-body">
+														<p>Diacritics can be added to change thumb positions in open handshapes...</p>
+														<img src="https://i.imgur.com/Q7BAUfd.png" alt="hamnosys-thumb-positions" width="100%">
+														<p>...or signify width of opening in connected handshapes.</p>
+														<img src="https://i.imgur.com/Dv72Iiv.png" alt="hamnosys-hand-opening" width="100%">
+													</div>
+												</div>
 											</div>
 										</div>
+									</h6>
+									<!-- Buttons (thumbpos)-->
+									<div class="btn-group hamkeys" role="group" aria-label="Thumb Positions">
+										<button title="hamthumboutmod" class="btn btn-light ham" value="" data-toggle="tooltip" data-placement="top" onclick="input1(this);">&nbsp;</button>
+										<button title="hamthumbacrossmod" class="btn btn-light ham" value="" data-toggle="tooltip" data-placement="top" onclick="input1(this);">&nbsp;</button>
+										<button title="hamthumbopenmod" class="btn btn-light ham" value="" data-toggle="tooltip" data-placement="top" onclick="input1(this);">&nbsp;</button>
 									</div>
 								</div>
-							</h6>
-							<!-- Buttons (bendingconf) -->
-							<div class="btn-group hamkeys" role="group" aria-label="Hand Opening">
-								<button title="hamdoublebent" class="btn btn-light ham" value="" data-toggle="tooltip" data-placement="top" onclick="input1(this);">&nbsp;</button>
-								<button title="hamfingerstraightmod" class="btn btn-light ham" value="" data-toggle="tooltip" data-placement="top" onclick="input1(this);">&nbsp;</button>
-								<button title="hamfingerbendmod" class="btn btn-light ham" value="" data-toggle="tooltip" data-placement="top" onclick="input1(this);">&nbsp;</button>
-								<button title="hamfingerhookmod" class="btn btn-light ham" value="" data-toggle="tooltip" data-placement="top" onclick="input1(this);">&nbsp;</button>
-								<button title="hamdoublehooked" class="btn btn-light ham" value="" data-toggle="tooltip" data-placement="top" onclick="input1(this);">&nbsp;</button>
+								<!-- endof(thumbmod) -->
+
+
+								<!-- 1.3: Bending (bending) -->
+								<div class="tab-pane fade" id="bending" role="tabpanel" aria-labelledby="bending-tab">
+
+									<!-- 1.3.1: Bending of Concerned Fingers (bendingconf)-->
+									<h6>
+										<!-- Title (bendingconf) -->
+										Bending of Concerned Fingers
+										<a href="" data-toggle="modal" data-target="#bendingconf-modal">
+										 <i class="fas fa-info-circle"></i>
+										</a>
+										<!-- Modal (bendingconf)-->
+										<div class="modal fade" id="bendingconf-modal" tabindex="-1" role="dialog" aria-labelledby="Bending of Concerned Fingers" aria-hidden="true">
+											<div class="modal-dialog" role="document">
+												<div class="modal-content">
+													<div class="modal-header">
+														<h5 class="modal-title" id="bendingconf-modal">Bending of Concerned Fingers</h5>
+														<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+														<span aria-hidden="true">&times;</span>
+														</button>
+													</div>
+													<div class="modal-body">
+														<p>Diacritics can be added for bending of concerned fingers for both open and closed handshapes</p>
+														<p>Concerned fingers in open handshapes are fingers that are raised.</p>
+														<img src="https://i.imgur.com/MpRx4TZ.png" alt="hamnosys-open-bending" width="100%">
+														<p>Concerned fingers in connected handshapes are fingers in (close) contact with the thumb.</p>
+														<img src="https://i.imgur.com/6yQ9VsJ.png" alt="hamnosys-connected-bending" width="100%">
+													</div>
+												</div>
+											</div>
+										</div>
+									</h6>
+									<!-- Buttons (bendingconf) -->
+									<div class="btn-group hamkeys" role="group" aria-label="Hand Opening">
+										<button title="hamdoublebent" class="btn btn-light ham" value="" data-toggle="tooltip" data-placement="top" onclick="input1(this);">&nbsp;</button>
+										<button title="hamfingerstraightmod" class="btn btn-light ham" value="" data-toggle="tooltip" data-placement="top" onclick="input1(this);">&nbsp;</button>
+										<button title="hamfingerbendmod" class="btn btn-light ham" value="" data-toggle="tooltip" data-placement="top" onclick="input1(this);">&nbsp;</button>
+										<button title="hamfingerhookmod" class="btn btn-light ham" value="" data-toggle="tooltip" data-placement="top" onclick="input1(this);">&nbsp;</button>
+										<button title="hamdoublehooked" class="btn btn-light ham" value="" data-toggle="tooltip" data-placement="top" onclick="input1(this);">&nbsp;</button>
+									</div>
+								</div>
+								<!-- endof(bending) -->
+							</div>
+							<!-- endof(NavContent) -->
+						</div>
+						<!-- endof(handshape) -->
+						
+						<!-- 2: Finger Specifications (fingerspecs) -->
+						<div class="tab-pane fade" id="fingerspecs" role="tabpanel" aria-labelledby="fingerspecs-tab">
+
+							<!-- Nav Items (fingerspecs) -->
+							<ul class="nav nav-pills mb-3" id="fingerspecs-tab" role="tablist">
+
+								<!-- 2.1: Override Defaults (override) -->
+								<li class="nav-item">
+									<a class="nav-link active" id="override-tab" data-toggle="pill" href="#override" role="tab" aria-controls="Override" aria-selected="true">Override Defaults</a>
+								</li>
+								<!-- 2.2 Selective Bending (selectbend) -->
+								<li class="nav-item">
+									<a class="nav-link" id="selectbend-tab" data-toggle="pill" href="#selectbend" role="tab" aria-controls="selectbend" aria-selected="false">Selective Bending</a>
+								</li>
+								<!-- 2.3 Finger Crossing (crossing) -->
+								<li class="nav-item">
+									<a class="nav-link" id="crossing-tab" data-toggle="pill" href="#crossing" role="tab" aria-controls="crossing" aria-selected="false">Finger Crossing</a>
+								</li>
+							</ul>
+
+							<!-- Nav Content (fingerspecs) -->
+							<div class="tab-content" id="fingerspecs-tabContent">
+
+								<!-- 2.1: Override Defaults (override) -->
+								<div class="tab-pane fade show active" id="override" role="tabpanel" aria-labelledby="override-tab">
+
+									<!-- Instruction (override) -->
+
+									<!-- 2.1.1: Default Digits (defaultdigits) -->
+									<h6>
+										<!-- Title (defaultdigits) -->
+										Default Digits
+										<a href="" data-toggle="modal" data-target="#defaultdigits-modal">
+										&nbsp;<i class="fas fa-info-circle"></i>
+										</a>
+										<!-- Modal (defaultdigits) -->
+										<div class="modal fade" id="defaultdigits-modal" tabindex="-1" role="dialog" aria-labelledby="Default Digits" aria-hidden="true">
+											<div class="modal-dialog" role="document">
+												<div class="modal-content">
+													<div class="modal-header">
+														<h5 class="modal-title" id="defaultdigits-modal">Default Digits</h5>
+														<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+														<span aria-hidden="true">&times;</span>
+														</button>
+													</div>
+													<div class="modal-body">
+														Use numbers to specify which fingers to be used to override defaults.
+														<img src="https://i.imgur.com/xfDkWdP.png" alt="hamnosys-finger-numbers" width="100%" style="padding-bottom:10px; padding-right: 100px;">
+														Finger specifications replace concerned finger(s) in open handshapes...
+														<img src="https://i.imgur.com/nIWceFN.png" alt="hamnosys-open-default" width="100%">
+														...or replace concerned fingers with connections in connected handshapes.
+														<img src="https://i.imgur.com/owgM1TG.png" alt="hamnosys-connected-default" width="100%" style="padding-right: 100px;">
+													</div>
+												</div>
+											</div>
+										</div>
+									</h6>
+									<!-- Buttons (defaultdigits) -->
+									<div class="btn-group hamkeys" role="group" aria-label="Default Digits">
+										<button title="hamthumb" class="btn btn-light ham" value="" data-toggle="tooltip" data-placement="top" onclick="input2(this);"></button>
+										<button title="hamindexfinger" class="btn btn-light ham" value="" data-toggle="tooltip" data-placement="top" onclick="input2(this);"></button>
+										<button title="hammiddlefinger" class="btn btn-light ham" value="" data-toggle="tooltip" data-placement="top" onclick="input2(this);"></button>
+										<button title="hamringfinger" class="btn btn-light ham" value="" data-toggle="tooltip" data-placement="top" onclick="input2(this);"></button>
+										<button title="hampinky" class="btn btn-light ham" value="" data-toggle="tooltip" data-placement="top" onclick="input2(this);"></button>
+									</div><br><br>
+								</div>
+
+								<!-- 2.2: Selective Bending (selectbend) -->
+								<div class="tab-pane fade" id="selectbend" role="tabpanel" aria-labelledby="selectbend-tab">
+
+									<!-- Instructions (selectbend) -->
+
+									<!-- 2.2.1: Individual Bending (selectbendfingers) -->
+									<h6>
+										<!-- Title (selectbendfingers) -->
+										Bending of Individual Fingers
+										<a href="" data-toggle="modal" data-target="#selectbendfingers-modal">
+										&nbsp;<i class="fas fa-info-circle"></i>
+										</a>
+										<!-- Modal (selectbendfingers) -->
+										<div class="modal fade" id="selectbendfingers-modal" tabindex="-1" role="dialog" aria-labelledby="selectbendfingers-modal" aria-hidden="true">
+											<div class="modal-dialog" role="document">
+												<div class="modal-content">
+													<div class="modal-header">
+														<h5 class="modal-title" id="selectbendfingers-modal">Select Fingers</h5>
+														<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+														<span aria-hidden="true">&times;</span>
+														</button>
+													</div>
+												<div class="modal-body">
+													Use numbers to specify which fingers are to be bent individually.
+													<img src="https://i.imgur.com/xfDkWdP.png" alt="hamnosys-finger-numbers" width="100%" style="padding-bottom:10px;padding-right: 100px;">
+													Bending of individual fingers specify derivations of a particular handshape.
+													<img src="https://i.imgur.com/iMWAeCm.png" alt="hamnosys-select-bend" width="100%">
+												</div>
+												</div>
+											</div>
+										</div>
+									</h6>
+									<!-- Buttons (selectbendfingers) -->
+									<div class="btn-group hamkeys" role="group" aria-label="Selective Bending 1">
+										<button title="hamthumb" class="btn btn-light ham" value="" data-toggle="tooltip" data-placement="top" onclick="input2(this);"></button>
+										<button title="hamindexfinger" class="btn btn-light ham" value="" data-toggle="tooltip" data-placement="top" onclick="input2(this);"></button>
+										<button title="hammiddlefinger" class="btn btn-light ham" value="" data-toggle="tooltip" data-placement="top" onclick="input2(this);"></button>
+										<button title="hamringfinger" class="btn btn-light ham" value="" data-toggle="tooltip" data-placement="top" onclick="input2(this);"></button>
+										<button title="hampinky" class="btn btn-light ham" value="" data-toggle="tooltip" data-placement="top" onclick="input2(this);"></button>
+									</div>
+									&emsp;
+									<div class="btn-group hamkeys" role="group" aria-label="Selective Bending 2">
+										<button title="hamdoublebent" class="btn btn-light ham" value="" data-toggle="tooltip" data-placement="top" onclick="input2(this);">&nbsp;</button>
+										<button title="hamfingerstraightmod" class="btn btn-light ham" value="" data-toggle="tooltip" data-placement="top" onclick="input2(this);">&nbsp;</button>
+										<button title="hamfingerbendmod" class="btn btn-light ham" value="" data-toggle="tooltip" data-placement="top" onclick="input2(this);">&nbsp;</button>
+										<button title="hamfingerhookmod" class="btn btn-light ham" value="" data-toggle="tooltip" data-placement="top" onclick="input2(this);">&nbsp;</button>
+										<button title="hamdoublehooked" class="btn btn-light ham" value="" data-toggle="tooltip" data-placement="top" onclick="input2(this);">&nbsp;</button>
+									</div><br><br>
+								</div>
+
+								<!-- 2.3: Finger Crossing (crossing) -->
+								<div class="tab-pane fade" id="crossing" role="tabpanel" aria-labelledby="crossing-tab">
+
+
+									<!-- 2.3.1: Crossing of Adjacent Fingers (crossingadf) -->
+									<h6>
+										<!-- Title (crossingadf) -->
+										Crossing Adjacent Fingers
+										<a href="" data-toggle="modal" data-target="#crossingadf-modal">
+										 <i class="fas fa-info-circle"></i>
+										</a>
+										<!-- Modal (crossingadf) -->
+										<div class="modal fade" id="crossingadf-modal" tabindex="-1" role="dialog" aria-labelledby="Crossing Adjacent Fingers" aria-hidden="true">
+											<div class="modal-dialog" role="document">
+												<div class="modal-content">
+													<div class="modal-header">
+														<h5 class="modal-title" id="crossingadf-modal">Crossing Adjacent Fingers</h5>
+														<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+														<span aria-hidden="true">&times;</span>
+														</button>
+													</div>
+													<div class="modal-body">
+														Crossing fingers are notated with finger digits (lower first)...
+														<img src="https://i.imgur.com/3gKv5eU.png" alt="hamnosys-crossing" width="100%">
+														...and the finger part where the upper finger meets the lower one.
+														<img src="https://i.imgur.com/wDR2xeW.png" alt="hamnosys-finger-parts" width="100%" style="padding-right: 200px;">
+													</div>
+												</div>
+											</div>
+										</div>
+									</h6>
+									<!-- Buttons (crossingadf) -->
+									<div class="btn-group hamkeys" role="group" aria-label="Cross Fingers">
+										<button title="hamthumb" class="btn btn-light ham" value="" data-toggle="tooltip" data-placement="top" onclick="input2(this);"></button>
+										<button title="hamindexfinger" class="btn btn-light ham" value="" data-toggle="tooltip" data-placement="top" onclick="input2(this);"></button>
+										<button title="hammiddlefinger" class="btn btn-light ham" value="" data-toggle="tooltip" data-placement="top" onclick="input2(this);"></button>
+										<button title="hamringfinger" class="btn btn-light ham" value="" data-toggle="tooltip" data-placement="top" onclick="input2(this);"></button>
+										<button title="hampinky" class="btn btn-light ham" value="" data-toggle="tooltip" data-placement="top" onclick="input2(this);"></button>
+									</div>
+									&emsp;
+									<!-- Buttons (crossingpoc) -->
+									<div class="btn-group hamkeys" role="group" aria-label="Point of Contact">
+										<button title="hamfingertip" class="btn btn-light ham" value="" data-toggle="tooltip" data-placement="top" onclick="input2(this);"></button>
+										<button title="hamfingernail" class="btn btn-light ham" value="" data-toggle="tooltip" data-placement="top" onclick="input2(this);"></button>
+										<button title="hamfingerpad" class="btn btn-light ham" value="" data-toggle="tooltip" data-placement="top" onclick="input2(this);"></button>
+										<button title="hamfingermidjoint" class="btn btn-light ham" value="" data-toggle="tooltip" data-placement="top" onclick="input2(this);"></button>
+										<button title="hamfingerbase" class="btn btn-light ham" value="" data-toggle="tooltip" data-placement="top" onclick="input2(this);"></button>
+										<button title="hamfingerside" class="btn btn-light ham" value="" data-toggle="tooltip" data-placement="top" onclick="input2(this);"></button>
+									</div>
+								</div>
 							</div>
 						</div>
-						<!-- endof(bending) -->
+						<!-- endof(fingerspecs) -->		
 					</div>
-					<!-- endof(NavContent) -->
+
 				</div>
-				<!-- endof(handshape) -->
-				
-				<!-- 2: Finger Specifications (fingerspecs) -->
-				<div class="tab-pane fade" id="fingerspecs" role="tabpanel" aria-labelledby="fingerspecs-tab">
-
-					<!-- Nav Items (fingerspecs) -->
-					<ul class="nav nav-pills mb-3" id="fingerspecs-tab" role="tablist">
-
-						<!-- 2.1: Override Defaults (override) -->
-						<li class="nav-item">
-							<a class="nav-link active" id="override-tab" data-toggle="pill" href="#override" role="tab" aria-controls="Override" aria-selected="true">Override Defaults</a>
-						</li>
-						<!-- 2.2 Selective Bending (selectbend) -->
-						<li class="nav-item">
-							<a class="nav-link" id="selectbend-tab" data-toggle="pill" href="#selectbend" role="tab" aria-controls="selectbend" aria-selected="false">Selective Bending</a>
-						</li>
-						<!-- 2.3 Finger Crossing (crossing) -->
-						<li class="nav-item">
-							<a class="nav-link" id="crossing-tab" data-toggle="pill" href="#crossing" role="tab" aria-controls="crossing" aria-selected="false">Finger Crossing</a>
-						</li>
-					</ul>
-
-					<!-- Nav Content (fingerspecs) -->
-					<div class="tab-content" id="fingerspecs-tabContent">
-
-						<!-- 2.1: Override Defaults (override) -->
-						<div class="tab-pane fade show active" id="override" role="tabpanel" aria-labelledby="override-tab">
-
-							<!-- Instruction (override) -->
-
-							<!-- 2.1.1: Default Digits (defaultdigits) -->
-							<h6>
-								<!-- Title (defaultdigits) -->
-								Default Digits
-								<a href="" data-toggle="modal" data-target="#defaultdigits-modal">
-								&nbsp;<i class="fas fa-info-circle"></i>
-								</a>
-								<!-- Modal (defaultdigits) -->
-								<div class="modal fade" id="defaultdigits-modal" tabindex="-1" role="dialog" aria-labelledby="Default Digits" aria-hidden="true">
-									<div class="modal-dialog" role="document">
-										<div class="modal-content">
-											<div class="modal-header">
-												<h5 class="modal-title" id="defaultdigits-modal">Default Digits</h5>
-												<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-												<span aria-hidden="true">&times;</span>
-												</button>
-											</div>
-											<div class="modal-body">
-												Use numbers to specify which fingers to be used to override defaults.
-												<img src="https://i.imgur.com/xfDkWdP.png" alt="hamnosys-finger-numbers" width="100%" style="padding-bottom:10px; padding-right: 100px;">
-												Finger specifications replace concerned finger(s) in open handshapes...
-												<img src="https://i.imgur.com/nIWceFN.png" alt="hamnosys-open-default" width="100%">
-												...or replace concerned fingers with connections in connected handshapes.
-												<img src="https://i.imgur.com/owgM1TG.png" alt="hamnosys-connected-default" width="100%" style="padding-right: 100px;">
-											</div>
-										</div>
-									</div>
-								</div>
-							</h6>
-							<!-- Buttons (defaultdigits) -->
-							<div class="btn-group hamkeys" role="group" aria-label="Default Digits">
-								<button title="hamthumb" class="btn btn-light ham" value="" data-toggle="tooltip" data-placement="top" onclick="input2(this);"></button>
-								<button title="hamindexfinger" class="btn btn-light ham" value="" data-toggle="tooltip" data-placement="top" onclick="input2(this);"></button>
-								<button title="hammiddlefinger" class="btn btn-light ham" value="" data-toggle="tooltip" data-placement="top" onclick="input2(this);"></button>
-								<button title="hamringfinger" class="btn btn-light ham" value="" data-toggle="tooltip" data-placement="top" onclick="input2(this);"></button>
-								<button title="hampinky" class="btn btn-light ham" value="" data-toggle="tooltip" data-placement="top" onclick="input2(this);"></button>
-							</div><br><br>
-						</div>
-
-						<!-- 2.2: Selective Bending (selectbend) -->
-						<div class="tab-pane fade" id="selectbend" role="tabpanel" aria-labelledby="selectbend-tab">
-
-							<!-- Instructions (selectbend) -->
-
-							<!-- 2.2.1: Individual Bending (selectbendfingers) -->
-							<h6>
-								<!-- Title (selectbendfingers) -->
-								Bending of Individual Fingers
-								<a href="" data-toggle="modal" data-target="#selectbendfingers-modal">
-								&nbsp;<i class="fas fa-info-circle"></i>
-								</a>
-								<!-- Modal (selectbendfingers) -->
-								<div class="modal fade" id="selectbendfingers-modal" tabindex="-1" role="dialog" aria-labelledby="selectbendfingers-modal" aria-hidden="true">
-									<div class="modal-dialog" role="document">
-										<div class="modal-content">
-											<div class="modal-header">
-												<h5 class="modal-title" id="selectbendfingers-modal">Select Fingers</h5>
-												<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-												<span aria-hidden="true">&times;</span>
-												</button>
-											</div>
-										<div class="modal-body">
-											Use numbers to specify which fingers are to be bent individually.
-											<img src="https://i.imgur.com/xfDkWdP.png" alt="hamnosys-finger-numbers" width="100%" style="padding-bottom:10px;padding-right: 100px;">
-											Bending of individual fingers specify derivations of a particular handshape.
-											<img src="https://i.imgur.com/iMWAeCm.png" alt="hamnosys-select-bend" width="100%">
-										</div>
-										</div>
-									</div>
-								</div>
-							</h6>
-							<!-- Buttons (selectbendfingers) -->
-							<div class="btn-group hamkeys" role="group" aria-label="Selective Bending 1">
-								<button title="hamthumb" class="btn btn-light ham" value="" data-toggle="tooltip" data-placement="top" onclick="input2(this);"></button>
-								<button title="hamindexfinger" class="btn btn-light ham" value="" data-toggle="tooltip" data-placement="top" onclick="input2(this);"></button>
-								<button title="hammiddlefinger" class="btn btn-light ham" value="" data-toggle="tooltip" data-placement="top" onclick="input2(this);"></button>
-								<button title="hamringfinger" class="btn btn-light ham" value="" data-toggle="tooltip" data-placement="top" onclick="input2(this);"></button>
-								<button title="hampinky" class="btn btn-light ham" value="" data-toggle="tooltip" data-placement="top" onclick="input2(this);"></button>
-							</div>
-							&emsp;
-							<div class="btn-group hamkeys" role="group" aria-label="Selective Bending 2">
-								<button title="hamdoublebent" class="btn btn-light ham" value="" data-toggle="tooltip" data-placement="top" onclick="input2(this);">&nbsp;</button>
-								<button title="hamfingerstraightmod" class="btn btn-light ham" value="" data-toggle="tooltip" data-placement="top" onclick="input2(this);">&nbsp;</button>
-								<button title="hamfingerbendmod" class="btn btn-light ham" value="" data-toggle="tooltip" data-placement="top" onclick="input2(this);">&nbsp;</button>
-								<button title="hamfingerhookmod" class="btn btn-light ham" value="" data-toggle="tooltip" data-placement="top" onclick="input2(this);">&nbsp;</button>
-								<button title="hamdoublehooked" class="btn btn-light ham" value="" data-toggle="tooltip" data-placement="top" onclick="input2(this);">&nbsp;</button>
-							</div><br><br>
-						</div>
-
-						<!-- 2.3: Finger Crossing (crossing) -->
-						<div class="tab-pane fade" id="crossing" role="tabpanel" aria-labelledby="crossing-tab">
-
-
-							<!-- 2.3.1: Crossing of Adjacent Fingers (crossingadf) -->
-							<h6>
-								<!-- Title (crossingadf) -->
-								Crossing Adjacent Fingers
-								<a href="" data-toggle="modal" data-target="#crossingadf-modal">
-								 <i class="fas fa-info-circle"></i>
-								</a>
-								<!-- Modal (crossingadf) -->
-								<div class="modal fade" id="crossingadf-modal" tabindex="-1" role="dialog" aria-labelledby="Crossing Adjacent Fingers" aria-hidden="true">
-									<div class="modal-dialog" role="document">
-										<div class="modal-content">
-											<div class="modal-header">
-												<h5 class="modal-title" id="crossingadf-modal">Crossing Adjacent Fingers</h5>
-												<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-												<span aria-hidden="true">&times;</span>
-												</button>
-											</div>
-											<div class="modal-body">
-												Crossing fingers are notated with finger digits (lower first)...
-												<img src="https://i.imgur.com/3gKv5eU.png" alt="hamnosys-crossing" width="100%">
-												...and the finger part where the upper finger meets the lower one.
-												<img src="https://i.imgur.com/wDR2xeW.png" alt="hamnosys-finger-parts" width="100%" style="padding-right: 200px;">
-											</div>
-										</div>
-									</div>
-								</div>
-							</h6>
-							<!-- Buttons (crossingadf) -->
-							<div class="btn-group hamkeys" role="group" aria-label="Cross Fingers">
-								<button title="hamthumb" class="btn btn-light ham" value="" data-toggle="tooltip" data-placement="top" onclick="input2(this);"></button>
-								<button title="hamindexfinger" class="btn btn-light ham" value="" data-toggle="tooltip" data-placement="top" onclick="input2(this);"></button>
-								<button title="hammiddlefinger" class="btn btn-light ham" value="" data-toggle="tooltip" data-placement="top" onclick="input2(this);"></button>
-								<button title="hamringfinger" class="btn btn-light ham" value="" data-toggle="tooltip" data-placement="top" onclick="input2(this);"></button>
-								<button title="hampinky" class="btn btn-light ham" value="" data-toggle="tooltip" data-placement="top" onclick="input2(this);"></button>
-							</div>
-							&emsp;
-							<!-- Buttons (crossingpoc) -->
-							<div class="btn-group hamkeys" role="group" aria-label="Point of Contact">
-								<button title="hamfingertip" class="btn btn-light ham" value="" data-toggle="tooltip" data-placement="top" onclick="input2(this);"></button>
-								<button title="hamfingernail" class="btn btn-light ham" value="" data-toggle="tooltip" data-placement="top" onclick="input2(this);"></button>
-								<button title="hamfingerpad" class="btn btn-light ham" value="" data-toggle="tooltip" data-placement="top" onclick="input2(this);"></button>
-								<button title="hamfingermidjoint" class="btn btn-light ham" value="" data-toggle="tooltip" data-placement="top" onclick="input2(this);"></button>
-								<button title="hamfingerbase" class="btn btn-light ham" value="" data-toggle="tooltip" data-placement="top" onclick="input2(this);"></button>
-								<button title="hamfingerside" class="btn btn-light ham" value="" data-toggle="tooltip" data-placement="top" onclick="input2(this);"></button>
-							</div>
-						</div>
-					</div>
-				</div>
-				<!-- endof(fingerspecs) -->		
-
 			</div>
-
+			<hr>
+			<!-- Alert -->
+			<div id="instructions" class="alert alert-success fade show" role="alert">
+				<h5 class="alert-heading"><i class="fas fa-edit"></i> SignTyper's FSL Handshape Transcription Guide</h5>
+				<hr>
+				<ul>
+					<li>This tool divides HamNoSys transcription for handshapes into two steps: <strong>base form</strong> and <strong>finger specifications</strong>.</li>
+					<li>The <strong>base form</strong> is defined by: basic hand <strong>shape</strong>, <strong>thumb modification</strong>, and <strong>bending</strong>.</li>
+					<li><strong>Finger specifications</strong> are <em>optional</em> and are added only when changes are needed for the base form.</li>
+					<li>There are <strong>two separate textboxes</strong> that you can edit at each transcription step.</li>
+				</ul>
+			</div>
 
 {% endblock %}
