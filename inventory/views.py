@@ -40,6 +40,11 @@ def sigmlfy(transcription, gloss):
 	itemManual = ET.SubElement(itemGloss, 'hamnosys_manual')
 	for tag in sigmlList:
 		ET.SubElement(itemManual, tag)
+	
+	# For handshapes, set location to @head
+	ET.SubElement(itemManual, "hamextfingeru")
+	ET.SubElement(itemManual, "hampalml")
+
 	dataStr = ET.tostring(data, encoding='unicode')
 	dom = xml.dom.minidom.parseString(dataStr)
 	sigml_data = dom.toprettyxml(encoding='UTF-8').decode("utf-8")
