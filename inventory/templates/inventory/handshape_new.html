@@ -18,7 +18,7 @@
 {% block content %}
 
 			<p class="font-italic" style="text-align: right;">
-				Editing handshape named "{{ handshape.name }}"
+				Create a new handshape.
 			</p>
 
 			<hr>
@@ -37,23 +37,28 @@
 				</div>
 				<hr>
 				<!-- Transcription -->
-				<label for="hs_transcription"><kbd>HamNoSys Transcription</kbd> <span style="font-size: 0.6rem;">HamNoSys symbols will appear here when their respective buttons are pressed in the collapsible keyboard.</span></label>
+				<label for="hs_transcription"><kbd>HamNoSys Transcription & Validation</kbd></label>
+				<div style="padding: 0 0 10px 10px;">
+					<span style="font-size: 0.6rem;">HamNoSys symbols will appear in the transcription box when their respective buttons are pressed in the collapsible keyboard.</span><br>
+					<span style="font-size: 0.6rem;">Transcriptions can be validated via clicking the SyntheSign icon and verifying the animation. This will open a new tab with an avatar that will sign your transcription.</span>
+				</div>
 				<div class="form-group form-inline mb-2">
 					<div class="input-group mb-3 col-md-10">
 						<input name="hs_transcription" id="hs_transcription" type="text" class="form-control ham" aria-label="HamNoSys Transcription" aria-describedby="basic-addon2">
 						<div class="input-group-append">
 							<button class="btn btn-dark" type="button" data-toggle="collapse" data-target="#collapseKeyboard" aria-expanded="false" aria-controls="collapseKeyboard"><i class="fas fa-keyboard"></i></button>
   						</div>
+  						<div class="input-group-append">
+  							<button name="animate" class="btn btn-info" type="submit" value="animate" formtarget="_blank"><i class="fas fa-hand-sparkles"></i></button>
+						</div>
 					</div>
 					<div class="mb-3 col-md-2">
-						<button name="save" class="btn btn-primary" type="submit"><i class="fas fa-check"></i> Save handshape</button>
+						<button name="save" class="btn btn-primary" type="submit" value="save"><i class="fas fa-check"></i> Save</button>
 					</div>
 				</div>
 			</form>
 
-
-
-			<!-- HamNoSys Input -->
+				<!-- HamNoSys Input -->
 			<div class="collapse" id="collapseKeyboard" style="margin:15px;">
 
 				<!-- Nav Content -->
@@ -590,11 +595,12 @@
 						</div>
 
 					</div>
+
 				</div>
 
-			<nav class="nav nav-pills flex-column flex-sm-row justify-content-center bg-dark" style="margin: 0px; padding: 5px; font-size: 0.7rem; font-color: white !important;">
+				<nav class="nav nav-pills flex-column flex-sm-row justify-content-center bg-dark" style="margin: 0px; padding: 5px; font-size: 0.7rem; font-color: white !important;">
 
-				<!-- Nav Items -->
+					<!-- Nav Items -->
 
 					<!-- Basic Form -->
 					<a class="flex-sm-fill text-sm-center nav-item nav-link active white-pill" id="v-pills-basicform-tab" data-toggle="pill" href="#v-pills-basicform" role="tab" aria-controls="v-pills-basicform" aria-selected="true">Basic Forms</a>
@@ -614,15 +620,6 @@
 
 			</div>
 
-
-
-			<!-- Animation Box -->
-			<br><hr>
-			<kbd>Validation via animation</kbd><br><br>
-
-			<p>You can validate your transcription via clicking the SyntheSign button below. This will open a new tab with an avatar that will sign your transcription.</p>
-
-			<a class="btn btn-sm btn-info" href="#" role="button" style="margin: 5px;"><i class="fas fa-hand-sparkles"></i> SyntheSign</a>
 
 
 

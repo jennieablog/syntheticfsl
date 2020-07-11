@@ -1,6 +1,6 @@
 @font-face {
     font-family: 'hamnosysunicoderegular';
-    src: url('HamNoSysUnicode.ttf') format('truetype');
+    src: url("HamNoSysUnicode.4aca32e60aa4.ttf") format('truetype');
     font-weight: normal;
     font-style: normal;
 }
@@ -33,7 +33,7 @@ h1.ham {
 	color: navy;
 }
 
-#hamnosys {
+textarea.ham {
 	padding: 20px;
 	line-height: 40px;
     margin-bottom: 30px;
