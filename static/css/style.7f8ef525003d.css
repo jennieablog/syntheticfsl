@@ -1,6 +1,6 @@
 @font-face {
     font-family: 'hamnosysunicoderegular';
-    src: url('HamNoSysUnicode.ttf') format('truetype');
+    src: url("HamNoSysUnicode.4aca32e60aa4.ttf") format('truetype');
     font-weight: normal;
     font-style: normal;
 }
@@ -159,6 +159,6 @@ tbody {
 	font-size: 0.7rem;
 }
 
-.white-pill {
+.nav-pills .nav-link {
 	color: whitesmoke;
 }

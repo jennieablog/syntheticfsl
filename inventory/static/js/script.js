@@ -6,12 +6,7 @@ function infoshow() {
 	document.getElementById("instruct-info").show();
 }
 
-function input1(e) {
-    var inputBox = document.getElementById("handshape-box");
-    inputBox.value = inputBox.value + e.value;
-}
-
-function input2(e) {
-    var inputBox = document.getElementById("fingerspecs-box");
+function input(e) {
+    var inputBox = document.getElementById("hs_transcription");
     inputBox.value = inputBox.value + e.value;
 }

@@ -79,14 +79,14 @@ def handshape_edit(request, pk):
 	if request.method == "POST":
 		new_name = request.POST.get("hs_name")
 		new_description = request.POST.get("hs_description")
-		new_base = request.POST.get("hs_base")
-		new_fingerspecs = request.POST.get("hs_fingerspecs")
-		new_transcription = new_base+none_to_str(new_fingerspecs)
+		# new_base = request.POST.get("hs_base")
+		# new_fingerspecs = request.POST.get("hs_fingerspecs")
+		new_transcription = request.POST.get("hs_transcription")
 		hs = Handshape.objects.get(id=pk)
 		hs.name = new_name
 		hs.description = new_description
-		hs.base = new_base
-		hs.fingerspecs = new_fingerspecs
+		# hs.base = new_base
+		# hs.fingerspecs = new_fingerspecs
 		hs.transcription = new_transcription
 		hs.save();
 		return redirect('handshape_detail', pk=hs.pk)
@@ -101,10 +101,10 @@ def handshape_new(request):
 	if request.method == "POST":
 		new_name = request.POST.get("hs_name")
 		new_description = request.POST.get("hs_description")
-		new_base = request.POST.get("hs_base")
-		new_fingerspecs = request.POST.get("hs_fingerspecs")
-		new_transcription = new_base+none_to_str(new_fingerspecs)
-		hs = Handshape(name=new_name, description=new_description, base=new_base, fingerspecs=new_fingerspecs, transcription=new_transcription)
+		# new_base = request.POST.get("hs_base")
+		# new_fingerspecs = request.POST.get("hs_fingerspecs")
+		new_transcription = request.POST.get("hs_transcription")
+		hs = Handshape(name=new_name, description=new_description, transcription=new_transcription)
 		hs.save();
 		return redirect('handshape_detail', pk=hs.pk)
 	return render(request, 'inventory/handshape_new.html')

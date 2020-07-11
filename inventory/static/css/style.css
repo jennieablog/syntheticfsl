@@ -43,7 +43,7 @@ input.ham {
 button.ham {
 	width:1.4em;
 	height:1.4em;
-	font-size:40px;
+	font-size:30px;
 	display: inline-block;
 	position: relative;
 	text-decoration: none;
@@ -64,7 +64,7 @@ button.ham {
 }
 
 td {
-	text-align: center;
+	text-align: left;
 }
 
 small {
@@ -153,4 +153,12 @@ textarea {
 a.disabled {
 	pointer-events: none;
 	cursor: default;
+}
+
+tbody {
+	font-size: 0.7rem;
+}
+
+.white-pill {
+	color: whitesmoke;
 }

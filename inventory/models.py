@@ -12,9 +12,6 @@ class Handshape(models.Model):
 	# To upload illustration, configure with pillow and django-storage
 	# illustration = models.ImageField(upload_to='images/')
 
-	# Separate Base Form and Finger Specs
-	base = models.CharField(max_length=10, verbose_name='Base Form')
-	fingerspecs = models.CharField(max_length=10, null=True, verbose_name='Finger Specifications')
 	transcription = models.CharField(max_length=20, verbose_name='Transcription')
 
 	# Using the Handshape name to identify handshapes.
