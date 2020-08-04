@@ -1,626 +1,282 @@
 {% extends 'inventory/base.html' %}
 
-{% block navbar %}
-			<ul class="navbar-nav mr-auto mt-2 mt-lg-0">
-				<li class="nav-item">
-					<a class="nav-link" href="{% url 'index' %}">Home</a>
-				</li>
-				<li class="nav-item active">
-					<a class="nav-link" href="{% url 'handshape_list' %}">Handshapes</a>
-				</li>
-				<li class="nav-item">
-					<a class="nav-item nav-link" href="#" class="disabled">Lexicon (developing)</a>
-				</li>
-			</ul>
-{% endblock %}
-
 
 {% block content %}
 
-			<p class="font-italic" style="text-align: right;">
-				Editing handshape named "{{ handshape.name }}"
-			</p>
-
-			<hr>
-			<!-- General Info -->
-			<form method="POST" style="margin-bottom: 0px;">
-				{% csrf_token %}
-				<!-- Name -->
-				<div class="form-group">
-					<label for="hs_name"><kbd>Handshape Name</kbd></label>
-					<input name="hs_name" type="text" class="form-control" id="hs_name" placeholder="Enter handshape name." value="{{ handshape.name }}">
-				</div>
-				<!-- Description -->
-				<div class="form-group">
-					<label for="hs_description"><kbd>Handshape Description</kbd></label>
-					<input name="hs_description" type="text" class="form-control" id="hs_description" placeholder="Enter handshape description." value="{{ handshape.description }}">
-				</div>
-				<hr>
-				<!-- Transcription -->
-				<label for="hs_transcription"><kbd>HamNoSys Transcription & Validation</kbd></label>
-				<div style="padding: 0 0 10px 10px;">
-					<span style="font-size: 0.6rem;">HamNoSys symbols will appear in the transcription box when their respective buttons are pressed in the collapsible keyboard.</span><br>
-					<span style="font-size: 0.6rem;">Transcriptions can be validated via clicking the SyntheSign icon and verifying the animation. This will open a new tab with an avatar that will sign your transcription.</span>
-				</div>
-				<div class="form-group form-inline mb-2">
-					<div class="input-group mb-3 col-md-10">
-						<input name="hs_transcription" id="hs_transcription" type="text" class="form-control ham" aria-label="HamNoSys Transcription" aria-describedby="basic-addon2" value="{{ handshape.transcription }}">
-						<div class="input-group-append">
-							<button class="btn btn-dark" type="button" data-toggle="collapse" data-target="#collapseKeyboard" aria-expanded="false" aria-controls="collapseKeyboard"><i class="fas fa-keyboard"></i></button>
-  						</div>
-  						<div class="input-group-append">
-  							<button name="animate" class="btn btn-info" type="submit" value="animate" formtarget="_blank"><i class="fas fa-hand-sparkles"></i></button>
+			<div class="detail">
+				<div class="detail-1">
+					<div class="card text-center">
+						<h6 id="loading" class="card-header"><img src="https://acegif.com/wp-content/uploads/loading-25.gif" width="30px"></h6>
+						<!-- Animation Box -->
+						<div style="height: 600px;">
+							<div class="card-body" style="padding:0px !important;">
+								<div class="CWASAAvatar av0" align="center" style="background-color: aliceblue;">
+								</div>
+							</div>
+							<!-- Description -->
+							<div class="card-footer bg-transparent">
+								<!-- Buttons -->
+								<div style="display: flex; align-items: center; justify-content: center; padding: 10px;">
+										<button type="button" id="animate" class="btn btn-sm btn-info bttnPlaySiGMLText av0" style="flex: 1;"><i class="fas fa-hand-sparkles"></i> Play</button>&emsp;
+										<div class="CWASAAvMenu av0 text-capitalize" style="flex:2;"></div>
+									</div>
+							</div>
 						</div>
 					</div>
-					<div class="mb-3 col-md-2">
-						<button name="save" class="btn btn-primary" type="submit" value="save"><i class="fas fa-check"></i> Save</button>
-					</div>
 				</div>
-			</form>
-
-				<!-- HamNoSys Input -->
-			<div class="collapse" id="collapseKeyboard" style="margin:15px;">
-
-				<!-- Nav Content -->
-				<div class="tab-content border border-dark" id="v-pills-tabContent" style="margin:0px;padding:10px;background-color: aliceblue; font-size: 0.7rem;">
-
-					<!-- Basic Form -->
-					<div class="tab-pane fade show active" id="v-pills-basicform" role="tabpanel" aria-labelledby="v-pills-basicform-tab">
-
-						<div class="alert alert-info" role="alert">
-							Basic forms are combined with diacritic signs for thumb position and bending. <a href="https://www.sign-lang.uni-hamburg.de/projekte/hamnosys/hns4.0/hns4.0eng/404handshapes.html" target="#"><i class="fas fa-info-circle"></i></a>
-						</div>
+				<div class="detail-2" style="border-color: grey;">
+					<form method="POST" id="handconfig" style="font-size: 0.7rem;">
+						{% csrf_token %}
 						
-						<div style="position: relative;height: 300px;overflow: auto;">
-							<table style="undefined;table-layout: fixed; width: 100%; text-align: left;">
-								<colgroup>
-									<col style="width: 72px;">
-									<col style="width: 300px;">
-								</colgroup>
-								<tbody>				
-									<!-- 1. BASIC FORMS -->
-									<tr>
-										<td colspan="2" style="padding-bottom: 10px; text-align: center;">
-											<strong>Basic Forms</strong>
-										</td>
-									</tr>
-									<!-- hamfist -->
-									<tr>
-										<td style="text-align: center;">
-											<button title="hamfist" class="btn btn-light ham" value="" data-toggle="tooltip" data-placement="right" onclick="input(this);"></button>
-										</td>
-										<td>Shaped like a fist.</td>
-									</tr>
-									<!-- hamflathand -->
-									<tr>
-										<td style="text-align: center;">
-											<button title="hamflathand" class="btn btn-light ham" value="" data-toggle="tooltip" data-placement="right" onclick="input(this);"></button>
-										</td>
-										<td>A flat hand, fingers together.</td>
-									</tr>
-									<!-- hamfinger2 -->
-									<tr>
-										<td style="text-align: center;">
-											<button title="hamfinger2" class="btn btn-light ham" value="" data-toggle="tooltip" data-placement="right" onclick="input(this);"></button>
-										</td>
-										<td>One finger is raised (index by default)</td>
-									</tr>
-									<!-- hamfinger23 -->
-									<tr>
-										<td style="text-align: center;">
-											<button title="hamfinger23" class="btn btn-light ham" value="" data-toggle="tooltip" data-placement="right" onclick="input(this);"></button>
-										</td>
-										<td>Two fingers are raised together (index and middle finger by default).</td>
-									</tr>
-									<!-- hamfinger23spread -->
-									<tr>
-										<td style="text-align: center;">
-											<button title="hamfinger23spread" class="btn btn-light ham" value="" data-toggle="tooltip" data-placement="right" onclick="input(this);"></button>
-										</td>
-										<td>Two fingers are raised spread (index and middle finger by default).</td>
-									</tr>
-									<!-- 2. THUMB DIACRITICS -->
-									<tr>
-										<td colspan="2" style="padding-bottom: 10px; padding-top: 20px; text-align: center;">
-											<strong>Thumb Positions</strong>
-										</td>
-									</tr>
-									<!-- default -->
-									<tr>
-										<td style="text-align: center; padding-bottom: 5px;">
-											<button class="btn btn-light ham" disabled> </button>
-										</td>
-										<td><strong>Thumb in the plane, nonspread -- default</strong></td>
-									</tr>
-									<!-- hamthumboutmod -->
-									<tr>
-										<td style="text-align: center;">
-											<button title="hamthumboutmod" class="btn btn-light ham" value="" data-toggle="tooltip" data-placement="right" onclick="input(this);"></button>
-										</td>
-										<td>Thumb in the plane, spread</td>
-									</tr>
-									<!-- hamthumbacrossmod -->
-									<tr>
-										<td style="text-align: center;">
-											<button title="hamthumbacrossmod" class="btn btn-light ham" value="" data-toggle="tooltip" data-placement="right" onclick="input(this);"></button>
-										</td>
-										<td>Thumb in the plane, across</td>
-									</tr>
-									<!-- hamthumbopenmod -->
-									<tr>
-										<td style="text-align: center;">
-											<button title="hamthumbopen" class="btn btn-light ham" value="" data-toggle="tooltip" data-placement="right" onclick="input(this);"></button>
-										</td>
-										<td>Thumb orthogonal to the plane</td>
-									</tr>
-									<!-- 3. BENDING -->
-									<tr>
-										<td colspan="2" style="padding-bottom: 10px; padding-top: 20px; text-align: center;">
-											<strong>Bending of Concerned Fingers</strong>
-										</td>
-									</tr>
-									<!-- default -->
-									<tr>
-										<td style="text-align: center; padding-bottom: 5px;">
-											<button class="btn btn-light ham" disabled> </button>
-										</td>
-										<td><strong>No bending -- default</strong></td>
-									</tr>
-									<!-- hamfingerstraightmod -->
-									<tr>
-										<td style="text-align: center;">
-											<button title="hamfingerstraightmod" class="btn btn-light ham" value="" data-toggle="tooltip" data-placement="right" onclick="input(this);">&nbsp;</button>
-										</td>
-										<td>Bent (straight)</td>
-									</tr>
-									<!-- hamfingerbendmod -->
-									<tr>
-										<td style="text-align: center;">
-											<button title="hamfingerbendmod" class="btn btn-light ham" value="" data-toggle="tooltip" data-placement="right" onclick="input(this);">&nbsp;</button>
-										</td>
-										<td>Bent (rounded)</td>
-									</tr>
-									<!-- hamfingerhookmod -->
-									<tr>
-										<td style="text-align: center;">
-											<button title="hamfingerhookmod" class="btn btn-light ham" value="" data-toggle="tooltip" data-placement="right" onclick="input(this);">&nbsp;</button>
-										</td>
-										<td>Bent (hooked)</td>
-									</tr>
-									<!-- hamdoublebentmod -->
-									<tr>
-										<td style="text-align: center;">
-											<button title="hamdoublebentmod" class="btn btn-light ham" value="" data-toggle="tooltip" data-placement="right" onclick="input(this);">&nbsp;</button>
-										</td>
-										<td>Double bent (distal joint not bent)</td>
-									</tr>
-									<!-- hamdoublehookedmod -->
-									<tr>
-										<td style="text-align: center;">
-											<button title="hamdoublehookedmod" class="btn btn-light ham" value="" data-toggle="tooltip" data-placement="right" onclick="input(this);">&nbsp;</button>
-										</td>
-										<td>Double hooked (distal joint bent)</td>
-									</tr>
-
-								</tbody>
-							</table>
+						<!-- Name -->
+						<div class="form-row" style="height:60px; margin: 5px;">
+							<div class="col-3">
+								<input type="text" name="handshapeName" class="form-control" placeholder="Handshape Name" style="font-size: 0.7rem;" value="{{ handshape.name }}">
+							</div>
+							<div class="col-sm-5">
+								<input type="text" name="handshapeDescription" class="form-control" placeholder="Description" style="font-size: 0.7rem;" value="{{ handshape.description }}">
+							</div>
+							<div class="col-sm-auto">
+								<button type="submit" class="btn btn-primary btn-sm" value="save">Save</button>
+							</div>
+							<div class="col-sm-auto">
+								<a href="#" data-toggle="modal" data-target="#delete-modal" class="btn btn-danger"><i class="fas fa-trash-alt"></i></a>
+								<div class="modal fade" id="delete-modal" tabindex="-1" role="dialog" aria-labelledby="delete-modal" aria-hidden="true">
+									<div class="modal-dialog" role="document">
+										<div class="modal-content">
+											<div class="modal-header">
+												<h5 class="modal-title" id="delete-modal">
+													Delete "{{ handshape.name }}" from inventory
+												</h5>
+												<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+												<span aria-hidden="true">&times;</span>
+												</button>
+											</div>
+											<div class="modal-body">
+												Are you sure you want to delete this handshape?
+											</div>
+											<div class="modal-footer">
+												<a href="{% url 'handshape_delete' pk=handshape.pk %}"><button type="button" class="btn btn-danger">Delete</button></a>
+												<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
 						</div>
 
-					</div>
+						<div class="container-fluid" style="width: 100%;overflow-y: scroll; overflow-x: hidden;">
 
-					<!-- Thumb-finger Combinations -->
-					<div class="tab-pane fade" id="v-pills-thumbfinger" role="tabpanel" aria-labelledby="v-pills-thumbfinger-tab">
+							<div class="row justify-content-center" style="padding: 0px 10px;">
 
-						<div class="alert alert-info" role="alert">
-							Basic symbols are combined with diacritic signs for the width of opening and bending (of concerned fingers). <a href="https://www.sign-lang.uni-hamburg.de/projekte/hamnosys/hns4.0/hns4.0eng/405thumbcombinations.html" target="#"><i class="fas fa-info-circle"></i></a>
+								<!-- Hand Shape -->
+								<div class="col border form-content" style="text-align: center;">
+									Choose a base shape to modify.
+									<div class="row" style="margin:0px;padding: 10px;">
+										<div class="col" style="text-align: center;padding: 0px;">
+											<img src="https://imgur.com/ymJT7p1.png" alt="" width="70px"><br>
+											<div class="custom-control custom-radio custom-control-inline">
+												<input type="radio" id="fist" name="selectedHandshape" class="custom-control-input" value="fist" onclick="updatesign();" {% if handshape.handshape == "fist" %} checked="true" {% endif %}>
+												<label class="custom-control-label" for="fist">Fist/Flat</label>
+											</div>
+										</div>
+										<!-- Spread -->
+										<div class="col" style="text-align: center;padding: 0px;">
+											<img src="https://imgur.com/KioSOMV.png" alt="" width="70px"><br>
+											<div class="custom-control custom-radio custom-control-inline">
+												<input type="radio" id="finger2345" name="selectedHandshape" class="custom-control-input" value="finger2345" onclick="updatesign();" {% if handshape.handshape == "finger2345" %} checked="true" {% endif %}>
+												<label class="custom-control-label" for="finger2345">Spread</label>
+											</div>
+										</div>
+										<!-- Pinch -->
+										<div class="col" style="text-align: center;padding: 0px;">
+											<img src="https://imgur.com/XWXJ29M.png" alt="" width="70px"><br>
+											<div class="custom-control custom-radio custom-control-inline">
+												<input type="radio" id="pinch12open" name="selectedHandshape" class="custom-control-input" value="pinch12open" onclick="updatesign();" {% if handshape.handshape == "pinch12open" %} checked="true" {% endif %}>
+												<label class="custom-control-label" for="pinch12open">Pinch</label>
+											</div>
+										</div>
+										<!-- Cee -->
+										<div class="col" style="text-align: center;padding: 0px;">
+											<img src="https://imgur.com/C2lrk0a.png" alt="" width="70px"><br>
+											<div class="custom-control custom-radio custom-control-inline">
+												<input type="radio" id="cee12open" name="selectedHandshape" class="custom-control-input" value="cee12open" onclick="updatesign();" {% if handshape.handshape == "cee12open" %} checked="true" {% endif %}>
+												<label class="custom-control-label" for="cee12open">Cee</label>
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<!-- Thumb Position -->
+								<div class="col border form-content" style="text-align: center;">
+									Choose a default thumb position.
+									<div class="row" style="margin: 0px;padding: 10px;">
+										<div class="col" style="text-align: center;padding: 0;">
+											<img src="https://imgur.com/C2lrk0a.png" alt="" width="70px"><br>
+											<div class="custom-control custom-radio custom-control-inline">
+												<input type="radio" id="defaultthumb" name="thumbpos" class="custom-control-input" value="None" onclick="updatesign();" {% if handshape.thumbpos == "None" %} checked="true" {% endif %}>
+												<label class="custom-control-label" for="defaultthumb">Default</label>
+											</div>
+										</div>
+										<div class="col" style="text-align: center; padding: 0;">
+											<img src="https://imgur.com/cVXciKW.png" alt="" width="70px"><br>
+											<div class="custom-control custom-radio custom-control-inline">
+												<input type="radio" id="out" name="thumbpos" class="custom-control-input" value="out" onclick="updatesign();" {% if handshape.thumbpos == "out" %} checked="true" {% endif %}>
+												<label class="custom-control-label" for="out">Out</label>
+											</div>
+										</div>
+										<div class="col" style="text-align: center; padding: 0;">
+											<img src="https://imgur.com/D6ucAMb.png" alt="" width="70px"><br>
+											<div class="custom-control custom-radio custom-control-inline">
+												<input type="radio" id="across" name="thumbpos" class="custom-control-input" value="across" onclick="updatesign();" {% if handshape.thumbpos == "across" %} checked="true" {% endif %}>
+												<label class="custom-control-label" for="across">Across</label>
+											</div>
+										</div>
+										<div class="col" style="text-align: center; padding: 0;">
+											<img src="https://imgur.com/NkOAIiz.png" alt="" width="70px"><br>
+											<div class="custom-control custom-radio custom-control-inline">
+												<input type="radio" id="opposed" name="thumbpos" class="custom-control-input" value="opposed" onclick="updatesign();" {% if handshape.thumbpos == "opposed" %} checked="true" {% endif %}>
+												<label class="custom-control-label" for="opposed">Opposed</label>
+											</div>
+										</div>
+									</div>
+								</div>
+
+							</div>
+
+							<div class="row justify-content-center" style="padding:0px 10px;">
+
+								<!-- Finger Specifications -->
+								<div class="col-sm-auto border form-content" style="text-align: center;">
+									Select involved fingers<br>
+									for chosen base form.
+									<div class="row" style="padding: 10px">
+										<div class="col" style="text-align: center;">
+											<img src="https://imgur.com/8X10d4b.png" alt="fingers" width="150px">
+										</div>
+	  								</div>
+	  								<div class="row" style="padding-bottom: 10px;">
+	  									<div class="col" style="padding-left: 20%;text-align:left;">
+	  										<div>
+	  											<input name="specialfingers" type="text" hidden="true">
+	  										</div>
+											<div class="custom-control custom-checkbox">
+												<input name="defaultFingers" type="checkbox" class="custom-control-input" id="index" onclick="updatesign();" {% if "2" in handshape.specialfingers %} checked="true" {% endif %}>
+		  										<label class="custom-control-label" for="index">1 - Index</label>
+		  									</div>
+		  									<div class="custom-control custom-checkbox">
+		  										<input name="defaultFingers" type="checkbox" class="custom-control-input" id="middle" onclick="updatesign();" {% if "3" in handshape.specialfingers %} checked="true" {% endif %}>
+		  										<label class="custom-control-label" for="middle">2 - Middle</label>
+		  									</div>
+		  									<div class="custom-control custom-checkbox">
+		  										<input name="defaultFingers" type="checkbox" class="custom-control-input" id="ring" onclick="updatesign();" {% if "4" in handshape.specialfingers %} checked="true" {% endif %}>
+		  										<label class="custom-control-label" for="ring">3 - Ring</label>
+		  									</div>
+		  									<div class="custom-control custom-checkbox">
+		  										<input name="defaultFingers" type="checkbox" class="custom-control-input" id="pinky" onclick="updatesign();" {% if "5" in handshape.specialfingers %} checked="true" {% endif %}>
+		  										<label class="custom-control-label" for="pinky">4 - Pinky</label>
+		  									</div>
+	  									</div>
+	  								</div>
+								</div>
+
+								<!-- Main Bending -->
+								<div class="col-sm-auto border form-content" style="text-align: center;">
+									Select bending<br>
+									for involved fingers.
+									<div class="row" style="padding: 10px">
+										<div class="col" style="text-align: center;">
+											<img src="https://imgur.com/GOP5nXW.png" alt="fingers" width="150px">
+										</div>
+	  								</div>
+	  								<div class="row" style="padding-bottom: 10px;">
+	  									<div class="col" style="padding-left: 20%;text-align:left;">
+											<div class="custom-control custom-radio">
+												<input name="mainbend" type="radio" class="custom-control-input" id="default" value="None" onclick="updatesign();" {% if handshape.mainbend == "None" %} checked="true" {% endif %}>
+		  										<label class="custom-control-label" for="default">1 - Normal</label>
+		  									</div>
+		  									<div class="custom-control custom-radio">
+		  										<input name="mainbend" type="radio" class="custom-control-input" id="rounded" value="round" onclick="updatesign();" {% if handshape.mainbend == "round" %} checked="true" {% endif %}>
+		  										<label class="custom-control-label" for="rounded">2 - Round</label>
+		  									</div>
+		  									<div class="custom-control custom-radio">
+		  										<input name="mainbend" type="radio" class="custom-control-input" id="hooked" value="hooked" onclick="updatesign();" {% if handshape.mainbend == "hooked" %} checked="true" {% endif %}>
+		  										<label class="custom-control-label" for="hooked">3 - Hooked</label>
+		  									</div>
+		  									<div class="custom-control custom-radio">
+		  										<input name="mainbend" type="radio" class="custom-control-input" id="bent" value="bent" onclick="updatesign();" {% if handshape.mainbend == "bent" %} checked="true" {% endif %}>
+		  										<label class="custom-control-label" for="bent">4 - Bent</label>
+		  									</div>
+	  									</div>
+	  								</div>
+								</div>
+
+								<!-- Individual Bending -->
+								<div class="col-lg border form-content" style="text-align: center;">
+									Adjust bending manually<br>
+									for individual fingers.
+									<div class="row justify-content-center" style="padding: 20px 0 20px 0;">
+										<div class="col-sm-5">
+											<img src="https://imgur.com/8HUeg2h.png" alt="fingers" width="200px">
+										</div>
+										<div class="col-sm" id="specificbend_options" style="padding-left: 10%;">
+											<div class="row" style="font-size:0.7rem;">
+												Thumb
+											</div>
+											<div class="row mb-1">
+												<input name="bend1_1" value="{{ handshape.bend1_1 }}" type="number" step=".01" style="font-size:0.5rem;width:2.2rem;margin-left:2px;" onchange="updatesign();">
+												<input name="bend1_2" value="{{ handshape.bend1_2 }}" type="number" step=".01" style="font-size:0.5rem;width:2.2rem;margin-left:2px;" onchange="updatesign();">
+												<input name="bend1_3" value="{{ handshape.bend1_3 }}" type="number" step=".01" style="font-size:0.5rem;width:2.2rem;margin-left:2px;" onchange="updatesign();">
+												<input name="bend1_4" value="{{ handshape.bend1_4 }}" type="number" step=".01" style="font-size:0.5rem;width:2.2rem;margin-left:2px;" onchange="updatesign();">
+												<input name="bend1_5" value="{{ handshape.bend1_5 }}" type="number" step=".01" style="font-size:0.5rem;width:2.2rem;margin-left:2px;" onchange="updatesign();">
+											</div>
+											<div class="row" style="font-size:0.7rem;">
+												Index
+											</div>
+											<div class="row mb-1">
+												<input name="bend2_1" value="{{ handshape.bend2_1 }}" type="number" step=".01" style="font-size:0.5rem;width:2.2rem;margin-left:2px;" onchange="updatesign();">
+												<input name="bend2_2" value="{{ handshape.bend2_2 }}" type="number" step=".01" style="font-size:0.5rem;width:2.2rem;margin-left:2px;" onchange="updatesign();">
+												<input name="bend2_3" value="{{ handshape.bend2_3 }}" type="number" step=".01" style="font-size:0.5rem;width:2.2rem;margin-left:2px;" onchange="updatesign();">
+												<input name="bend2_4" value="{{ handshape.bend2_4 }}" type="number" step=".01" style="font-size:0.5rem;width:2.2rem;margin-left:2px;" onchange="updatesign();">
+											</div>
+											<div class="row" style="font-size:0.7rem;">
+												Middle
+											</div>
+											<div class="row mb-1" style="font-size:0.7rem;">
+												<input name="bend3_1" value="{{ handshape.bend3_1 }}" type="number" step=".01" style="font-size:0.5rem;width:2.2rem;margin-left:2px;" onchange="updatesign();">
+												<input name="bend3_2" value="{{ handshape.bend3_2 }}" type="number" step=".01" style="font-size:0.5rem;width:2.2rem;margin-left:2px;" onchange="updatesign();">
+												<input name="bend3_3" value="{{ handshape.bend3_3 }}" type="number" step=".01" style="font-size:0.5rem;width:2.2rem;margin-left:2px;" onchange="updatesign();">
+												<input name="bend3_4" value="{{ handshape.bend3_4 }}" type="number" step=".01" style="font-size:0.5rem;width:2.2rem;margin-left:2px;" onchange="updatesign();">
+											</div>
+											<div class="row" style="font-size:0.7rem;">
+												Ring
+											</div>
+											<div class="row mb-1">
+												<input name="bend4_1" value="{{ handshape.bend4_1 }}" type="number" step=".01" style="font-size:0.5rem;width:2.2rem;margin-left:2px;" onchange="updatesign();">
+												<input name="bend4_2" value="{{ handshape.bend4_2 }}" type="number" step=".01" style="font-size:0.5rem;width:2.2rem;margin-left:2px;" onchange="updatesign();">
+												<input name="bend4_3" value="{{ handshape.bend4_3 }}" type="number" step=".01" style="font-size:0.5rem;width:2.2rem;margin-left:2px;" onchange="updatesign();">
+												<input name="bend4_4" value="{{ handshape.bend4_4 }}" type="number" step=".01" style="font-size:0.5rem;width:2.2rem;margin-left:2px;" onchange="updatesign();">
+											</div>
+											<div class="row" style="font-size:0.7rem;">
+												Pinky
+											</div>
+											<div class="row mb-1">
+												<input name="bend5_1" value="{{ handshape.bend5_1 }}" type="number" step=".01" style="font-size:0.5rem;width:2.2rem;margin-left:2px;" onchange="updatesign();">
+												<input name="bend5_2" value="{{ handshape.bend5_2 }}" type="number" step=".01" style="font-size:0.5rem;width:2.2rem;margin-left:2px;" onchange="updatesign();">
+												<input name="bend5_3" value="{{ handshape.bend5_3 }}" type="number" step=".01" style="font-size:0.5rem;width:2.2rem;margin-left:2px;" onchange="updatesign();">
+												<input name="bend5_4" value="{{ handshape.bend5_4 }}" type="number" step=".01" style="font-size:0.5rem;width:2.2rem;margin-left:2px;" onchange="updatesign();">
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
 						</div>
-
-						<div style="position: relative;height: 300px;overflow: auto;">
-							<table style="undefined;table-layout: fixed; width: 100%; text-align: left;">
-								<colgroup>
-									<col style="width: 72px">
-									<col style="width: 300px">
-								</colgroup>
-								<tbody>				
-									<!-- 1. THUMB-FINGER COMBINATIONS -->
-									<tr>
-										<td colspan="2" style="padding-bottom: 10px; text-align: center;">
-											<strong>Basic Symbols</strong>
-										</td>
-									</tr>
-									<!-- hampinch12 -->
-									<tr>
-										<td style="text-align: center;">
-											<button title="hampinch12" class="btn btn-light ham" value="" data-toggle="tooltip" data-placement="right" onclick="input(this);"></button>
-										</td>
-										<td>Hand is closed with a finger touching the thumb (index finger bent by default)</td>
-									</tr>
-									<!-- hampinchall -->
-									<tr>
-										<td style="text-align: center;">
-											<button title="hampinch12" class="btn btn-light ham" value="" data-toggle="tooltip" data-placement="right" onclick="input(this);"></button>
-										</td>
-										<td>All fingers are touching the thumb (fingers bent by default)</td>
-									</tr>
-									<!-- hampinch12open -->
-									<tr>
-										<td style="text-align: center;">
-											<button title="hampinch12open" class="btn btn-light ham" value="" data-toggle="tooltip" data-placement="right" onclick="input(this);"></button>
-										</td>
-										<td>Hand is open with a finger touching the thumb (index finger bent by default)</td>
-									</tr>
-									<!-- hamcee12 -->
-									<tr>
-										<td style="text-align: center;">
-											<button title="hamcee12" class="btn btn-light ham" value="" data-toggle="tooltip" data-placement="right" onclick="input(this);"></button>
-										</td>
-										<td>Hand is closed with a finger and the thumb shaped like a 'C' (index finger bent by default)</td>
-									</tr>
-									<!-- hamceeall -->
-									<tr>
-										<td style="text-align: center;">
-											<button title="hamceeall" class="btn btn-light ham" value="" data-toggle="tooltip" data-placement="right" onclick="input(this);"></button>
-										</td>
-										<td>All fingers and thumb shaped like a 'C'</td>
-									</tr>
-									<!-- hamceeopen -->
-									<tr>
-										<td style="text-align: center;">
-											<button title="hamceeopen" class="btn btn-light ham" value="" data-toggle="tooltip" data-placement="right" onclick="input(this);"></button>
-										</td>
-										<td>Open hand with a finger and the thumb shaped like a 'C'</td>
-									</tr>
-
-									<!-- 2. THUMB DIACRITICS -->
-									<tr>
-										<td colspan="2" style="padding-bottom: 10px; padding-top: 20px; text-align: center;">
-											<strong>Width of Opening (added to cee-shapes only)</strong>
-										</td>
-									</tr>
-									<!-- default -->
-									<tr>
-										<td style="text-align: center; padding-bottom: 5px;">
-											<button class="btn btn-light ham" disabled> </button>
-										</td>
-										<td><strong>Normal width -- default</strong></td>
-									</tr>
-									<!-- hamthumbacrossmod -->
-									<tr>
-										<td style="text-align: center;">
-											<button title="hamthumbacrossmod" class="btn btn-light ham" value="" data-toggle="tooltip" data-placement="right" onclick="input(this);"></button>
-										</td>
-										<td>Narrow opening</td>
-									</tr>
-									<!-- hamthumbopenmod -->
-									<tr>
-										<td style="text-align: center;">
-											<button title="hamthumbopen" class="btn btn-light ham" value="" data-toggle="tooltip" data-placement="right" onclick="input(this);"></button>
-										</td>
-										<td>Wide opening</td>
-									</tr>
-									
-									<!-- 3. BENDING OF CONCERNED FINGERS -->
-									<tr>
-										<td colspan="2" style="padding-bottom: 10px; padding-top: 20px; text-align: center;">
-											<strong>Bending of Concerned Fingers</strong>
-										</td>
-									</tr>
-									<!-- default -->
-									<tr>
-										<td style="text-align: center; padding-bottom: 5px;">
-											
-										</td>
-										<td><strong>No bending -- default</strong></td>
-									</tr>
-									<!-- hamfingerstraightmod -->
-									<tr>
-										<td style="text-align: center;">
-											<button title="hamfingerstraightmod" class="btn btn-light ham" value="" data-toggle="tooltip" data-placement="right" onclick="input(this);">&nbsp;</button>
-										</td>
-										<td>Bent (straight)</td>
-									</tr>
-									<!-- hamfingerbendmod -->
-									<tr>
-										<td style="text-align: center;">
-											<button title="hamfingerbendmod" class="btn btn-light ham" value="" data-toggle="tooltip" data-placement="right" onclick="input(this);">&nbsp;</button>
-										</td>
-										<td>Bent (rounded)</td>
-									</tr>
-									<!-- hamfingerhookmod -->
-									<tr>
-										<td style="text-align: center;">
-											<button title="hamfingerhookmod" class="btn btn-light ham" value="" data-toggle="tooltip" data-placement="right" onclick="input(this);">&nbsp;</button>
-										</td>
-										<td>Bent (hooked)</td>
-									</tr>
-									<!-- hamdoublebentmod -->
-									<tr>
-										<td style="text-align: center;">
-											<button title="hamdoublebentmod" class="btn btn-light ham" value="" data-toggle="tooltip" data-placement="right" onclick="input(this);">&nbsp;</button>
-										</td>
-										<td>Double bent (distal joint not bent)</td>
-									</tr>
-									<!-- hamdoublehookedmod -->
-									<tr>
-										<td style="text-align: center;">
-											<button title="hamdoublehookedmod" class="btn btn-light ham" value="" data-toggle="tooltip" data-placement="right" onclick="input(this);">&nbsp;</button>
-										</td>
-										<td>Double hooked (distal joint bent)</td>
-									</tr>
-									
-
-								</tbody>
-							</table>
-						</div>
-
-					</div>
-
-					<!-- Finger specifications -->
-					<div class="tab-pane fade" id="v-pills-fingerspecs" role="tabpanel" aria-labelledby="v-pills-fingerspecs-tab">
-						
-						<div class="alert alert-info" role="alert">
-								Finger specifications replace default finger(s) or specify derivations in basic forms. <a href="https://www.sign-lang.uni-hamburg.de/projekte/hamnosys/hns4.0/hns4.0eng/405thumbcombinations.html" target="#"><i class="fas fa-info-circle"></i></a>
-						</div>
-
-						<div style="position: relative;height: 300px;overflow: auto;">
-
-							<table style="undefined;table-layout: fixed; width: 100%; text-align: left;">
-								<colgroup>
-									<col style="width: 72px">
-									<col style="width: 300px">
-								</colgroup>
-								<tbody>				
-									<!-- 1. FINGER DIGITS -->
-									<tr>
-										<td colspan="2" style="padding-bottom: 10px; text-align: center;">
-											<strong>Finger Digits</strong>
-										</td>
-									</tr>
-									<!-- hamindexfinger -->
-									<tr>
-										<td style="text-align: center;">
-											<button title="hamindexfinger" class="btn btn-light ham" value="" data-toggle="tooltip" data-placement="right" onclick="input(this);"></button>
-										</td>
-										<td>Index finger</td>
-									</tr>
-									<!-- hammiddlefinger -->
-									<tr>
-										<td style="text-align: center;">
-											<button title="hammiddlefinger" class="btn btn-light ham" value="" data-toggle="tooltip" data-placement="right" onclick="input(this);"></button>
-										</td>
-										<td>Middle finger</td>
-									</tr>
-									<!-- hamringfinger -->
-									<tr>
-										<td style="text-align: center;">
-											<button title="hamringfinger" class="btn btn-light ham" value="" data-toggle="tooltip" data-placement="right" onclick="input(this);"></button>
-										</td>
-										<td>Ring finger</td>
-									</tr>
-									<!-- hampinky -->
-									<tr>
-										<td style="text-align: center;">
-											<button title="hampinky" class="btn btn-light ham" value="" data-toggle="tooltip" data-placement="right" onclick="input(this);"></button>
-										</td>
-										<td>Pinky</td>
-									</tr>
-									
-									<!-- 2. BENDING OF SELECTED FINGERS-->
-									<tr>
-										<td colspan="2" style="padding-bottom: 10px; padding-top: 20px; text-align: center;">
-											<strong>Bending of Selected Fingers</strong>
-										</td>
-									</tr>
-									<!-- default -->
-									<tr>
-										<td style="text-align: center; padding-bottom: 5px;">
-											
-										</td>
-										<td><strong>No bending -- default</strong></td>
-									</tr>
-									<!-- hamfingerstraightmod -->
-									<tr>
-										<td style="text-align: center;">
-											<button title="hamfingerstraightmod" class="btn btn-light ham" value="" data-toggle="tooltip" data-placement="right" onclick="input(this);">&nbsp;</button>
-										</td>
-										<td>Bent (straight)</td>
-									</tr>
-									<!-- hamfingerbendmod -->
-									<tr>
-										<td style="text-align: center;">
-											<button title="hamfingerbendmod" class="btn btn-light ham" value="" data-toggle="tooltip" data-placement="right" onclick="input(this);">&nbsp;</button>
-										</td>
-										<td>Bent (rounded)</td>
-									</tr>
-									<!-- hamfingerhookmod -->
-									<tr>
-										<td style="text-align: center;">
-											<button title="hamfingerhookmod" class="btn btn-light ham" value="" data-toggle="tooltip" data-placement="right" onclick="input(this);">&nbsp;</button>
-										</td>
-										<td>Bent (hooked)</td>
-									</tr>
-									<!-- hamdoublebentmod -->
-									<tr>
-										<td style="text-align: center;">
-											<button title="hamdoublebentmod" class="btn btn-light ham" value="" data-toggle="tooltip" data-placement="right" onclick="input(this);">&nbsp;</button>
-										</td>
-										<td>Double bent (distal joint not bent)</td>
-									</tr>
-									<!-- hamdoublehookedmod -->
-									<tr>
-										<td style="text-align: center;">
-											<button title="hamdoublehookedmod" class="btn btn-light ham" value="" data-toggle="tooltip" data-placement="right" onclick="input(this);">&nbsp;</button>
-										</td>
-										<td>Double hooked (distal joint bent)</td>
-									</tr>
-									
-
-								</tbody>
-							</table>
-						</div>
-
-					</div>
-
-					<!-- Crossing Fingers -->
-					<div class="tab-pane fade" id="v-pills-crossing" role="tabpanel" aria-labelledby="v-pills-crossing-tab">
-
-						<div class="alert alert-info" role="alert">
-							Crossing fingers are notated with finger digits (lower first) and the finger part where the upper finger meets the lower one. <a href="https://www.sign-lang.uni-hamburg.de/projekte/hamnosys/hns4.0/hns4.0eng/07fingerparts.html" target="#"><i class="fas fa-info-circle"></i></a>
-						</div>
-						
-						<div style="position: relative;height: 300px;overflow: auto;">
-							<table style="undefined;table-layout: fixed; width: 100%; text-align: left;">
-								<colgroup>
-									<col style="width: 72px">
-									<col style="width: 300px">
-								</colgroup>
-								<tbody>				
-									<!-- 1. FINGER DIGITS -->
-									<tr>
-										<td colspan="2" style="padding-bottom: 10px; text-align: center;">
-											<strong>Finger Digits</strong>
-										</td>
-									</tr>
-									<!-- hamindexfinger -->
-									<tr>
-										<td style="text-align: center;">
-											<button title="hamindexfinger" class="btn btn-light ham" value="" data-toggle="tooltip" data-placement="right" onclick="input(this);"></button>
-										</td>
-										<td>Index finger</td>
-									</tr>
-									<!-- hammiddlefinger -->
-									<tr>
-										<td style="text-align: center;">
-											<button title="hammiddlefinger" class="btn btn-light ham" value="" data-toggle="tooltip" data-placement="right" onclick="input(this);"></button>
-										</td>
-										<td>Middle finger</td>
-									</tr>
-									<!-- hamringfinger -->
-									<tr>
-										<td style="text-align: center;">
-											<button title="hamringfinger" class="btn btn-light ham" value="" data-toggle="tooltip" data-placement="right" onclick="input(this);"></button>
-										</td>
-										<td>Ring finger</td>
-									</tr>
-									<!-- hampinky -->
-									<tr>
-										<td style="text-align: center;">
-											<button title="hampinky" class="btn btn-light ham" value="" data-toggle="tooltip" data-placement="right" onclick="input(this);"></button>
-										</td>
-										<td>Pinky</td>
-									</tr>
-									
-									<!-- 2. CROSSING-->
-									<tr>
-										<td colspan="2" style="padding-bottom: 10px; padding-top: 20px; text-align: center;">
-											<strong>Point of Contact</strong>
-										</td>
-									</tr>
-									<!-- hamfingernail -->
-									<tr>
-										<td style="text-align: center;">
-											<button title="hamfingerstraightmod" class="btn btn-light ham" value="" data-toggle="tooltip" data-placement="right" onclick="input(this);">&nbsp;</button>
-										</td>
-										<td>Finger nail of the lower hand</td>
-									</tr>
-								</tbody>
-							</table>
-						</div>
-
-					</div>
-
-					<div class="tab-pane fade" id="v-pills-hiding" role="tabpanel" aria-labelledby="v-pills-hiding-tab">
-
-						<div class="alert alert-info" role="alert">
-							Hidden thumb is notated with the finger digit above the thumb, the hambetween sign "\", and the finger digit below the thumb. <a href="https://www.sign-lang.uni-hamburg.de/projekte/hamnosys/hns4.0/hns4.0eng/07fingerparts.html" target="#"><i class="fas fa-info-circle"></i></a>
-						</div>
-
-						<div style="position: relative;height: 300px;overflow: auto;">
-							<table style="undefined;table-layout: fixed; width: 100%; text-align: left;">
-								<colgroup>
-									<col style="width: 72px">
-									<col style="width: 300px">
-								</colgroup>
-								<tbody Page>				
-									<!-- 1. FINGER DIGITS -->
-									<tr>
-										<td colspan="2" style="padding-bottom: 10px; text-align: center;">
-											<strong>Finger Digits</strong>
-										</td>
-									</tr>
-									<!-- hamindexfinger -->
-									<tr>
-										<td style="text-align: center;">
-											<button title="hamindexfinger" class="btn btn-light ham" value="" data-toggle="tooltip" data-placement="right" onclick="input(this);"></button>
-										</td>
-										<td>Index finger</td>
-									</tr>
-									<!-- hammiddlefinger -->
-									<tr>
-										<td style="text-align: center;">
-											<button title="hammiddlefinger" class="btn btn-light ham" value="" data-toggle="tooltip" data-placement="right" onclick="input(this);"></button>
-										</td>
-										<td>Middle finger</td>
-									</tr>
-									<!-- hamringfinger -->
-									<tr>
-										<td style="text-align: center;">
-											<button title="hamringfinger" class="btn btn-light ham" value="" data-toggle="tooltip" data-placement="right" onclick="input(this);"></button>
-										</td>
-										<td>Ring finger</td>
-									</tr>
-									<!-- hampinky -->
-									<tr>
-										<td style="text-align: center;">
-											<button title="hampinky" class="btn btn-light ham" value="" data-toggle="tooltip" data-placement="right" onclick="input(this);"></button>
-										</td>
-										<td>Pinky</td>
-									</tr>
-									
-									<!-- 2. CROSSING-->
-									<tr>
-										<td colspan="2" style="padding-bottom: 10px; padding-top: 20px; text-align: center;">
-											<strong>Between</strong>
-										</td>
-									</tr>
-									<!-- hambetween -->
-									<tr>
-										<td style="text-align: center;">
-											<button title="hambetween" class="btn btn-light ham" value="" data-toggle="tooltip" data-placement="right" onclick="input(this);">&nbsp;</button>
-										</td>
-										<td>In between operator</td>
-									</tr>
-								</tbody>
-							</table>
-						</div>
-
-					</div>
+					</form>
+					<textarea id="sigml" rows="10" class="txtaSiGMLText av0" hidden="true">{{ sigml }}</textarea>
 
 				</div>
-
-				<nav class="nav nav-pills flex-column flex-sm-row justify-content-center bg-dark" style="margin: 0px; padding: 5px; font-size: 0.7rem; font-color: white !important;">
-
-					<!-- Nav Items -->
-
-					<!-- Basic Form -->
-					<a class="flex-sm-fill text-sm-center nav-item nav-link active white-pill" id="v-pills-basicform-tab" data-toggle="pill" href="#v-pills-basicform" role="tab" aria-controls="v-pills-basicform" aria-selected="true">Basic Forms</a>
-
-					<!-- Thumb-finger Combinations -->
-					<a class="flex-sm-fill text-sm-center nav-item nav-link white-pill" id="v-pills-thumbfinger-tab" data-toggle="pill" href="#v-pills-thumbfinger" role="tab" aria-controls="v-pills-thumbfinger" aria-selected="false">Connected Forms</a>
-					
-					<!-- Finger specifications -->
-					<a class="flex-sm-fill text-sm-center nav-item nav-link white-pill" id="v-pills-fingerspecs-tab" data-toggle="pill" href="#v-pills-fingerspecs" role="tab" aria-controls="v-pills-fingerspecs" aria-selected="false">Finger Specifications</a>
-					
-					<!-- Crossing -->
-					<a class="flex-sm-fill text-sm-center nav-item nav-link white-pill" id="v-pills-crossing-tab" data-toggle="pill" href="#v-pills-crossing" role="tab" aria-controls="v-pills-crossing" aria-selected="false">Crossed Fingers</a>
-
-					<!-- Hidden Thumb -->
-					<a class="flex-sm-fill text-sm-center nav-item nav-link white-pill" id="v-pills-hiding-tab" data-toggle="pill" href="#v-pills-hiding" role="tab" aria-controls="v-pills-hiding" aria-selected="false">Hidden Thumb</a>
-				</nav>
 
 			</div>
-
-
 
 
 {% endblock %}

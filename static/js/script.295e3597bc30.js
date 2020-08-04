@@ -16,6 +16,8 @@ function initsigml(){
 
 function updatesign(){
 
+    theForm = document.forms["handconfig"];
+
     // Handshape
     var selectedHandshape = document.getElementsByName('selectedHandshape');
     for (var i=0; i<4; i++) {
@@ -109,11 +111,10 @@ function updatesign(){
     handconfig.setAttribute("palmor", "d");
     // Render animation
     initsigml();
-    document.getElementById("loading").innerHTML = "JASigning Avatar"
     document.getElementById("animate").click();
 }
 
-function writesigml(sigml){
+function hello(sigml){
     console.log(sigml);
     // document.getElementsByName('hello')[0].value = sigml;
     document.getElementById('sigml').innerHTML = sigml;
@@ -129,9 +130,6 @@ var delay = ( function() {
 })();
 
 delay(function(){
-    // document.getElementById("animate").removeAttribute("disabled");
-    theForm = document.forms["handconfig"];
-    if (theForm){
-        updatesign();
-    }
+    document.getElementById("animate").removeAttribute("disabled");
+    updatesign();
 }, 3000 ); // end delay

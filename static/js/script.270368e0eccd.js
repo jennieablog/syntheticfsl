@@ -1,7 +1,12 @@
 var xmlString = "<sigml><hamgestural_sign><sign_manual></sign_manual></hamgestural_sign></sigml>";
 var parser = new DOMParser();
-var xmlDoc = parser.parseFromString(xmlString, "text/xml");
+var xmlDoc = parser.parseFromString(xmlString, "text/xml"); //important to use "text/xml"
 var handconfig = xmlDoc.createElement("handconfig");
+handconfig.setAttribute("handshape","fist");
+handconfig.setAttribute("extfidir", "u");
+handconfig.setAttribute("palmor", "d");
+// Location
+
 var elements = xmlDoc.getElementsByTagName("sign_manual");
 elements[0].appendChild(handconfig);
 var serializer = new XMLSerializer();
@@ -15,6 +20,8 @@ function initsigml(){
 }
 
 function updatesign(){
+
+    theForm = document.forms["handconfig"];
 
     // Handshape
     var selectedHandshape = document.getElementsByName('selectedHandshape');
@@ -32,7 +39,6 @@ function updatesign(){
             specialfingers = specialfingers+(i+2);
         }
     }
-    document.getElementsByName('specialfingers')[0].value = specialfingers;
     handconfig.setAttribute("specialfingers",specialfingers)
 
     // Thumb Position
@@ -52,71 +58,44 @@ function updatesign(){
     }
 
     // Specific Bending
-    var bend1_attr =
-        document.getElementsByName('bend1_1')[0].value + " " +
-        document.getElementsByName('bend1_2')[0].value + " " +
-        document.getElementsByName('bend1_3')[0].value + " " +
-        document.getElementsByName('bend1_4')[0].value + " " +
-        document.getElementsByName('bend1_5')[0].value;
-    var bend2_attr =
-        document.getElementsByName('bend2_1')[0].value + " " +
-        document.getElementsByName('bend2_2')[0].value + " " +
-        document.getElementsByName('bend2_3')[0].value + " " +
-        document.getElementsByName('bend2_4')[0].value;
-    var bend3_attr =
-        document.getElementsByName('bend3_1')[0].value + " " +
-        document.getElementsByName('bend3_2')[0].value + " " +
-        document.getElementsByName('bend3_3')[0].value + " " +
-        document.getElementsByName('bend3_4')[0].value;
-    var bend4_attr = 
-        document.getElementsByName('bend4_1')[0].value + " " +
-        document.getElementsByName('bend4_2')[0].value + " " +
-        document.getElementsByName('bend4_3')[0].value + " " +
-        document.getElementsByName('bend4_4')[0].value;
-    var bend5_attr = 
-        document.getElementsByName('bend5_1')[0].value + " " +
-        document.getElementsByName('bend5_2')[0].value + " " +
-        document.getElementsByName('bend5_3')[0].value + " " +
-        document.getElementsByName('bend5_4')[0].value;
-
-
-    if (bend1_attr == "0 0 0 0 0" || bend1_attr == "0.0 0.0 0.0 0.0 0.0") {
+    var bend1 = document.getElementsByName('bend1');
+    var bend2 = document.getElementsByName('bend2');
+    var bend3 = document.getElementsByName('bend3');
+    var bend4 = document.getElementsByName('bend4');
+    var bend5 = document.getElementsByName('bend5');
+    var bend1_attr = bend1[0].value+" "+bend1[1].value+" "+bend1[2].value+" "+bend1[3].value+" "+bend1[4].value;
+    var bend2_attr = bend2[0].value+" "+bend2[1].value+" "+bend2[2].value+" "+bend2[3].value;
+    var bend3_attr = bend3[0].value+" "+bend3[1].value+" "+bend3[2].value+" "+bend3[3].value;
+    var bend4_attr = bend4[0].value+" "+bend4[1].value+" "+bend4[2].value+" "+bend4[3].value;
+    var bend5_attr = bend5[0].value+" "+bend5[1].value+" "+bend5[2].value+" "+bend5[3].value;
+    if (bend1_attr == "0 0 0 0 0") {
     	handconfig.removeAttribute("bend1");
     } else {
     	handconfig.setAttribute("bend1", bend1_attr);
     }
-    if (bend2_attr == "0 0 0 0" || bend2_attr == "0.0 0.0 0.0 0.0") {
+    if (bend2_attr == "0 0 0 0") {
     	handconfig.removeAttribute("bend2");
     } else {
     	handconfig.setAttribute("bend2", bend2_attr);
     }
-    if (bend3_attr == "0 0 0 0" || bend3_attr == "0.0 0.0 0.0 0.0") {
+    if (bend3_attr == "0 0 0 0") {
     	handconfig.removeAttribute("bend3");
     } else {
     	handconfig.setAttribute("bend3", bend3_attr);
     }
-    if (bend4_attr == "0 0 0 0" || bend4_attr == "0.0 0.0 0.0 0.0") {
+    if (bend4_attr == "0 0 0 0") {
     	handconfig.removeAttribute("bend4");
     } else {
     	handconfig.setAttribute("bend4", bend4_attr);
     }
-    if (bend5_attr == "0 0 0 0" || bend5_attr == "0.0 0.0 0.0 0.0") {
+    if (bend5_attr == "0 0 0 0") {
     	handconfig.removeAttribute("bend5");
     } else {
     	handconfig.setAttribute("bend5", bend5_attr);
     }
-    handconfig.setAttribute("extfidir", "u");
-    handconfig.setAttribute("palmor", "d");
+
     // Render animation
     initsigml();
-    document.getElementById("loading").innerHTML = "JASigning Avatar"
-    document.getElementById("animate").click();
-}
-
-function writesigml(sigml){
-    console.log(sigml);
-    // document.getElementsByName('hello')[0].value = sigml;
-    document.getElementById('sigml').innerHTML = sigml;
     document.getElementById("animate").click();
 }
 
@@ -129,9 +108,6 @@ var delay = ( function() {
 })();
 
 delay(function(){
-    // document.getElementById("animate").removeAttribute("disabled");
-    theForm = document.forms["handconfig"];
-    if (theForm){
-        updatesign();
-    }
+    document.getElementById("animate").removeAttribute("disabled");
+    document.getElementById("animate").click();
 }, 3000 ); // end delay

@@ -109,7 +109,6 @@ function updatesign(){
     handconfig.setAttribute("palmor", "d");
     // Render animation
     initsigml();
-    document.getElementById("loading").innerHTML = "JASigning Avatar"
     document.getElementById("animate").click();
 }
 
@@ -129,7 +128,7 @@ var delay = ( function() {
 })();
 
 delay(function(){
-    // document.getElementById("animate").removeAttribute("disabled");
+    document.getElementById("animate").removeAttribute("disabled");
     theForm = document.forms["handconfig"];
     if (theForm){
         updatesign();

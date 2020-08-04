@@ -16,6 +16,8 @@ function initsigml(){
 
 function updatesign(){
 
+    theForm = document.forms["handconfig"];
+
     // Handshape
     var selectedHandshape = document.getElementsByName('selectedHandshape');
     for (var i=0; i<4; i++) {
@@ -80,27 +82,27 @@ function updatesign(){
         document.getElementsByName('bend5_4')[0].value;
 
 
-    if (bend1_attr == "0 0 0 0 0" || bend1_attr == "0.0 0.0 0.0 0.0 0.0") {
+    if (bend1_attr == "0.0 0.0 0.0 0.0 0.0") {
     	handconfig.removeAttribute("bend1");
     } else {
     	handconfig.setAttribute("bend1", bend1_attr);
     }
-    if (bend2_attr == "0 0 0 0" || bend2_attr == "0.0 0.0 0.0 0.0") {
+    if (bend2_attr == "0.0 0.0 0.0 0.0") {
     	handconfig.removeAttribute("bend2");
     } else {
     	handconfig.setAttribute("bend2", bend2_attr);
     }
-    if (bend3_attr == "0 0 0 0" || bend3_attr == "0.0 0.0 0.0 0.0") {
+    if (bend3_attr == "0.0 0.0 0.0 0.0") {
     	handconfig.removeAttribute("bend3");
     } else {
     	handconfig.setAttribute("bend3", bend3_attr);
     }
-    if (bend4_attr == "0 0 0 0" || bend4_attr == "0.0 0.0 0.0 0.0") {
+    if (bend4_attr == "0.0 0.0 0.0 0.0") {
     	handconfig.removeAttribute("bend4");
     } else {
     	handconfig.setAttribute("bend4", bend4_attr);
     }
-    if (bend5_attr == "0 0 0 0" || bend5_attr == "0.0 0.0 0.0 0.0") {
+    if (bend5_attr == "0.0 0.0 0.0 0.0") {
     	handconfig.removeAttribute("bend5");
     } else {
     	handconfig.setAttribute("bend5", bend5_attr);
@@ -109,15 +111,12 @@ function updatesign(){
     handconfig.setAttribute("palmor", "d");
     // Render animation
     initsigml();
-    document.getElementById("loading").innerHTML = "JASigning Avatar"
     document.getElementById("animate").click();
 }
 
-function writesigml(sigml){
+function hello(sigml){
     console.log(sigml);
-    // document.getElementsByName('hello')[0].value = sigml;
-    document.getElementById('sigml').innerHTML = sigml;
-    document.getElementById("animate").click();
+    document.getElementsByName('hello')[0].value=sigml;
 }
 
 var delay = ( function() {
@@ -129,9 +128,6 @@ var delay = ( function() {
 })();
 
 delay(function(){
-    // document.getElementById("animate").removeAttribute("disabled");
-    theForm = document.forms["handconfig"];
-    if (theForm){
-        updatesign();
-    }
+    document.getElementById("animate").removeAttribute("disabled");
+    updatesign();
 }, 3000 ); // end delay
