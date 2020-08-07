@@ -4,7 +4,7 @@ from django.shortcuts import render
 from django.http import HttpResponse
 
 # To have access to our Handshapes.
-from .models import Handshape
+from .models import Handshape, Sign
 # To help us rearrange posts according to publishing date.
 from django.utils import timezone
  # To render templates and get existing objects.
@@ -77,8 +77,6 @@ def handshape_edit(request, pk):
 @login_required
 def handshape_new(request):
 
-	none_to_str = lambda i : i or ''
-
 	if request.method == "POST":
 
 		print(request.POST)
@@ -127,3 +125,84 @@ def handshape_delete(request,pk):
 	handshape = get_object_or_404(Handshape, id=pk)
 	handshape.delete()
 	return redirect('handshape_list')
+
+# List all signs.
+def sign_list(request):
+	signs = Sign.objects.all()
+	context = {'signs' : signs}
+	return render(request, 'inventory/sign_list.html', context)
+
+# Create a new sign. 
+@login_required
+def sign_new(request):
+
+	handshapes = Handshape.objects.all()
+	context = {'handshapes' : handshapes}
+	if request.method == "POST":
+		print(request.POST)
+		name = request.POST.get('signName')
+		description = request.POST.get('signDescription')
+		twohanded = request.POST.get('twohanded')
+		if twohanded == 'on':
+			twohanded = True;
+		else:
+			twohanded = False;
+		hs = request.POST.get('handshape')
+		lhs = request.POST.get('l_handshape')
+		efd = request.POST.get('extfidir')
+		lefd = request.POST.get('lextfidir')
+		ori = request.POST.get('palmor')
+		lori = request.POST.get('lpalmor')
+		loc = request.POST.get('bodypart')
+		contact = request.POST.get('proximity')
+		side = request.POST.get('side')
+		lloc = request.POST.get('lbodypart')
+		lcontact = request.POST.get('lside')
+		lside = request.POST.get('lproximity')
+		sign = Sign(name=name, description=description, twohanded=twohanded, hs=Handshape.objects.get(id=hs), lhs=Handshape.objects.get(id=lhs), efd=efd, lefd=lefd, ori=ori, lori=lori, loc=loc, contact=contact, side=side, lloc=lloc, lcontact=lcontact, lside=lside)
+		sign.sigml = sign.sigmlfy();
+		sign.save();
+		return redirect('sign_list')
+	return render(request, 'inventory/sign_new.html', context)
+
+# Edit a sign.
+@login_required
+def sign_edit(request, pk):
+
+	sign = Sign.objects.get(id=pk)
+
+	if request.method == "POST":
+
+		sign.name = request.POST.get('signName')
+		sign.description = request.POST.get('signDescription')
+		twohanded = request.POST.get('twohanded')
+		if twohanded == 'on':
+			sign.twohanded = True;
+		else:
+			sign.twohanded = False;
+		sign.hs = Handshape.objects.get(id=request.POST.get('handshape'))
+		sign.lhs = Handshape.objects.get(id=request.POST.get('l_handshape'))
+		sign.efd = request.POST.get('extfidir')
+		sign.lefd = request.POST.get('lextfidir')
+		sign.ori = request.POST.get('palmor')
+		sign.lori = request.POST.get('lpalmor')
+		sign.loc = request.POST.get('bodypart')
+		sign.contact = request.POST.get('proximity')
+		sign.side = request.POST.get('side')
+		sign.lloc = request.POST.get('lbodypart')
+		sign.lcontact = request.POST.get('lproximity')
+		sign.lside = request.POST.get('lside')
+		sign.sigml = sign.sigmlfy()
+		sign.save();
+		return redirect('sign_list')
+
+	handshapes = Handshape.objects.all()
+	context = {'handshapes' : handshapes, 'sign' : sign}
+	return render(request, 'inventory/sign_edit.html', context)
+
+# Delete a sign.
+@login_required
+def sign_delete(request,pk):
+	sign = get_object_or_404(Sign, id=pk)
+	sign.delete()
+	return redirect('sign_list')

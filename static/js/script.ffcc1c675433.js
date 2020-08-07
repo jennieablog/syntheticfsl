@@ -1,4 +1,4 @@
-var handshapeForm, xmlDoc;
+var theForm, xmlDoc;
 var parser = new DOMParser();
 var serializer = new XMLSerializer();
 var xmlString = "<sigml><hamgestural_sign><sign_manual></sign_manual></hamgestural_sign></sigml>";
@@ -35,7 +35,7 @@ function updatesign(){
     handconfig.setAttribute("specialfingers",specialfingers)
 
     // Thumb Position
-    var selectedThumbpos = handshapeForm.elements["thumbpos"];
+    var selectedThumbpos = theForm.elements["thumbpos"];
     if (selectedThumbpos.value == "None"){
         handconfig.removeAttribute("thumbpos");
     } else {
@@ -43,7 +43,7 @@ function updatesign(){
     }
 
     // Main Bend
-    var selectedMainbend = handshapeForm.elements["mainbend"];
+    var selectedMainbend = theForm.elements["mainbend"];
     if (selectedMainbend.value == "None"){
         handconfig.removeAttribute("mainbend");
     } else {
@@ -151,12 +151,9 @@ function reload(){
 
         // Handshape
         var handshape = document.getElementById('handshape');
-        var selected = handshape.options[handshape.selectedIndex].getAttribute('data');
-        $split_handconfig.append(selected);
-
+        $split_handconfig.append(handshape.data('sigml'));
         var lhandshape = document.getElementById('l_handshape');
-        var selected = lhandshape.options[lhandshape.selectedIndex].getAttribute('data');
-        $split_handconfig.append(selected);
+        $split_handconfig.append(lhandshape.data('sigml'));
 
         // External Finger Direction
         var handconfig = xmlDoc.getElementsByTagName('handconfig')[0];
@@ -216,8 +213,7 @@ function reload(){
         
         // Update hand configuration
         var handshape = document.getElementById('handshape');
-        var selected = handshape.options[handshape.selectedIndex].getAttribute('data');
-        $sign_manual.append(selected);
+        $sign_manual.append(handshape.value);
         var handconfig = xmlDoc.getElementsByTagName('handconfig')[0];
 
         // Update external finger direction
@@ -265,11 +261,8 @@ var delay = ( function() {
 
 delay(function(){
     // document.getElementById("animate").removeAttribute("disabled");
-    handshapeForm = document.forms["handconfig"];
-    signForm = document.forms["signeditor"]
-    if (handshapeForm){
+    theForm = document.forms["handconfig"];
+    if (theForm){
         updatesign();
-    } else if (signForm){
-        activateleft(document.getElementById('twohanded'));
     }
 }, 3000 ); // end delay

@@ -1,12 +1,8 @@
-var xmlString = "<sigml><hamgestural_sign><sign_manual></sign_manual></hamgestural_sign></sigml>";
+var handshapeForm, xmlDoc;
 var parser = new DOMParser();
-var xmlDoc = parser.parseFromString(xmlString, "text/xml");
-var handconfig = xmlDoc.createElement("handconfig");
-var elements = xmlDoc.getElementsByTagName("sign_manual");
-elements[0].appendChild(handconfig);
 var serializer = new XMLSerializer();
-var theForm;
-
+var xmlString = "<sigml><hamgestural_sign><sign_manual></sign_manual></hamgestural_sign></sigml>";
+xmlDoc = parser.parseFromString(xmlString, "text/xml");
 
 function initsigml(){
     var sigmltxt = serializer.serializeToString(xmlDoc);
@@ -15,6 +11,10 @@ function initsigml(){
 }
 
 function updatesign(){
+    xmlDoc = parser.parseFromString(xmlString, "text/xml");
+    var handconfig = xmlDoc.createElement("handconfig");
+    var elements = xmlDoc.getElementsByTagName("sign_manual");
+    elements[0].appendChild(handconfig);
 
     // Handshape
     var selectedHandshape = document.getElementsByName('selectedHandshape');
@@ -36,7 +36,7 @@ function updatesign(){
     handconfig.setAttribute("specialfingers",specialfingers)
 
     // Thumb Position
-    var selectedThumbpos = theForm.elements["thumbpos"];
+    var selectedThumbpos = handshapeForm.elements["thumbpos"];
     if (selectedThumbpos.value == "None"){
         handconfig.removeAttribute("thumbpos");
     } else {
@@ -44,7 +44,7 @@ function updatesign(){
     }
 
     // Main Bend
-    var selectedMainbend = theForm.elements["mainbend"];
+    var selectedMainbend = handshapeForm.elements["mainbend"];
     if (selectedMainbend.value == "None"){
         handconfig.removeAttribute("mainbend");
     } else {
@@ -120,6 +120,143 @@ function writesigml(sigml){
     document.getElementById("animate").click();
 }
 
+function activateleft(e){
+    var leftOptions = document.getElementsByName('left');
+    if (e.checked) {
+        for (var i = 0; i < leftOptions.length; i++) {
+            leftOptions[i].removeAttribute('hidden');
+        }
+    }
+    else {
+        for (var i = 0; i < leftOptions.length; i++) {
+            leftOptions[i].setAttribute('hidden',true);
+        }
+    }
+    reload();
+}
+
+function reload(){
+
+    // Initialize xml
+    xmlDoc = parser.parseFromString(xmlString, "text/xml");
+    var $xml = $( xmlDoc );
+    var $sign_manual = $xml.find( "sign_manual" );
+        
+    var twohanded = document.getElementById('twohanded').checked;
+
+    if (twohanded){
+
+        // Split handconfig
+        $sign_manual.append('<split_handconfig/>');
+        var $split_handconfig = $xml.find( "split_handconfig" );
+
+        // Handshape
+        var handshape = document.getElementById('handshape');
+        var selected = handshape.options[handshape.selectedIndex].getAttribute('data');
+        $split_handconfig.append(selected);
+
+        var lhandshape = document.getElementById('l_handshape');
+        var selected = lhandshape.options[lhandshape.selectedIndex].getAttribute('data');
+        $split_handconfig.append(selected);
+
+        // External Finger Direction
+        var handconfig = xmlDoc.getElementsByTagName('handconfig')[0];
+        var extfidirSet = document.getElementsByName('extfidir'); 
+        for(i = 0; i < extfidirSet.length; i++) {
+            if(extfidirSet[i].checked){
+                handconfig.setAttribute('extfidir',extfidirSet[i].value)
+            }
+        }
+        var lhandconfig = xmlDoc.getElementsByTagName('handconfig')[1];
+        var lextfidirSet = document.getElementsByName('lextfidir'); 
+        for(i = 0; i < lextfidirSet.length; i++) {
+            if(lextfidirSet[i].checked){
+                lhandconfig.setAttribute('extfidir',lextfidirSet[i].value)
+            }
+        }
+
+        // Palm Orientation
+        var palmorSet = document.getElementsByName('palmor'); 
+        for(i = 0; i < palmorSet.length; i++) {
+            if(palmorSet[i].checked){
+                handconfig.setAttribute('palmor',palmorSet[i].value)
+            }
+        }
+        var lpalmorSet = document.getElementsByName('lpalmor'); 
+        for(i = 0; i < lpalmorSet.length; i++) {
+            if(lpalmorSet[i].checked){
+                lhandconfig.setAttribute('palmor',lpalmorSet[i].value)
+            }
+        }
+
+        // Split location
+        $sign_manual.append('<split_location/>');
+        var $split_location = $xml.find( "split_location" );
+
+        $split_location.append("<location_bodyarm/>");
+        var bodypart = document.getElementById('bodypart');
+        var loc = xmlDoc.getElementsByTagName('location_bodyarm')[0];
+        loc.setAttribute('location',bodypart.value);
+        var side = document.getElementById('side');
+        loc.setAttribute('side',side.value);
+        var proximity = document.getElementById('proximity');
+        loc.setAttribute('contact',proximity.value);
+
+        $split_location.append("<location_bodyarm/>");
+        var lbodypart = document.getElementById('lbodypart');
+        var lloc = xmlDoc.getElementsByTagName('location_bodyarm')[1];
+        lloc.setAttribute('location',lbodypart.value);
+        var lside = document.getElementById('lside');
+        lloc.setAttribute('side',lside.value);
+        var lproximity = document.getElementById('lproximity');
+        lloc.setAttribute('contact',lproximity.value);
+
+
+    }
+    else {
+        
+        // Update hand configuration
+        var handshape = document.getElementById('handshape');
+        var selected = handshape.options[handshape.selectedIndex].getAttribute('data');
+        $sign_manual.append(selected);
+        var handconfig = xmlDoc.getElementsByTagName('handconfig')[0];
+
+        // Update external finger direction
+        var extfidirSet = document.getElementsByName('extfidir'); 
+        for(i = 0; i < extfidirSet.length; i++) {
+            if(extfidirSet[i].checked){
+                handconfig.setAttribute('extfidir',extfidirSet[i].value)
+            }
+        }
+
+        // Update palm orientation
+        var palmorSet = document.getElementsByName('palmor'); 
+        for(i = 0; i < palmorSet.length; i++) {
+            if(palmorSet[i].checked){
+                handconfig.setAttribute('palmor',palmorSet[i].value)
+            }
+        }
+
+        // Location
+        $sign_manual.append("<location_bodyarm/>");
+        var bodypart = document.getElementById('bodypart');
+        var loc = xmlDoc.getElementsByTagName('location_bodyarm')[0];
+        loc.setAttribute('location',bodypart.value);
+        var side = document.getElementById('side');
+        loc.setAttribute('side',side.value);
+        var proximity = document.getElementById('proximity');
+        loc.setAttribute('contact',proximity.value);
+    }
+
+    // Change sigml txt in textbox
+    var sigmltxt = serializer.serializeToString(xmlDoc);
+    document.getElementById('sigml').innerHTML = sigmltxt;
+
+    // Animate
+    document.getElementById("loading").innerHTML = "JASigning Avatar"
+    document.getElementById("animate").click();
+}
+
 var delay = ( function() {
     var timer = 0;
     return function(callback, ms) {
@@ -130,8 +267,11 @@ var delay = ( function() {
 
 delay(function(){
     // document.getElementById("animate").removeAttribute("disabled");
-    theForm = document.forms["handconfig"];
-    if (theForm){
+    handshapeForm = document.forms["handconfig"];
+    signForm = document.forms["signeditor"]
+    if (handshapeForm){
         updatesign();
+    } else if (signForm){
+        activateleft(document.getElementById('twohanded'));
     }
 }, 3000 ); // end delay

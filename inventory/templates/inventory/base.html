@@ -24,8 +24,9 @@
 		<script src="{% static 'js/script.js' %}" type="text/javascript"></script>
 		<script src="{% static 'js/allcsa.js' %}" type="text/javascript"></script>
 	</head>
+	
 
-	<body onload="CWASA.init();initsigml();">
+	<body onload="CWASA.init();">
 
 		<!-- Nav Bar -->
 		<nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
@@ -37,6 +38,9 @@
 				<ul class="navbar-nav mr-auto mt-2 mt-lg-0">
 					<li class="nav-item active">
 						<a class="nav-link" href="{% url 'handshape_list' %}">Handshape Inventory</a>
+					</li>
+					<li class="nav-item active">
+						<a class="nav-link" href="{% url 'sign_list' %}">Sign Inventory</a>
 					</li>
 				</ul>
 				{% if user.is_authenticated %}

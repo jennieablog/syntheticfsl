@@ -26,7 +26,7 @@
 					</div>
 				</div>
 				<div class="col col-lg" style="padding:10px;">
-					<h4>FSL Handshape Inventory</h4>
+					<h4>FSL Sign Inventory</h4>
 					<div class="border" style="height:500px;overflow-y: scroll;">
 						<table class="table table-striped">
 						<thead style="font-size: 0.6rem;">
@@ -37,35 +37,34 @@
 								{% if user.is_authenticated %}
 								<th scope="col">Options</th>
 								{% endif %}
-								<th scope="col">handshape</th>
-								<th scope="col">thumbpos</th>
-								<th scope="col">specialfingers</th>
-								<th scope="col">mainbend</th>
-								<th scope="col">individualbend</th>
+								<th scope="col">Two-handed</th>
+								<th scope="col">Right</th>
+								<th scope="col">Location</th>
+								<th scope="col">Left</th>
+								<th scope="col">Location</th>
 							</tr>
 						</thead>
 						<tbody>
-							{% for hs in handshapes %}
+							{% for sign in signs %}
 							<tr>
-								<td><button class="btn btn-sm btn-success" style="font-size: 0.5rem;" onclick="writesigml('{{ hs.sigml }}');"><i class="fas fa-play"></i></button></td>
-								<td>{{ hs.name }}</td>
-								<td>{{ hs.description }}</td>
+								<td><button class="btn btn-sm btn-success" style="font-size: 0.5rem;" onclick="writesigml('{{ sign.sigmlfy }}');"><i class="fas fa-play"></i></button></td>
+								<td>{{ sign.name }}</td>
+								<td>{{ sign.description }}</td>
 								{% if user.is_authenticated %}
 								<td>
-								<a href="{% url 'handshape_edit' pk=hs.pk %}" class="text-primary"><i class="fas fa-edit"></i> Edit
+								
+								<a href="{% url 'sign_edit' pk=sign.pk %}" class="text-primary"><i class="fas fa-edit"></i> Edit
 								</a>
 								{% endif %}
-								<td>{{ hs.handshape }}</td>
-								<td>{{ hs.thumbpos }}</td>
-								<td>{% if hs.specialfingers == "" %}None{% else %}{{ hs.specialfingers }}{% endif %}</td>
-								<td>{{ hs.mainbend }}</td>
-								<td style="white-space: nowrap; text-overflow:ellipsis; overflow: hidden; max-width:1px;">
-									[{{ hs.bend1_1}}, {{ hs.bend1_2}}, {{ hs.bend1_3}}, {{ hs.bend1_4}}, {{ hs.bend1_5}}], 
-									[{{ hs.bend2_1 }}, {{ hs.bend2_2 }}, {{ hs.bend2_3 }}, {{ hs.bend2_4 }}], 
-									[{{ hs.bend3_1 }}, {{ hs.bend3_2 }}, {{ hs.bend3_3 }}, {{ hs.bend3_4 }}], 
-									[{{ hs.bend4_1 }}, {{ hs.bend4_2 }}, {{ hs.bend4_3 }}, {{ hs.bend4_4 }}], 
-									[{{ hs.bend5_1 }}, {{ hs.bend5_2 }}, {{ hs.bend5_3 }}, {{ hs.bend5_4 }}]
+								<td>{{ sign.twohanded }}</td>
+								<td>{{ sign.hs.name }} handshape</td>
+								<td>{% if sign.loc == ' ' %} neutral space {% else %} {{ sign.loc }} {% endif %} ({{ sign.side }})</td>
+								<td>
+									{% if sign.twohanded %}
+									{{ sign.lhs.name }} handshape, on {% if sign.lloc == ' ' %} neutral space {% else %} {{ sign.lloc }} {% endif %}
+									{% endif %}
 								</td>
+								<td>{% if sign.lloc == ' ' %} neutral space {% else %} {{ sign.lloc }} {% endif %} ({{ sign.lside }})</td>
 							</tr>
 							{% endfor %}
 						</tbody>
@@ -74,7 +73,7 @@
 					{% if user.is_authenticated %}
 					<hr>
 					<div style="text-align: center;">
-						<a href="{% url 'handshape_new' %}" class="btn btn-sm btn-success"><i class="fas fa-plus"></i> Add new handshape.</a>
+						<a href="#" class="btn btn-sm btn-success"><i class="fas fa-plus"></i> Add new sign.</a>
 					</div>
 					{% endif %}
 				</div>

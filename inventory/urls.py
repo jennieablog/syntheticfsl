@@ -12,4 +12,9 @@ urlpatterns = [
 	# Assign a view called handshape_edit when editing an existing handshape.
 	path('handshapes/<int:pk>/edit', views.handshape_edit, name='handshape_edit'),
 	path('handshapes/<int:pk>/delete',views.handshape_delete,name='handshape_delete'),
+
+	path('signs/', views.sign_list, name='sign_list'),
+	path('signs/new/', views.sign_new, name='sign_new'),
+	path('signs/<int:pk>/edit', views.sign_edit, name='sign_edit'),
+	path('signs/<int:pk>/delete',views.sign_delete,name='sign_delete'),
 ]

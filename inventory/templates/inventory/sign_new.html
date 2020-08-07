@@ -1,0 +1,640 @@
+{% extends 'inventory/base.html' %}
+
+
+{% block content %}
+			<div class="detail">
+				<div class="detail-1">
+					<div class="card text-center">
+						<h6 id="loading" class="card-header"><img src="https://acegif.com/wp-content/uploads/loading-25.gif" width="30px"></h6>
+						<!-- Animation Box -->
+						<div style="height: 600px;">
+							<div class="card-body" style="padding:0px !important;">
+								<div class="CWASAAvatar av0" align="center" style="background-color: aliceblue;">
+								</div>
+							</div>
+							<!-- Description -->
+							<div class="card-footer bg-transparent">
+								<!-- Buttons -->
+								<div style="display: flex; align-items: center; justify-content: center; padding: 10px;">
+										<button type="button" id="animate" class="btn btn-sm btn-info bttnPlaySiGMLText av0" style="flex: 1;"><i class="fas fa-hand-sparkles"></i> Play</button>&emsp;
+										<div class="CWASAAvMenu av0 text-capitalize" style="flex:2;"></div>
+									</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="detail-2" style="border-color: grey;">
+
+					<form method="POST" id="signeditor" style="font-size: 0.7rem;">
+					{% csrf_token %}
+
+						<!-- Name -->
+						<div class="form-row" style="height:60px; margin: 5px;">
+							<div class="col-3">
+								<input type="text" name="signName" class="form-control" placeholder="Handshape Name" style="font-size: 0.7rem;">
+							</div>
+							<div class="col-5">
+								<input type="text" name="signDescription" class="form-control" placeholder="Description" style="font-size: 0.7rem;">
+							</div>
+							<div class="col">
+								<button type="submit" class="btn btn-primary btn-sm" value="save">Save</button>
+							</div>
+						</div>
+
+						<div class="container-fluid" style="width: 100%;overflow-y: scroll; overflow-x: hidden;">
+
+							<nav style="padding-bottom: 20px;">
+								<div class="nav nav-pills" id="nav-tab" role="tablist">
+									<a class="nav-item nav-link active" id="nav-handconfig-tab" data-toggle="tab" href="#nav-handconfig" role="tab" aria-controls="nav-handconfig" aria-selected="true">Hand Configuration</a>
+									<a class="nav-item nav-link" id="nav-location-tab" data-toggle="tab" href="#nav-location" role="tab" aria-controls="nav-location" aria-selected="false">Location</a>
+									<!-- <a class="nav-item nav-link" id="nav-movement-tab" data-toggle="tab" href="#nav-movement" role="tab" aria-controls="nav-movement" aria-selected="false">Movement</a> -->
+								</div>
+							</nav>
+
+							<div class="tab-content border" id="nav-tabContent" style="height:500px; padding: 10px;overflow-y: scroll;">
+								
+								<div class="tab-pane fade show active" id="nav-handconfig" role="tabpanel" aria-labelledby="nav-handconfig-tab">
+									<div class="row">
+										<div class="col">
+											<h6>Set handshape.</h6>
+										</div>
+									</div>
+									<!-- Handshape-->
+									<div class="row" style="padding-top: 10px;">
+										<div class="col-sm-auto">
+											<div class="form-check">
+												<input name="twohanded" type="checkbox" class="form-check-input" id="twohanded" onclick="activateleft(this);">
+												<label class="form-check-label" for="twohanded">Two-handed?</label>
+											</div>
+										</div>
+										<div class="col-sm-auto">
+											<div class="form-row">
+												<div class="form-group">
+													<label for="handshape">Right handshape</label>
+													<select name="handshape" id="handshape" class="custom-select" onchange="reload();">
+														{% for hs in handshapes %}
+														<option value="{{ hs.pk }}" data="{{ hs.sigmlStr | safe }}">{{ hs.name }}: {{ hs.description}}</option>
+														{% endfor %}
+													</select>
+												</div>
+											</div>
+										</div>
+										<div class="col-sm-auto">
+											<div class="form-row" name="left" hidden="true">
+												<div class="form-group">
+													<label for="l_handshape">Left handshape</label>
+													<select name="l_handshape" id="l_handshape" class="custom-select" onchange="reload();">
+														{% for hs in handshapes %}
+														<option value="{{ hs.pk }}" data="{{ hs.sigmlStr | safe }}">{{ hs.name }}: {{ hs.description}}</option>
+														{% endfor %}
+													</select>
+												</div>
+											</div>
+										</div>										
+									</div><hr>
+
+									<!-- RIGHT HAND -->
+									<div class="row">
+										<div class="col">
+											<h6>Set right hand configuration.</h6>
+										</div>
+									</div>
+									<!-- ORIENTATION-->
+									<div class="row">
+										<div class="col-7">
+											<p style="text-align: center;">Set extended finger direction.</p>
+											<div class="row" style="padding-top:20px;">
+												<div class="col-4">
+													<img src="https://imgur.com/aJwHLm9.png" height="150px" alt=""><br>
+													<p style="text-align: center;">Frontal</p>
+													<div class="form-check">
+														<input class="form-check-input" type="radio" name="extfidir" onclick="reload();" id="u" value="u" checked>
+														<label class="form-check-label" for="u">
+														1: UP
+														</label>
+														<input class="form-check-input" type="radio" name="extfidir" onclick="reload();" id="ur" value="ur">
+														<label class="form-check-label" for="ur">
+														2: UP-RIGHT
+														</label>
+														<input class="form-check-input" type="radio" name="extfidir" onclick="reload();" id="r" value="r">
+														<label class="form-check-label" for="r">
+														3: RIGHT
+														</label>
+														<input class="form-check-input" type="radio" name="extfidir" onclick="reload();" id="dr" value="dr">
+														<label class="form-check-label" for="dr">
+														4: DOWN-RIGHT
+														</label>
+														<input class="form-check-input" type="radio" name="extfidir" onclick="reload();" id="d" value="d">
+														<label class="form-check-label" for="d">
+														5: DOWN
+														</label>
+														<input class="form-check-input" type="radio" name="extfidir" onclick="reload();" id="dl" value="dl">
+														<label class="form-check-label" for="dl">
+														6: DOWN-LEFT
+														</label>
+														<input class="form-check-input" type="radio" name="extfidir" onclick="reload();" id="l" value="l">
+														<label class="form-check-label" for="l">
+														7: LEFT
+														</label>
+														<input class="form-check-input" type="radio" name="extfidir" onclick="reload();" id="ul" value="ul">
+														<label class="form-check-label" for="ul">
+														8: UP-LEFT
+														</label>
+													</div>
+												</div>
+												<div class="col-4">
+													
+													<img src="https://imgur.com/qCRaQ1q.png" height="150px" alt="">
+													<p style="text-align: center;">Axial</p>
+
+													<input class="form-check-input" type="radio" name="extfidir" onclick="reload();" id="o" value="o">
+													<label class="form-check-label" for="o">
+													9: OUT
+													</label>
+													<input class="form-check-input" type="radio" name="extfidir" onclick="reload();" id="or" value="or">
+													<label class="form-check-label" for="or">
+													10: OUT-RIGHT
+													</label>
+													<input class="form-check-input" type="radio" name="extfidir" onclick="reload();" id="ir" value="ir">
+													<label class="form-check-label" for="ir">
+													11: IN-RIGHT
+													</label>
+													<input class="form-check-input" type="radio" name="extfidir" onclick="reload();" id="i" value="i">
+													<label class="form-check-label" for="i">
+													12: IN
+													</label>
+													<input class="form-check-input" type="radio" name="extfidir" onclick="reload();" id="il" value="il">
+													<label class="form-check-label" for="il">
+													13: IN-LEFT
+													</label>
+													<input class="form-check-input" type="radio" name="extfidir" onclick="reload();" id="ol" value="ol">
+													<label class="form-check-label" for="ol">
+													14: OUT-LEFT
+													</label>
+												</div>
+												<div class="col-4">
+													<img src="https://imgur.com/Oskn77f.png" height="150px" alt="">
+													<p style="text-align: center;">Sagittal</p>
+
+													<input class="form-check-input" type="radio" name="extfidir" onclick="reload();" id="ui" value="ui">
+													<label class="form-check-label" for="ui">
+													15: UP-IN
+													</label>
+													<input class="form-check-input" type="radio" name="extfidir" onclick="reload();" id="uo" value="uo">
+													<label class="form-check-label" for="uo">
+													16: UP-OUT
+													</label>
+													<input class="form-check-input" type="radio" name="extfidir" onclick="reload();" id="do" value="do">
+													<label class="form-check-label" for="do">
+													17: DOWN-OUT
+													</label>
+													<input class="form-check-input" type="radio" name="extfidir" onclick="reload();" id="di" value="di">
+													<label class="form-check-label" for="di">
+													18: DOWN-IN
+													</label>
+												</div>
+											</div>
+											<div class="row" style="padding: 0 20px 0 0;">
+												<div class="col" style="padding-top: 10px;">
+													<p style="text-align: center;">Axial + Sagittal</p>
+													<div class="form-check">
+														<input class="form-check-input" type="radio" name="extfidir" onclick="reload();" id="uol" value="uol">
+														<label class="form-check-label" for="uol">
+														19: UP-OUT-LEFT
+														</label>
+														<input class="form-check-input" type="radio" name="extfidir" onclick="reload();" id="dol" value="dol">
+														<label class="form-check-label" for="dol">
+														20: DOWN-OUT-LEFT
+														</label>
+														<input class="form-check-input" type="radio" name="extfidir" onclick="reload();" id="dil" value="dil">
+														<label class="form-check-label" for="dil">
+														21: DOWN-IN-LEFT
+														</label>
+														<input class="form-check-input" type="radio" name="extfidir" onclick="reload();" id="uil" value="uil">
+														<label class="form-check-label" for="uil">
+														22: UP-IN-LEFT
+														</label>
+														<input class="form-check-input" type="radio" name="extfidir" onclick="reload();" id="uor" value="uor">
+														<label class="form-check-label" for="uor">
+														23: UP-OUT-RIGHT
+														</label>
+														<input class="form-check-input" type="radio" name="extfidir" onclick="reload();" id="dor" value="dor">
+														<label class="form-check-label" for="dor">
+														24: DOWN-OUT-RIGHT
+														</label>
+														<input class="form-check-input" type="radio" name="extfidir" onclick="reload();" id="dir" value="dir">
+														<label class="form-check-label" for="dir">
+														25: DOWN-IN-RIGHT
+														</label>
+														<input class="form-check-input" type="radio" name="extfidir" onclick="reload();" id="uir" value="uir">
+														<label class="form-check-label" for="uir">
+														26: UP-IN-RIGHT
+														</label>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="col">
+											<p style="text-align: center;">Set palm orientation.</p>
+											<div class="row" style="margin:0px;padding: 10px;">
+												<div class="col" style="text-align: center;padding: 0px;">
+													<img src="https://imgur.com/kdhdKhC.png" alt="" width="70px"><br>
+													<div class="custom-control custom-radio custom-control-inline">
+														<input type="radio" id="palmd" name="palmor" onclick="reload();" class="custom-control-input" value="d" checked>
+														<label class="custom-control-label" for="palmd">DOWN</label>
+													</div>
+												</div>
+												<div class="col" style="text-align: center;padding: 0px;">
+													<img src="https://imgur.com/ReGLQCl.png" alt="" width="70px"><br>
+													<div class="custom-control custom-radio custom-control-inline">
+														<input type="radio" id="palmu" name="palmor" onclick="reload();" class="custom-control-input" value="u">
+														<label class="custom-control-label" for="palmu">UP</label>
+													</div>
+												</div>
+											</div>
+											<div class="row" style="margin:0px;padding: 10px;">
+												<div class="col" style="text-align: center;padding: 0px;">
+													<img src="https://imgur.com/90Q1sgb.png" alt="" width="70px"><br>
+													<div class="custom-control custom-radio custom-control-inline">
+														<input type="radio" id="palml" name="palmor" onclick="reload();" class="custom-control-input" value="l">
+														<label class="custom-control-label" for="palml">LEFT</label>
+													</div>
+												</div>
+												<div class="col" style="text-align: center;padding: 0px;">
+													<img src="https://imgur.com/bdlboe8.png" alt="" width="70px"><br>
+													<div class="custom-control custom-radio custom-control-inline">
+														<input type="radio" id="palmr" name="palmor" onclick="reload();" class="custom-control-input" value="r">
+														<label class="custom-control-label" for="palmr">RIGHT</label>
+													</div>
+												</div>
+											</div>
+											<div class="row" style="margin:0px;padding: 10px;">
+												<div class="col" style="text-align: center;padding: 0px;">
+													<img src="https://imgur.com/KgdplGC.png" alt="" width="70px"><br>
+													<div class="custom-control custom-radio custom-control-inline">
+														<input type="radio" id="palmdl" name="palmor" onclick="reload();" class="custom-control-input" value="dl">
+														<label class="custom-control-label" for="palmdl">DOWN-LEFT</label>
+													</div>
+												</div>
+												<div class="col" style="text-align: center;padding: 0px;">
+													<img src="https://imgur.com/TnZqS2h.png" alt="" width="70px"><br>
+													<div class="custom-control custom-radio custom-control-inline">
+														<input type="radio" id="palmdr" name="palmor" onclick="reload();" class="custom-control-input" value="dr">
+														<label class="custom-control-label" for="palmdr">DOWN-RIGHT</label>
+													</div>
+												</div>
+											</div>
+											<div class="row" style="margin:0px;padding: 10px;">
+												<div class="col" style="text-align: center;padding: 0px;">
+													<img src="https://imgur.com/jMT7rRb.png" alt="" width="70px"><br>
+													<div class="custom-control custom-radio custom-control-inline">
+														<input type="radio" id="palmul" name="palmor" onclick="reload();" class="custom-control-input" value="ul">
+														<label class="custom-control-label" for="palmul">UP-LEFT</label>
+													</div>
+												</div>
+												<div class="col" style="text-align: center;padding: 0px;">
+													<img src="https://imgur.com/Mq3La9P.png" alt="" width="70px"><br>
+													<div class="custom-control custom-radio custom-control-inline">
+														<input type="radio" id="palmur" name="palmor" onclick="reload();" class="custom-control-input" value="ur">
+														<label class="custom-control-label" for="palmur">UP-RIGHT</label>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div><hr>
+
+									<!-- LEFT HAND -->
+									<div name="left" hidden="true">
+										<div class="row">
+											<div class="col">
+												<h6>Set left hand configuration.</h6>
+											</div>
+										</div>
+										<div class="row">
+											<div class="col-7">
+												<p style="text-align: center;">Set extended finger direction.</p>
+												<div class="row" style="padding-top:20px;">
+													<div class="col-4">
+														<img src="https://imgur.com/aJwHLm9.png" height="150px" alt=""><br>
+														<p style="text-align: center;">Frontal</p>
+														<div class="form-check">
+															<input class="form-check-input" type="radio" name="lextfidir" onclick="reload();" id="l_u" value="u" checked>
+															<label class="form-check-label" for="l_u">
+															1: UP
+															</label>
+															<input class="form-check-input" type="radio" name="lextfidir" onclick="reload();" id="l_ur" value="ur">
+															<label class="form-check-label" for="l_ur">
+															2: UP-RIGHT
+															</label>
+															<input class="form-check-input" type="radio" name="lextfidir" onclick="reload();" id="l_r" value="r">
+															<label class="form-check-label" for="l_r">
+															3: RIGHT
+															</label>
+															<input class="form-check-input" type="radio" name="lextfidir" onclick="reload();" id="l_dr" value="dr">
+															<label class="form-check-label" for="l_dr">
+															4: DOWN-RIGHT
+															</label>
+															<input class="form-check-input" type="radio" name="lextfidir" onclick="reload();" id="l_d" value="d">
+															<label class="form-check-label" for="l_d">
+															5: DOWN
+															</label>
+															<input class="form-check-input" type="radio" name="lextfidir" onclick="reload();" id="l_dl" value="dl">
+															<label class="form-check-label" for="l_dl">
+															6: DOWN-LEFT
+															</label>
+															<input class="form-check-input" type="radio" name="lextfidir" onclick="reload();" id="l_l" value="l">
+															<label class="form-check-label" for="l_l">
+															7: LEFT
+															</label>
+															<input class="form-check-input" type="radio" name="lextfidir" onclick="reload();" id="l_ul" value="ul">
+															<label class="form-check-label" for="l_ul">
+															8: UP-LEFT
+															</label>
+														</div>
+													</div>
+													<div class="col-4">
+														
+														<img src="https://imgur.com/qCRaQ1q.png" height="150px" alt="">
+														<p style="text-align: center;">Axial</p>
+
+														<input class="form-check-input" type="radio" name="lextfidir" onclick="reload();" id="l_o" value="o">
+														<label class="form-check-label" for="l_o">
+														9: OUT
+														</label>
+														<input class="form-check-input" type="radio" name="lextfidir" onclick="reload();" id="l_or" value="or">
+														<label class="form-check-label" for="l_or">
+														10: OUT-RIGHT
+														</label>
+														<input class="form-check-input" type="radio" name="lextfidir" onclick="reload();" id="l_ir" value="ir">
+														<label class="form-check-label" for="l_ir">
+														11: IN-RIGHT
+														</label>
+														<input class="form-check-input" type="radio" name="lextfidir" onclick="reload();" id="l_i" value="i">
+														<label class="form-check-label" for="l_i">
+														12: IN
+														</label>
+														<input class="form-check-input" type="radio" name="lextfidir" onclick="reload();" id="l_il" value="il">
+														<label class="form-check-label" for="l_il">
+														13: IN-LEFT
+														</label>
+														<input class="form-check-input" type="radio" name="lextfidir" onclick="reload();" id="l_ol" value="ol">
+														<label class="form-check-label" for="l_ol">
+														14: OUT-LEFT
+														</label>
+													</div>
+													<div class="col-4">
+														<img src="https://imgur.com/Oskn77f.png" height="150px" alt="">
+														<p style="text-align: center;">Sagittal</p>
+
+														<input class="form-check-input" type="radio" name="lextfidir" onclick="reload();" id="l_ui" value="ui">
+														<label class="form-check-label" for="l_ui">
+														15: UP-IN
+														</label>
+														<input class="form-check-input" type="radio" name="lextfidir" onclick="reload();" id="l_uo" value="uo">
+														<label class="form-check-label" for="l_uo">
+														16: UP-OUT
+														</label>
+														<input class="form-check-input" type="radio" name="lextfidir" onclick="reload();" id="l_do" value="do">
+														<label class="form-check-label" for="l_do">
+														17: DOWN-OUT
+														</label>
+														<input class="form-check-input" type="radio" name="lextfidir" onclick="reload();" id="l_di" value="di">
+														<label class="form-check-label" for="l_di">
+														18: DOWN-IN
+														</label>
+													</div>
+												</div>
+												<div class="row" style="padding: 0 20px 0 0;">
+													<div class="col" style="padding-top: 10px;">
+														<p style="text-align: center;">Axial + Sagittal</p>
+														<div class="form-check">
+															<input class="form-check-input" type="radio" name="lextfidir" onclick="reload();" id="l_uol" value="uol">
+															<label class="form-check-label" for="l_uol">
+															19: UP-OUT-LEFT
+															</label>
+															<input class="form-check-input" type="radio" name="lextfidir" onclick="reload();" id="l_dol" value="dol">
+															<label class="form-check-label" for="l_dol">
+															20: DOWN-OUT-LEFT
+															</label>
+															<input class="form-check-input" type="radio" name="lextfidir" onclick="reload();" id="l_dil" value="dil">
+															<label class="form-check-label" for="l_dil">
+															21: DOWN-IN-LEFT
+															</label>
+															<input class="form-check-input" type="radio" name="lextfidir" onclick="reload();" id="l_uil" value="uil">
+															<label class="form-check-label" for="l_uil">
+															22: UP-IN-LEFT
+															</label>
+															<input class="form-check-input" type="radio" name="lextfidir" onclick="reload();" id="l_uor" value="uor">
+															<label class="form-check-label" for="l_uor">
+															23: UP-OUT-RIGHT
+															</label>
+															<input class="form-check-input" type="radio" name="lextfidir" onclick="reload();" id="l_dor" value="dor">
+															<label class="form-check-label" for="l_dor">
+															24: DOWN-OUT-RIGHT
+															</label>
+															<input class="form-check-input" type="radio" name="lextfidir" onclick="reload();" id="l_dir" value="dir">
+															<label class="form-check-label" for="l_dir">
+															25: DOWN-IN-RIGHT
+															</label>
+															<input class="form-check-input" type="radio" name="lextfidir" onclick="reload();" id="l_uir" value="uir">
+															<label class="form-check-label" for="l_uir">
+															26: UP-IN-RIGHT
+															</label>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div class="col">
+												<p style="text-align: center;">Set palm orientation.</p>
+												<div class="row" style="margin:0px;padding: 10px;">
+													<div class="col" style="text-align: center;padding: 0px;">
+														<img src="https://imgur.com/kdhdKhC.png" alt="" width="70px"><br>
+														<div class="custom-control custom-radio custom-control-inline">
+															<input type="radio" id="l_palmd" name="lpalmor" onclick="reload();" class="custom-control-input" value="d" checked>
+															<label class="custom-control-label" for="l_palmd">DOWN</label>
+														</div>
+													</div>
+													<div class="col" style="text-align: center;padding: 0px;">
+														<img src="https://imgur.com/ReGLQCl.png" alt="" width="70px"><br>
+														<div class="custom-control custom-radio custom-control-inline">
+															<input type="radio" id="l_palmu" name="lpalmor" onclick="reload();" class="custom-control-input" value="u">
+															<label class="custom-control-label" for="l_palmu">UP</label>
+														</div>
+													</div>
+												</div>
+												<div class="row" style="margin:0px;padding: 10px;">
+													<div class="col" style="text-align: center;padding: 0px;">
+														<img src="https://imgur.com/90Q1sgb.png" alt="" width="70px"><br>
+														<div class="custom-control custom-radio custom-control-inline">
+															<input type="radio" id="l_palml" name="lpalmor" onclick="reload();" class="custom-control-input" value="l">
+															<label class="custom-control-label" for="l_palml">LEFT</label>
+														</div>
+													</div>
+													<div class="col" style="text-align: center;padding: 0px;">
+														<img src="https://imgur.com/bdlboe8.png" alt="" width="70px"><br>
+														<div class="custom-control custom-radio custom-control-inline">
+															<input type="radio" id="l_palmr" name="lpalmor" onclick="reload();" class="custom-control-input" value="r">
+															<label class="custom-control-label" for="l_palmr">RIGHT</label>
+														</div>
+													</div>
+												</div>
+												<div class="row" style="margin:0px;padding: 10px;">
+													<div class="col" style="text-align: center;padding: 0px;">
+														<img src="https://imgur.com/KgdplGC.png" alt="" width="70px"><br>
+														<div class="custom-control custom-radio custom-control-inline">
+															<input type="radio" id="l_palmdl" name="lpalmor" onclick="reload();" class="custom-control-input" value="dl">
+															<label class="custom-control-label" for="l_palmdl">DOWN-LEFT</label>
+														</div>
+													</div>
+													<div class="col" style="text-align: center;padding: 0px;">
+														<img src="https://imgur.com/TnZqS2h.png" alt="" width="70px"><br>
+														<div class="custom-control custom-radio custom-control-inline">
+															<input type="radio" id="l_palmdr" name="lpalmor" onclick="reload();" class="custom-control-input" value="dr">
+															<label class="custom-control-label" for="l_palmdr">DOWN-RIGHT</label>
+														</div>
+													</div>
+												</div>
+												<div class="row" style="margin:0px;padding: 10px;">
+													<div class="col" style="text-align: center;padding: 0px;">
+														<img src="https://imgur.com/jMT7rRb.png" alt="" width="70px"><br>
+														<div class="custom-control custom-radio custom-control-inline">
+															<input type="radio" id="l_palmul" name="lpalmor" onclick="reload();" class="custom-control-input" value="ul">
+															<label class="custom-control-label" for="l_palmul">UP-LEFT</label>
+														</div>
+													</div>
+													<div class="col" style="text-align: center;padding: 0px;">
+														<img src="https://imgur.com/Mq3La9P.png" alt="" width="70px"><br>
+														<div class="custom-control custom-radio custom-control-inline">
+															<input type="radio" id="l_palmur" name="lpalmor" onclick="reload();" class="custom-control-input" value="ur">
+															<label class="custom-control-label" for="l_palmur">UP-RIGHT</label>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div><hr>
+									</div>
+
+								</div>
+
+								<div class="tab-pane fade" id="nav-location" role="tabpanel" aria-labelledby="nav-location-tab">
+									<div class="row justify-content-center" style="padding: 0px 10px;">
+										<div class="col-lg-5" style="text-align: center; padding: 0px;">
+											<strong>Body Parts</strong><br>
+											<img src="https://imgur.com/uJoJCmA.png" width="300px" height="420px" alt="">
+										</div>
+										<div class="col-lg">
+											<div class="row" style="padding-left: 10px;">
+												<h6>Set right hand location.</h6>
+											</div>
+											<div class="row" style="padding-left: 10px;">
+												<div class="form-group" style="padding-right: 10px;">
+													<label for="bodypart">Body part</label>
+													<select name="bodypart" id="bodypart" class="custom-select" onchange="reload();">
+														<option value=" " selected>Neutral space</option>
+														<option value="head">(0) Head</option>
+														<option value="headtop">(1) Top of the head</option>
+														<option value="forehead">(2) Forehead</option>
+														<option value="eyebrows">(3) Eyebrows</option>
+														<option value="uppereyelid">(4) Eyes</option>
+														<option value="nose">(5) Nose</option>
+														<option value="ear">(6) Ears</option>
+														<option value="cheek">(7) Cheek</option>
+														<option value="lips">(8) Lips</option>
+														<option value="chin">(9) Chin</option>
+														<option value="neck">(10) Neck</option>
+														<option value="shoulders">(11) Shoulders</option>
+														<option value="chest">(12) Chest</option>
+														<option value="stomach">(13) Stomach</option>
+														<option value="belowstomach">(14) Crotch</option>
+													</select>
+												</div>
+												<div class="form-group" style="padding-right: 10px;">
+													<label for="side">Relative location</label>
+													<select name="side" id="side" class="custom-select" onchange="reload();">
+														<option value=" " selected>Center (default)</option>
+														<option value="right_at">Right</option>
+														<option value="left_at">Left</option>
+														<option value="right_beside">Far right</option>
+														<option value="left_beside">Far left</option>
+													</select>
+												</div>
+												<div class="form-group">
+													<label for="proximity">Proximity level</label>
+													<select name="proximity" id="proximity" class="custom-select" onchange="reload();">
+														<option value=" " selected>Default</option>
+														<option value="touch">A - Touching</option>
+														<option value="close">B - Close</option>
+														<option value="armextended">C - Distant</option>
+													</select>
+												</div>
+											</div>
+											<div class="row" style="padding-left: 10px;" name="left" hidden="true">
+												<h6>Set left hand location.</h6>
+											</div>
+											<div class="row" style="padding-left: 10px;" name="left" hidden="true">
+												<div class="form-group" style="padding-right: 10px;">
+													<label for="lbodypart">Body part</label>
+													<select name="lbodypart" id="lbodypart" class="custom-select" onchange="reload();">
+														<option value=" " selected>Neutral space</option>
+														<option value="head">(0) Head</option>
+														<option value="headtop">(1) Top of the head</option>
+														<option value="forehead">(2) Forehead</option>
+														<option value="eyebrows">(3) Eyebrows</option>
+														<option value="uppereyelid">(4) Eyes</option>
+														<option value="nose">(5) Nose</option>
+														<option value="ear">(6) Ears</option>
+														<option value="cheek">(7) Cheek</option>
+														<option value="lips">(8) Lips</option>
+														<option value="chin">(9) Chin</option>
+														<option value="neck">(10) Neck</option>
+														<option value="shoulders">(11) Shoulders</option>
+														<option value="chest">(12) Chest</option>
+														<option value="stomach">(13) Stomach</option>
+														<option value="belowstomach">(14) Crotch</option>
+													</select>
+												</div>
+												<div class="form-group" style="padding-right: 10px;">
+													<label for="lside">Relative location</label>
+													<select name="lside" id="lside" class="custom-select" onchange="reload();">
+														<option value=" " selected>Center (default)</option>
+														<option value="right_at">Right</option>
+														<option value="left_at">Left</option>
+														<option value="right_beside">Far right</option>
+														<option value="left_beside">Far left</option>
+													</select>
+												</div>
+												<div class="form-group">
+													<label for="lproximity">Proximity level</label>
+													<select name="lproximity" id="lproximity" class="custom-select" onchange="reload();">
+														<option value=" " selected>Default</option>
+														<option value="touch">A - Touching</option>
+														<option value="close">B - Close</option>
+														<option value="armextended">C - Distant</option>
+													</select>
+												</div>
+											</div>
+											<div class="row">
+												<div class="col" style="text-align: center;">
+													<strong>Proximity Levels</strong><br><br>
+													<img src="https://imgur.com/5N2bHHY.png" alt="">
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<!-- <div class="tab-pane fade" id="nav-movement" role="tabpanel" aria-labelledby="nav-movement-tab">
+									<div class="row justify-content-center" style="padding: 0px 10px;">
+										Movement stuff
+									</div>
+								</div> -->
+							</div>
+
+						</div>
+					</form>
+					<textarea id="sigml" rows="10" class="txtaSiGMLText av0" hidden="true">{{ sigml }}</textarea>
+				</div>
+
+			</div>
+
+{% endblock %}

@@ -1,4 +1,4 @@
-var handshapeForm, xmlDoc;
+var theForm, xmlDoc;
 var parser = new DOMParser();
 var serializer = new XMLSerializer();
 var xmlString = "<sigml><hamgestural_sign><sign_manual></sign_manual></hamgestural_sign></sigml>";
@@ -35,7 +35,7 @@ function updatesign(){
     handconfig.setAttribute("specialfingers",specialfingers)
 
     // Thumb Position
-    var selectedThumbpos = handshapeForm.elements["thumbpos"];
+    var selectedThumbpos = theForm.elements["thumbpos"];
     if (selectedThumbpos.value == "None"){
         handconfig.removeAttribute("thumbpos");
     } else {
@@ -43,7 +43,7 @@ function updatesign(){
     }
 
     // Main Bend
-    var selectedMainbend = handshapeForm.elements["mainbend"];
+    var selectedMainbend = theForm.elements["mainbend"];
     if (selectedMainbend.value == "None"){
         handconfig.removeAttribute("mainbend");
     } else {
@@ -265,11 +265,8 @@ var delay = ( function() {
 
 delay(function(){
     // document.getElementById("animate").removeAttribute("disabled");
-    handshapeForm = document.forms["handconfig"];
-    signForm = document.forms["signeditor"]
-    if (handshapeForm){
+    theForm = document.forms["handconfig"];
+    if (theForm){
         updatesign();
-    } else if (signForm){
-        activateleft(document.getElementById('twohanded'));
     }
 }, 3000 ); // end delay
