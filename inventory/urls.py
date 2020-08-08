@@ -17,4 +17,6 @@ urlpatterns = [
 	path('signs/new/', views.sign_new, name='sign_new'),
 	path('signs/<int:pk>/edit', views.sign_edit, name='sign_edit'),
 	path('signs/<int:pk>/delete',views.sign_delete,name='sign_delete'),
+
+	path("translator/", views.translator, name="translator"),
 ]

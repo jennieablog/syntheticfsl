@@ -11,7 +11,9 @@ from django.utils import timezone
 from django.shortcuts import render, get_object_or_404, redirect
 # To authorize users before editing/posting/deleting handshapes
 from django.contrib.auth.decorators import login_required
-
+# For ajax
+from django.template.loader import render_to_string
+from django.http import JsonResponse
 
 # Display index.
 def index(request):
@@ -207,3 +209,21 @@ def sign_delete(request,pk):
 	sign = get_object_or_404(Sign, id=pk)
 	sign.delete()
 	return redirect('sign_list')
+
+def translator(request):
+
+	url_parameter = request.GET.get("q")
+
+	signs = Sign.objects.all()
+
+	if url_parameter:
+		signs = Sign.objects.filter(name__icontains=url_parameter)
+
+	if request.is_ajax():
+		html = render_to_string(template_name="inventory/translator-partial.html",context={'signs' : signs})
+		data_dict = {"html_from_view": html}
+		return JsonResponse(data=data_dict, safe=False)
+
+	context = {'signs' : signs}
+
+	return render(request, "inventory/translator.html", context)

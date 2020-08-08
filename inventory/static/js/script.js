@@ -293,6 +293,34 @@ function resetBend(finger){
     updatesign();
 }
 
+
+function includeSign(e){
+    var sentence = document.getElementById("sentence");
+    var word_button = document.createElement("a");
+    word_button.setAttribute("name", "sign-word");
+    word_button.setAttribute("class", "btn btn-sm btn-success text-white");
+    word_button.setAttribute("style", "font-size:0.7rem;margin-right: 10px;");
+    word_button.setAttribute("data", e.getAttribute('data').slice(7,-8));
+    word_button.innerHTML = "<strong>"+e.value+"</strong>"
+    sentence.appendChild(word_button);
+    generateSentence();
+}
+
+function generateSentence(){
+    var words = document.getElementsByName("sign-word");
+    var sigml = "<sigml>"
+    for (var i = 0; i < words.length; i++) {
+        sigml = sigml + words[i].getAttribute('data');
+    }
+    sigml = sigml + "</sigml>"
+    document.getElementById('sigml').innerHTML = sigml;
+}
+
+function clearSentence(){
+    document.getElementById('sentence').innerHTML = "";
+    document.getElementById('sigml').innerHTML = "";
+}
+
 var delay = ( function() {
     var timer = 0;
     return function(callback, ms) {

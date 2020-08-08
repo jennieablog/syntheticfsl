@@ -73,7 +73,7 @@
 					{% if user.is_authenticated %}
 					<hr>
 					<div style="text-align: center;">
-						<a href="#" class="btn btn-sm btn-success"><i class="fas fa-plus"></i> Add new sign.</a>
+						<a href="{% url 'sign_new' %}" class="btn btn-sm btn-success"><i class="fas fa-plus"></i> Add new sign.</a>
 					</div>
 					{% endif %}
 				</div>

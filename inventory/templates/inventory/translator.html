@@ -1,0 +1,59 @@
+{% extends 'inventory/base.html' %}
+{% load static %}
+
+{% block content %}
+
+			<div class="row" style="padding: 20px;">
+				<div class="col col-lg-4">
+					<div class="card text-center">
+						<h6 class="card-header">JASigning Avatar</h6>
+						<!-- Animation Box -->
+						<div style="height: 600px;">
+							<div class="card-body" style="padding:0px !important;">
+								<div class="CWASAAvatar av0" align="center" style="background-color: aliceblue;">
+								</div>
+							</div>
+							<!-- Description -->
+							<div class="card-footer bg-transparent">
+								<!-- Buttons -->
+								<div style="display: flex; align-items: center; justify-content: center; padding: 10px;">
+										Avatar:&emsp;
+										<div class="CWASAAvMenu av0 text-capitalize" style="flex:2;"></div>
+									</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col col-lg" style="padding:10px;">
+					<h4>FSL Translator</h4><hr>
+					<h5>Sign Search</h5>
+					<p style="font-size: 0.7rem;">Search for signs that you could use for your sentence on the fly. You can preview a sign before adding it to your sentence.</p>
+					<div class="row">
+						<div class="col col-lg ">
+							<form class="form-inline">
+								<i id="search-icon" class="fas fa-search" aria-hidden="true"></i>
+								<input id="user-input" class="form-control form-control-sm ml-3 w-75" type="text" placeholder="Search for FSL sign in the database." aria-label="Search">
+							</form>
+						</div>
+					</div>
+					<div class="row" style="padding-left:50px;font-size: 0.7rem;">
+						Search results for your query:
+						<div id="replaceable-content" class="col" style="height:100px;overflow-y:scroll;">
+							{% include 'inventory/translator-partial.html' %}
+						</div>
+					</div><hr>
+					<h5>
+						FSL Sentence
+					</h5>
+					<p style="font-size: 0.7rem;">Click the play button to animate whole sentence or click on each sign to play animation individually.</p>
+					<div class="border mb-4" id="sentence" style="padding:20px;height:100px;overflow-y:scroll;">
+					</div>
+
+					<button type="button" id="animate" class="btn btn-sm btn-success bttnPlaySiGMLText av0"><i class="fas fa-play"></i> Play sentence</button>
+					<button type="button" class="btn btn-sm btn-secondary" onclick="clearSentence();"><i class="fas fa-trash"></i> Clear</button>
+				</div>
+			</div>
+			<textarea id="sigml" rows="10" class="txtaSiGMLText av0" hidden="true"></textarea>
+			<script src="{% static 'js/translate.js' %}" type="text/javascript"></script>
+
+{% endblock %}
