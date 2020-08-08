@@ -290,7 +290,6 @@ function resetBend(finger){
             }
             break;
     }
-    updatesign();
 }
 
 var delay = ( function() {

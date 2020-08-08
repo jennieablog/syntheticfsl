@@ -88,28 +88,28 @@
 									Choose a default thumb position.
 									<div class="row" style="margin: 0px;padding: 10px;">
 										<div class="col" style="text-align: center;padding: 0;">
-											<img src="https://imgur.com/C2lrk0a.png" alt="" width="70px"><br>
+											<img src="https://imgur.com/odvw2hi.png" alt="" width="70px"><br>
 											<div class="custom-control custom-radio custom-control-inline">
 												<input type="radio" id="defaultthumb" name="thumbpos" class="custom-control-input" value="None" onclick="updatesign();" checked="true">
 												<label class="custom-control-label" for="defaultthumb">Default</label>
 											</div>
 										</div>
 										<div class="col" style="text-align: center; padding: 0;">
-											<img src="https://imgur.com/cVXciKW.png" alt="" width="70px"><br>
+											<img src="https://imgur.com/NlB4dzP.png" alt="" width="70px"><br>
 											<div class="custom-control custom-radio custom-control-inline">
 												<input type="radio" id="out" name="thumbpos" class="custom-control-input" value="out" onclick="updatesign();">
 												<label class="custom-control-label" for="out">Out</label>
 											</div>
 										</div>
 										<div class="col" style="text-align: center; padding: 0;">
-											<img src="https://imgur.com/D6ucAMb.png" alt="" width="70px"><br>
+											<img src="https://imgur.com/4P9vbBu.png" alt="" width="70px"><br>
 											<div class="custom-control custom-radio custom-control-inline">
 												<input type="radio" id="across" name="thumbpos" class="custom-control-input" value="across" onclick="updatesign();">
 												<label class="custom-control-label" for="across">Across</label>
 											</div>
 										</div>
 										<div class="col" style="text-align: center; padding: 0;">
-											<img src="https://imgur.com/NkOAIiz.png" alt="" width="70px"><br>
+											<img src="https://imgur.com/Z3bchBG.png" alt="" width="70px"><br>
 											<div class="custom-control custom-radio custom-control-inline">
 												<input type="radio" id="opposed" name="thumbpos" class="custom-control-input" value="opposed" onclick="updatesign();">
 												<label class="custom-control-label" for="opposed">Opposed</label>
@@ -128,7 +128,7 @@
 									for chosen base form.
 									<div class="row" style="padding: 10px">
 										<div class="col" style="text-align: center;">
-											<img src="https://imgur.com/8X10d4b.png" alt="fingers" width="150px">
+											<img src="https://imgur.com/u1aTrZN.png" alt="fingers" width="150px">
 										</div>
 	  								</div>
 	  								<div class="row" style="padding-bottom: 10px;">
@@ -162,7 +162,7 @@
 									for involved fingers.
 									<div class="row" style="padding: 10px">
 										<div class="col" style="text-align: center;">
-											<img src="https://imgur.com/GOP5nXW.png" alt="fingers" width="150px">
+											<img src="https://imgur.com/6wjntUG.png" alt="fingers" width="150px">
 										</div>
 	  								</div>
 	  								<div class="row" style="padding-bottom: 10px;">
@@ -189,58 +189,60 @@
 
 								<!-- Individual Bending -->
 								<div class="col-lg border form-content" style="text-align: center;">
-									Adjust bending manually<br>
-									for individual fingers.
-									<div class="row justify-content-center" style="padding: 20px 0 20px 0;">
+									<div class="row" style="padding-left: 20px;">
+										<div class="col" style="text-align: center;">
+											Override default bending for individual fingers.<br>
+											<img src="https://imgur.com/Q1YTlKG.png" height="125px" width="250px">
+										</div>
+									</div>
+									<div class="row" style="padding-left: 20px; font-size: 0.7rem;">
+										<strong>Thumb - <a href="#" onclick="resetBend('1');">Reset</a></strong>
+										&nbsp;1 <input name="bend1_1" value="0" type="number" step=".01" style="font-size:0.5rem;width:2.2rem;margin-left:2px;" onchange="updatesign();">
+										&nbsp;2 <input name="bend1_2" value="0" type="number" step=".01" style="font-size:0.5rem;width:2.2rem;margin-left:2px;" onchange="updatesign();">
+										&nbsp;3 <input name="bend1_3" value="0" type="number" step=".01" style="font-size:0.5rem;width:2.2rem;margin-left:2px;" onchange="updatesign();">
+										&nbsp;4 <input name="bend1_4" value="0" type="number" step=".01" style="font-size:0.5rem;width:2.2rem;margin-left:2px;" onchange="updatesign();">
+										&nbsp;5 <input name="bend1_5" value="0" type="number" step=".01" style="font-size:0.5rem;width:2.2rem;margin-left:2px;" onchange="updatesign();">
+									</div>
+									<div class="row justify-content-center" style="padding-top: 10px;">
 										<div class="col-sm-5">
-											<img src="https://imgur.com/8HUeg2h.png" alt="fingers" width="200px">
+											<img src="https://imgur.com/BjaMBum.png" alt="fingers" width="200px">
 										</div>
 										<div class="col-sm" id="specificbend_options" style="padding-left: 10%;">
 											<div class="row" style="font-size:0.7rem;">
-												Thumb
-											</div>
-											<div class="row mb-1">
-												<input name="bend1_1" value="0" type="number" step=".01" style="font-size:0.5rem;width:2.2rem;margin-left:2px;" onchange="updatesign();">
-												<input name="bend1_2" value="0" type="number" step=".01" style="font-size:0.5rem;width:2.2rem;margin-left:2px;" onchange="updatesign();">
-												<input name="bend1_3" value="0" type="number" step=".01" style="font-size:0.5rem;width:2.2rem;margin-left:2px;" onchange="updatesign();">
-												<input name="bend1_4" value="0" type="number" step=".01" style="font-size:0.5rem;width:2.2rem;margin-left:2px;" onchange="updatesign();">
-												<input name="bend1_5" value="0" type="number" step=".01" style="font-size:0.5rem;width:2.2rem;margin-left:2px;" onchange="updatesign();">
-											</div>
-											<div class="row" style="font-size:0.7rem;">
-												Index
-											</div>
-											<div class="row mb-1">
-												<input name="bend2_1" value="0" type="number" step=".01" style="font-size:0.5rem;width:2.2rem;margin-left:2px;" onchange="updatesign();">
-												<input name="bend2_2" value="0" type="number" step=".01" style="font-size:0.5rem;width:2.2rem;margin-left:2px;" onchange="updatesign();">
-												<input name="bend2_3" value="0" type="number" step=".01" style="font-size:0.5rem;width:2.2rem;margin-left:2px;" onchange="updatesign();">
-												<input name="bend2_4" value="0" type="number" step=".01" style="font-size:0.5rem;width:2.2rem;margin-left:2px;" onchange="updatesign();">
-											</div>
-											<div class="row" style="font-size:0.7rem;">
-												Middle
+												<strong>Index - <a href="#" onclick="resetBend('2');">Reset</a></strong>
 											</div>
 											<div class="row mb-1" style="font-size:0.7rem;">
-												<input name="bend3_1" value="0" type="number" step=".01" style="font-size:0.5rem;width:2.2rem;margin-left:2px;" onchange="updatesign();">
-												<input name="bend3_2" value="0" type="number" step=".01" style="font-size:0.5rem;width:2.2rem;margin-left:2px;" onchange="updatesign();">
-												<input name="bend3_3" value="0" type="number" step=".01" style="font-size:0.5rem;width:2.2rem;margin-left:2px;" onchange="updatesign();">
-												<input name="bend3_4" value="0" type="number" step=".01" style="font-size:0.5rem;width:2.2rem;margin-left:2px;" onchange="updatesign();">
+												1 <input name="bend2_1" value="0" type="number" step=".01" style="font-size:0.5rem;width:2.2rem;margin-left:2px;" onchange="updatesign();" onclick="resetBend('3');">
+												&nbsp;2 <input name="bend2_2" value="0" type="number" step=".01" style="font-size:0.5rem;width:2.2rem;margin-left:2px;" onchange="updatesign();">
+												&nbsp;3 <input name="bend2_3" value="0" type="number" step=".01" style="font-size:0.5rem;width:2.2rem;margin-left:2px;" onchange="updatesign();">
+												&nbsp;4 <input name="bend2_4" value="0" type="number" step=".01" style="font-size:0.5rem;width:2.2rem;margin-left:2px;" onchange="updatesign();">
 											</div>
 											<div class="row" style="font-size:0.7rem;">
-												Ring
+												<strong>Middle - <a href="#" onclick="resetBend('3');">Reset</a></strong>
 											</div>
-											<div class="row mb-1">
-												<input name="bend4_1" value="0" type="number" step=".01" style="font-size:0.5rem;width:2.2rem;margin-left:2px;" onchange="updatesign();">
-												<input name="bend4_2" value="0" type="number" step=".01" style="font-size:0.5rem;width:2.2rem;margin-left:2px;" onchange="updatesign();">
-												<input name="bend4_3" value="0" type="number" step=".01" style="font-size:0.5rem;width:2.2rem;margin-left:2px;" onchange="updatesign();">
-												<input name="bend4_4" value="0" type="number" step=".01" style="font-size:0.5rem;width:2.2rem;margin-left:2px;" onchange="updatesign();">
+											<div class="row mb-1" style="font-size:0.7rem;">
+												1 <input name="bend3_1" value="0" type="number" step=".01" style="font-size:0.5rem;width:2.2rem;margin-left:2px;" onchange="updatesign();">
+												&nbsp;2 <input name="bend3_2" value="0" type="number" step=".01" style="font-size:0.5rem;width:2.2rem;margin-left:2px;" onchange="updatesign();">
+												&nbsp;3 <input name="bend3_3" value="0" type="number" step=".01" style="font-size:0.5rem;width:2.2rem;margin-left:2px;" onchange="updatesign();">
+												&nbsp;4 <input name="bend3_4" value="0" type="number" step=".01" style="font-size:0.5rem;width:2.2rem;margin-left:2px;" onchange="updatesign();">
 											</div>
 											<div class="row" style="font-size:0.7rem;">
-												Pinky
+												<strong>Ring - <a href="#" onclick="resetBend('4');">Reset</a></strong>
 											</div>
-											<div class="row mb-1">
-												<input name="bend5_1" value="0" type="number" step=".01" style="font-size:0.5rem;width:2.2rem;margin-left:2px;" onchange="updatesign();">
-												<input name="bend5_2" value="0" type="number" step=".01" style="font-size:0.5rem;width:2.2rem;margin-left:2px;" onchange="updatesign();">
-												<input name="bend5_3" value="0" type="number" step=".01" style="font-size:0.5rem;width:2.2rem;margin-left:2px;" onchange="updatesign();">
-												<input name="bend5_4" value="0" type="number" step=".01" style="font-size:0.5rem;width:2.2rem;margin-left:2px;" onchange="updatesign();">
+											<div class="row mb-1" style="font-size:0.7rem;">
+												1 <input name="bend4_1" value="0" type="number" step=".01" style="font-size:0.5rem;width:2.2rem;margin-left:2px;" onchange="updatesign();">
+												&nbsp;2 <input name="bend4_2" value="0" type="number" step=".01" style="font-size:0.5rem;width:2.2rem;margin-left:2px;" onchange="updatesign();">
+												&nbsp;3 <input name="bend4_3" value="0" type="number" step=".01" style="font-size:0.5rem;width:2.2rem;margin-left:2px;" onchange="updatesign();">
+												&nbsp;4 <input name="bend4_4" value="0" type="number" step=".01" style="font-size:0.5rem;width:2.2rem;margin-left:2px;" onchange="updatesign();">
+											</div>
+											<div class="row" style="font-size:0.7rem;">
+												<strong>Finger - <a href="#" onclick="resetBend('5');">Reset</a></strong>
+											</div>
+											<div class="row mb-1" style="font-size:0.7rem;">
+												1 <input name="bend5_1" value="0" type="number" step=".01" style="font-size:0.5rem;width:2.2rem;margin-left:2px;" onchange="updatesign();">
+												&nbsp;2 <input name="bend5_2" value="0" type="number" step=".01" style="font-size:0.5rem;width:2.2rem;margin-left:2px;" onchange="updatesign();">
+												&nbsp;3 <input name="bend5_3" value="0" type="number" step=".01" style="font-size:0.5rem;width:2.2rem;margin-left:2px;" onchange="updatesign();">
+												&nbsp;4 <input name="bend5_4" value="0" type="number" step=".01" style="font-size:0.5rem;width:2.2rem;margin-left:2px;" onchange="updatesign();">
 											</div>
 										</div>
 									</div>

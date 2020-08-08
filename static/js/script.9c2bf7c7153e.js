@@ -261,36 +261,20 @@ function resetBend(finger){
     var box;
     switch(finger){
         case '1':
-            for(i = 1; i < 6; i++) {
+            for(i = 1; i < 6.length; i++) {
                 box = 'bend1_'+ i;
-                document.getElementsByName(box)[0].value = 0.0;
+                document.getElementsByName('box')[0].value = 0.0;
             }
             break;
         case '2':
-            for(i = 1; i < 5; i++) {
-                box = 'bend2_'+ i;
-                document.getElementsByName(box)[0].value = 0.0;
-            }
             break;
         case '3':
-            for(i = 1; i < 5; i++) {
-                box = 'bend3_'+ i;
-                document.getElementsByName(box)[0].value = 0.0;
-            }
             break;
         case '4':
-            for(i = 1; i < 5; i++) {
-                box = 'bend4_'+ i;
-                document.getElementsByName(box)[0].value = 0.0;
-            }
+            break;
         case '5':
-            for(i = 1; i < 5; i++) {
-                box = 'bend5_'+ i;
-                document.getElementsByName(box)[0].value = 0.0;
-            }
             break;
     }
-    updatesign();
 }
 
 var delay = ( function() {

@@ -21,6 +21,7 @@ def index(request):
 def handshape_list(request):
 	handshapes = Handshape.objects.all()
 	context = { 'handshapes' : handshapes }
+
 	return render(request, 'inventory/handshape_list.html', context)
 
 # Edit a handshape.
