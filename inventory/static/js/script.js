@@ -298,7 +298,7 @@ function includeSign(e){
     var sentence = document.getElementById("sentence");
     var word_button = document.createElement("a");
     word_button.setAttribute("name", "sign-word");
-    word_button.setAttribute("class", "btn btn-sm btn-success text-white");
+    word_button.setAttribute("class", "btn btn-sm btn-info text-white");
     word_button.setAttribute("style", "font-size:0.7rem;margin-right: 10px;");
     word_button.setAttribute("data", e.getAttribute('data').slice(7,-8));
     word_button.innerHTML = "<strong>"+e.value+"</strong>"

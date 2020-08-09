@@ -62,9 +62,17 @@
 								<td>
 									{% if sign.twohanded %}
 									{{ sign.lhs.name }} handshape, on {% if sign.lloc == ' ' %} neutral space {% else %} {{ sign.lloc }} {% endif %}
+									{% else %}
+									--
 									{% endif %}
 								</td>
-								<td>{% if sign.lloc == ' ' %} neutral space {% else %} {{ sign.lloc }} {% endif %} ({{ sign.lside }})</td>
+								<td>
+									{% if sign.twohanded %}
+									{% if sign.lloc == ' ' %} neutral space {% else %} {{ sign.lloc }} {% endif %} ({{ sign.lside }})
+									{% else %}
+									--
+									{% endif %}
+								</td>
 							</tr>
 							{% endfor %}
 						</tbody>
