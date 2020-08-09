@@ -321,6 +321,18 @@ function clearSentence(){
     document.getElementById('sigml').innerHTML = "";
 }
 
+function backspace(){
+    var words = document.getElementsByName("sign-word");
+    words[words.length-1].remove();
+    words = document.getElementsByName("sign-word");
+    var sigml = "<sigml>"
+    for (var i = 0; i < words.length; i++) {
+        sigml = sigml + words[i].getAttribute('data');
+    }
+    sigml = sigml + "</sigml>"
+    document.getElementById('sigml').innerHTML = sigml;
+}
+
 var delay = ( function() {
     var timer = 0;
     return function(callback, ms) {
