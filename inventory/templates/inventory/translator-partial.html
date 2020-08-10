@@ -1,8 +1,8 @@
-{% if signs %}
+{% if signs and not spellout %}
 {% for sign in signs %}
 <button class="btn btn-sm btn-info mb-1" value="{{ sign.name }}" data="{{ sign.sigmlfy }}" style="padding:3px;font-size:0.5rem;" onclick="writesigml(this.getAttribute('data'))"><i class="fas fa-play"></i> <strong>PREVIEW</strong></button>
 <button class="btn btn-sm btn-success mb-1" value="{{ sign.name }}" data="{{ sign.sigmlfy }}" style="padding:3px;font-size:0.5rem;" onclick="includeSign(this);"><i class="fas fa-plus"></i> <strong>USE THIS SIGN</strong></button><strong>&emsp;{{ sign.name }}</strong> - {{ sign.description}}<br>
 {% endfor %}
 {% else %}
-  <p>No signs found.</p>
+  <p>No signs found. {% if spellout %} <button class="btn btn-sm btn-success mb-1" style="padding:3px;font-size:0.5rem;" value="{{ query }}" data="{{ sigml }}" onclick="spellOut(this)"><strong>SPELL OUT</strong></button>{% else %}Please remove non-alphanumeric symbols.{% endif %}</p>
 {% endif %}

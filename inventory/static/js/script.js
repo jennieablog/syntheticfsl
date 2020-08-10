@@ -114,8 +114,6 @@ function updatesign(){
 }
 
 function writesigml(sigml){
-    console.log(sigml);
-    // document.getElementsByName('hello')[0].value = sigml;
     document.getElementById('sigml').innerHTML = sigml;
     document.getElementById("animate").click();
 }
@@ -297,14 +295,35 @@ function resetBend(finger){
 function includeSign(e){
     var sentence = document.getElementById("sentence");
     var word_button = document.createElement("a");
+    var sigml = e.getAttribute('data');
     word_button.setAttribute("name", "sign-word");
     word_button.setAttribute("class", "btn btn-sm btn-info text-white");
     word_button.setAttribute("style", "font-size:0.7rem;margin-right: 10px;");
-    word_button.setAttribute("data", e.getAttribute('data').slice(7,-8));
+    word_button.setAttribute("data", sigml.slice(7,-8));
+    word_button.setAttribute("onclick", "playWord(this);");
     word_button.innerHTML = "<strong>"+e.value+"</strong>"
     sentence.appendChild(word_button);
     generateSentence();
 }
+
+function spellOut(e){
+    var sentence = document.getElementById("sentence");
+    var word_button = document.createElement("a");
+    word_button.setAttribute("name", "sign-word");
+    word_button.setAttribute("class", "btn btn-sm btn-warning text-white");
+    word_button.setAttribute("style", "font-size:0.7rem;margin-right: 10px;");
+    word_button.setAttribute("data", e.getAttribute('data'));
+    word_button.setAttribute("onclick", "playWord(this);");
+    word_button.innerHTML = "<strong>"+e.value+"</strong>"
+    sentence.appendChild(word_button);
+    generateSentence();
+}
+
+function playWord(e){
+    var sigml = "<sigml>" + e.getAttribute("data") + "</sigml>";
+    writesigml(sigml);
+}
+
 
 function generateSentence(){
     var words = document.getElementsByName("sign-word");
@@ -314,6 +333,7 @@ function generateSentence(){
     }
     sigml = sigml + "</sigml>"
     document.getElementById('sigml').innerHTML = sigml;
+    document.getElementById("animate").click();
 }
 
 function clearSentence(){

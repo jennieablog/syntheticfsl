@@ -39,10 +39,6 @@ user_input.on('keyup', function () {
     scheduled_function = setTimeout(ajax_call, delay_by_in_ms, endpoint, request_parameters)
 })
 
-$(document).keypress(
-  function(event){
-    if (event.which == '13') {
-        console.log("enter key is pressed")
-      event.preventDefault();
-    }
+document.getElementById('user-input').addEventListener('keydown', function(k){
+    if(k.keyCode == 13) return false;
 });

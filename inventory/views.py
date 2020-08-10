@@ -211,16 +211,32 @@ def sign_delete(request,pk):
 	return redirect('sign_list')
 
 def translator(request):
-
+	
+	spellout = False;
+	sigml = ""
+	query = ""
 	url_parameter = request.GET.get("q")
 
 	signs = Sign.objects.all()
 
 	if url_parameter:
 		signs = Sign.objects.filter(name__icontains=url_parameter)
+		if not signs:
+			signs = []
+			for c in url_parameter:
+				if c.isalpha() or c.isnumeric():
+					sign = Sign.objects.filter(name=c.upper())
+					if sign:
+						signs.append(sign[0])
+						sigml = sigml + sign[0].sigmlfy()[7:-8]
+						query = query + c.upper()
+
+			if query:
+				query = "SPELLOUT: " + query
+				spellout=True;
 
 	if request.is_ajax():
-		html = render_to_string(template_name="inventory/translator-partial.html",context={'signs' : signs})
+		html = render_to_string(template_name="inventory/translator-partial.html",context={'signs' : signs, 'spellout' : spellout, 'sigml' : sigml, 'query' : query})
 		data_dict = {"html_from_view": html}
 		return JsonResponse(data=data_dict, safe=False)
 
