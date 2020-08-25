@@ -150,29 +150,45 @@ class Sign(models.Model):
 	name = models.CharField(max_length=200, verbose_name='Name')
 	description = models.TextField(verbose_name='Description')
 
-	# Single handed?
-	twohanded = models.BooleanField(default=False) 
+	# Two handed
+	twoHanded = models.BooleanField(default=False) 
 
-	# Handshape
-	hs = models.ForeignKey(Handshape, default=1, verbose_name="Right Handshape", on_delete=models.SET_DEFAULT, related_name='rhs_sign_set')
-	lhs = models.ForeignKey(Handshape, default=1, verbose_name="Left Handshape", on_delete=models.SET_DEFAULT, related_name='lhs_sign_set')
+	# Initial Configuration
+	rightHandshape = models.ForeignKey(Handshape, verbose_name="Right Handshape", default="1", on_delete=models.CASCADE, related_name='rightHandshape_sign_set')
+	rightFingerDirection = models.CharField(max_length=5, verbose_name='Right External Finger Direction', default='')
+	rightPalmOrientation = models.CharField(max_length=5, verbose_name='Right Palm Orientation', default='')
+	leftHandshape = models.ForeignKey(Handshape, verbose_name="Left Handshape", default="1", on_delete=models.CASCADE, related_name='leftHandshape_sign_set')
+	leftFingerDirection = models.CharField(max_length=5, verbose_name='Left External Finger Direction', default='')
+	leftPalmOrientation = models.CharField(max_length=5, verbose_name='Left Palm Orientation', default='')
 
-	# External Finger Direction
-	efd = models.CharField(max_length=5, verbose_name='Right External Finger Direction', default='')
-	lefd = models.CharField(max_length=5, verbose_name='Left External Finger Direction', default='')
+	# Location Definition
+	locationType = models.CharField(max_length=5, verbose_name='Location Type', default='')
 
-	# Hand Orientation
-	ori = models.CharField(max_length=5, verbose_name='Right Palm Orientation', default='')
-	lori = models.CharField(max_length=5, verbose_name='Left Palm Orientation', default='')
+	# Split Location
+	rightLocation = models.CharField(max_length=20, verbose_name='Right Hand Location', default='')
+	rightLocationSide = models.CharField(max_length=20, verbose_name='Right Hand Location Side', default='')
+	rightLocationContact = models.CharField(max_length=20, verbose_name='Right Hand Location Contact', default='')
+	leftLocation = models.CharField(max_length=20, verbose_name='Left Hand Location', default='')
+	leftLocationSide = models.CharField(max_length=20, verbose_name='Left Hand Location Contact', default='')
+	leftLocationContact = models.CharField(max_length=20, verbose_name='Left Hand Location Side', default='')
+	
+	# Constellation
+	constellationContact = models.CharField(max_length=20, verbose_name='Constellation Contact', default='')
+	constellationLocation = models.CharField(max_length=20, verbose_name='Constellation Location', default='')
+	constellationLocationSide = models.CharField(max_length=20, verbose_name='Constellation Location Side', default='')
+	constellationLocationContact = models.CharField(max_length=20, verbose_name='Constellation Location Contact', default='')
 
-	# Location
-	loc = models.CharField(max_length=20, verbose_name='Right Hand Location', default='')
-	contact = models.CharField(max_length=20, verbose_name='Right Hand Location Contact', default='')
-	side = models.CharField(max_length=20, verbose_name='Right Hand Location Side', default='')
+	# Contact Definition
+	rightContactType = models.CharField(max_length=20, verbose_name='Right Contact Type', default='')
+	leftContactType = models.CharField(max_length=20, verbose_name='Left Contact Type', default='')
 
-	lloc = models.CharField(max_length=20, verbose_name='Left Hand Location', default='')
-	lcontact = models.CharField(max_length=20, verbose_name='Left Hand Location Contact', default='')
-	lside = models.CharField(max_length=20, verbose_name='Left Hand Location Side', default='')
+	# Contact Part
+	rightContactFinger = models.CharField(max_length=5, verbose_name='Constellation Location Contact', default='')
+	rightContactPart = models.CharField(max_length=20, verbose_name='Right Contact Part', default='')
+	rightContactSide = models.CharField(max_length=20, verbose_name='Right Contact Side', default='')
+	leftContactFinger = models.CharField(max_length=20, verbose_name='Right Contact Side', default='') 
+	leftContactPart = models.CharField(max_length=20, verbose_name='Right Contact Side', default='')
+	leftContactSide = models.CharField(max_length=20, verbose_name='Right Contact Side', default='')
 	
 	sigml = models.TextField(default="<sigml></sigml>")
 
@@ -190,52 +206,81 @@ class Sign(models.Model):
 		sign_manual = ET.SubElement(hamgestural_sign, 'sign_manual')
 
 		# Hand Config
-		if self.twohanded:
+		if self.twoHanded:
 
 			# Hand Configuration
 			split_handconfig = ET.SubElement(sign_manual, 'split_handconfig')
 			
 			# Right Hand Config
 			r_handconfig = ET.SubElement(split_handconfig, 'handconfig')
-			self.hs.createHGSTree(r_handconfig)
-			r_handconfig.set('extfidir', self.efd)
-			r_handconfig.set('palmor', self.ori)
+			self.rightHandshape.createHGSTree(r_handconfig)
+			r_handconfig.set('extfidir', self.rightFingerDirection)
+			r_handconfig.set('palmor', self.rightPalmOrientation)
 
 			# Left Hand Config
 			l_handconfig = ET.SubElement(split_handconfig, 'handconfig')
-			self.lhs.createHGSTree(l_handconfig)
-			l_handconfig.set('extfidir', self.lefd)
-			l_handconfig.set('palmor', self.lori)
+			self.leftHandshape.createHGSTree(l_handconfig)
+			l_handconfig.set('extfidir', self.leftFingerDirection)
+			l_handconfig.set('palmor', self.leftPalmOrientation)
 
-			# Location
-			split_location = ET.SubElement(sign_manual, 'split_location')
+			if self.locationType == "split":
+				# Split location
+				split_location = ET.SubElement(sign_manual, 'split_location')
 
-			# Right Hand Location
-			r_location = ET.SubElement(split_location,'location_bodyarm')
-			r_location.set('location',self.loc)
-			r_location.set('contact',self.contact)
-			r_location.set('side',self.side)
+				# Right Hand Location
+				r_location = ET.SubElement(split_location,'location_bodyarm')
+				r_location.set('location',self.rightLocation)
+				r_location.set('contact',self.rightLocationContact)
+				r_location.set('side',self.rightLocationSide)
 
-			# Left Hand Location
-			l_location = ET.SubElement(split_location,'location_bodyarm')
-			l_location.set('location',self.lloc)
-			l_location.set('contact',self.lcontact)
-			l_location.set('side',self.lside)
+				# Left Hand Location
+				l_location = ET.SubElement(split_location,'location_bodyarm')
+				l_location.set('location',self.leftLocation)
+				l_location.set('contact',self.leftLocationContact)
+				l_location.set('side',self.leftLocationSide)
+
+			else:
+				handconstellation = ET.SubElement(sign_manual, 'handconstellation')
+				handconstellation.set('contact', self.constellationContact)
+
+				r_site = ET.SubElement(handconstellation, 'location_hand')
+				if self.rightContactType == "fingerpart":
+					r_site.set('digits', self.rightContactFinger)
+					r_site.set('location', self.rightContactPart)
+					r_site.set('side',self.rightContactSide)
+				else:
+					r_site.set('location', self.rightContactPart)
+					r_site.set('side',self.rightContactSide)
+
+
+				l_site = ET.SubElement(handconstellation, 'location_hand')
+				if self.leftContactType == "fingerpart":
+					l_site.set('digits', self.leftContactFinger)
+					l_site.set('location', self.leftContactPart)
+					l_site.set('side',self.leftContactSide)
+				else:
+					l_site.set('location', self.leftContactPart)
+					l_site.set('side',self.leftContactSide)
+
+				site_loc = ET.SubElement(handconstellation, 'location_bodyarm')
+				site_loc.set('location', self.constellationLocation)
+				site_loc.set('side', self.constellationLocationSide)
+				site_loc.set('contact', self.constellationLocationContact)
+				
 
 		else:
 
 			# Hand Configuration
 			handconfig = ET.SubElement(sign_manual,'handconfig')
-			self.hs.createHGSTree(handconfig)
-			handconfig.set('extfidir', self.efd)
-			handconfig.set('palmor', self.ori)
+			self.rightHandshape.createHGSTree(handconfig)
+			handconfig.set('extfidir', self.rightFingerDirection)
+			handconfig.set('palmor', self.rightPalmOrientation)
 
 			# Location
 			location = ET.SubElement(sign_manual,'location_bodyarm')
-			location.set('location', self.loc)
-			location.set('contact', self.contact)
-			location.set('side', self.side)
-
+			location.set('location', self.rightLocation)
+			location.set('contact', self.rightLocationContact)
+			location.set('side', self.rightLocationSide)
 
 		dataStr = ET.tostring(sigml, encoding='unicode')
 		return dataStr;

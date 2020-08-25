@@ -3,6 +3,8 @@
 
 {% block content %}
 			<div class="detail">
+
+				<!-- Avatar -->
 				<div class="detail-1">
 					<div class="card text-center">
 						<h6 id="loading" class="card-header"><img src="https://acegif.com/wp-content/uploads/loading-25.gif" width="30px"></h6>
@@ -18,17 +20,19 @@
 								<div style="display: flex; align-items: center; justify-content: center; padding: 10px;">
 										<button type="button" id="animate" class="btn btn-sm btn-info bttnPlaySiGMLText av0" style="flex: 1;"><i class="fas fa-hand-sparkles"></i> Play</button>&emsp;
 										<div class="CWASAAvMenu av0 text-capitalize" style="flex:2;"></div>
-									</div>
+								</div>
 							</div>
 						</div>
 					</div>
 				</div>
+
+				<!-- Form -->
 				<div class="detail-2" style="border-color: grey;">
 
 					<form method="POST" id="signeditor" style="font-size: 0.7rem;">
 					{% csrf_token %}
 
-						<!-- Name -->
+						<!-- General Info -->
 						<div class="form-row" style="height:60px; margin: 5px;">
 							<div class="col-3">
 								<input type="text" name="signName" class="form-control" placeholder="Handshape Name" style="font-size: 0.7rem;">
@@ -43,6 +47,7 @@
 
 						<div class="container-fluid" style="width: 100%;overflow-y: scroll; overflow-x: hidden;">
 
+							<!-- Nav Pills -->
 							<nav style="padding-bottom: 20px;">
 								<div class="nav nav-pills" id="nav-tab" role="tablist">
 									<a class="nav-item nav-link active" id="nav-handconfig-tab" data-toggle="tab" href="#nav-handconfig" role="tab" aria-controls="nav-handconfig" aria-selected="true">Hand Configuration</a>
@@ -99,7 +104,7 @@
 											<h6>Set right hand configuration.</h6>
 										</div>
 									</div>
-									<!-- ORIENTATION-->
+									<!-- Orientation -->
 									<div class="row">
 										<div class="col-7">
 											<p style="text-align: center;">Set extended finger direction.</p>
@@ -310,6 +315,7 @@
 												<h6>Set left hand configuration.</h6>
 											</div>
 										</div>
+										<!-- Orientation -->
 										<div class="row">
 											<div class="col-7">
 												<p style="text-align: center;">Set extended finger direction.</p>
@@ -517,16 +523,39 @@
 								</div>
 
 								<div class="tab-pane fade" id="nav-location" role="tabpanel" aria-labelledby="nav-location-tab">
-									<div class="row justify-content-center" style="padding: 0px 10px;">
-										<div class="col-lg-5" style="text-align: center; padding: 0px;">
-											<strong>Body Parts</strong><br>
-											<img src="https://imgur.com/uJoJCmA.png" width="300px" height="420px" alt="">
+									
+									<div class="row" style="padding-left: 20px;">
+										<div class="form-check form-check-inline" name="left">
+											<strong>Choose a location type for two-handed sign.&emsp;</strong>
+											<input class="form-check-input" type="radio" name="loctype" onclick="updateloctype();" id="split" value="split" checked>
+											<label class="form-check-label" for="split">
+											Separate locations</label>&emsp;
+											<input class="form-check-input" type="radio" name="loctype" onclick="updateloctype();" id="relative" value="relative">
+											<label class="form-check-label" for="relative">
+											Relative Locations</label>
 										</div>
-										<div class="col-lg">
-											<div class="row" style="padding-left: 10px;">
-												<h6>Set right hand location.</h6>
+									</div><hr>
+
+									<div class="row justify-content-center" style="padding: 0px 10px;">
+										
+										<div class="col-lg-5" style="text-align: center; padding: 0px;">
+											<strong>Body Parts & Proximity</strong><br>
+											<img src="https://imgur.com/5923sCN.png" width="300px" height="420px" alt="">
+										</div>
+
+										<div class="col-lg" id="split_options">
+
+											<div name="left">
+												<h5>Separate locations</h5>
+												<p>Absolute location for each hand is defined separately.</p><hr>
 											</div>
+
 											<div class="row" style="padding-left: 10px;">
+												<strong>RIGHT HAND</strong>
+											</div>
+
+											<div class="row" style="padding-left: 10px;">
+
 												<div class="form-group" style="padding-right: 10px;">
 													<label for="bodypart">Body part</label>
 													<select name="bodypart" id="bodypart" class="custom-select" onchange="reload();">
@@ -548,6 +577,7 @@
 														<option value="belowstomach">(14) Crotch</option>
 													</select>
 												</div>
+
 												<div class="form-group" style="padding-right: 10px;">
 													<label for="side">Relative location</label>
 													<select name="side" id="side" class="custom-select" onchange="reload();">
@@ -558,6 +588,7 @@
 														<option value="left_beside">Far left</option>
 													</select>
 												</div>
+
 												<div class="form-group">
 													<label for="proximity">Proximity level</label>
 													<select name="proximity" id="proximity" class="custom-select" onchange="reload();">
@@ -567,11 +598,14 @@
 														<option value="armextended">C - Distant</option>
 													</select>
 												</div>
+
+											</div>
+
+											<div class="row" style="padding-left: 10px;" name="left" hidden="true">
+												<strong>LEFT HAND</strong>
 											</div>
 											<div class="row" style="padding-left: 10px;" name="left" hidden="true">
-												<h6>Set left hand location.</h6>
-											</div>
-											<div class="row" style="padding-left: 10px;" name="left" hidden="true">
+												
 												<div class="form-group" style="padding-right: 10px;">
 													<label for="lbodypart">Body part</label>
 													<select name="lbodypart" id="lbodypart" class="custom-select" onchange="reload();">
@@ -593,6 +627,7 @@
 														<option value="belowstomach">(14) Crotch</option>
 													</select>
 												</div>
+
 												<div class="form-group" style="padding-right: 10px;">
 													<label for="lside">Relative location</label>
 													<select name="lside" id="lside" class="custom-select" onchange="reload();">
@@ -603,6 +638,7 @@
 														<option value="left_beside">Far left</option>
 													</select>
 												</div>
+
 												<div class="form-group">
 													<label for="lproximity">Proximity level</label>
 													<select name="lproximity" id="lproximity" class="custom-select" onchange="reload();">
@@ -612,11 +648,272 @@
 														<option value="armextended">C - Distant</option>
 													</select>
 												</div>
+												
 											</div>
-											<div class="row">
-												<div class="col" style="text-align: center;">
-													<strong>Proximity Levels</strong><br><br>
-													<img src="https://imgur.com/5N2bHHY.png" alt="">
+										</div>
+
+										<div class="col" id="relative_options" hidden="true">
+											
+											<h5>Relative locations</h5>
+											<p>Hand locations are relative to each other.</p><hr>
+											
+											<div class="row" style="padding-left: 10px;">
+												<strong>LOCATION OF BOTH HANDS</strong>
+											</div>
+
+											<div class="row" style="padding-left: 10px;">
+
+												<!-- Constellation Location -->
+												<div class="form-group" style="padding-right: 10px;">
+													<label for="lrbodypart">Body part</label>
+													<select name="lrbodypart" id="lrbodypart" class="custom-select" onchange="reload();">
+														<option value=" " selected>Neutral space</option>
+														<option value="head">(0) Head</option>
+														<option value="headtop">(1) Top of the head</option>
+														<option value="forehead">(2) Forehead</option>
+														<option value="eyebrows">(3) Eyebrows</option>
+														<option value="uppereyelid">(4) Eyes</option>
+														<option value="nose">(5) Nose</option>
+														<option value="ear">(6) Ears</option>
+														<option value="cheek">(7) Cheek</option>
+														<option value="lips">(8) Lips</option>
+														<option value="chin">(9) Chin</option>
+														<option value="neck">(10) Neck</option>
+														<option value="shoulders">(11) Shoulders</option>
+														<option value="chest">(12) Chest</option>
+														<option value="stomach">(13) Stomach</option>
+														<option value="belowstomach">(14) Crotch</option>
+													</select>
+												</div>
+
+												<!-- Constellation Location Side  -->
+												<div class="form-group" style="padding-right: 10px;">
+													<label for="lrside">Relative location</label>
+													<select name="lrside" id="lrside" class="custom-select" onchange="reload();">
+														<option value=" " selected>Center (default)</option>
+														<option value="right_at">Right</option>
+														<option value="left_at">Left</option>
+														<option value="right_beside">Far right</option>
+														<option value="left_beside">Far left</option>
+													</select>
+												</div>
+
+												<!-- Constellation Location Contact -->
+												<div class="form-group">
+													<label for="lrproximity">Proximity level</label>
+													<select name="lrproximity" id="lrproximity" class="custom-select" onchange="reload();">
+														<option value=" " selected>Default</option>
+														<option value="touch">A - Touching</option>
+														<option value="close">B - Close</option>
+														<option value="armextended">C - Distant</option>
+													</select>
+												</div>
+
+											</div>
+
+											<div class="row" style="padding-left: 10px;">
+												<strong>HAND CONTACT</strong>
+											</div>
+
+											<div class="row" style="padding-left: 10px;">
+
+												<!-- Constellation Contact -->
+												<div class="form-group">
+													<label for="lrproximity_rel">Proximity level</label>
+													<select name="lrproximity_rel" id="lrproximity_rel" class="custom-select" onchange="reload();">
+														<option value=" " selected>Default</option>
+														<option value="touch">A - Touching</option>
+														<option value="close">B - Close</option>
+													</select>
+												</div>
+
+											</div>
+
+										</div>
+									
+									</div><hr>
+
+									<div class="row justify-content-center" id="relative_options_2" style="padding: 0px 10px;" hidden="true">
+										<div class="col-lg-5" style="text-align: center; padding: 0px;">
+											<strong>Fingers and Finger Parts</strong><br>
+											<img src="https://imgur.com/6tIhyhS.png" alt="" width="320px"><br>
+											<strong>Sides and Hand Parts</strong><br>
+											<img src="https://imgur.com/AEZL61l.png" alt="" width="300px">
+										</div>
+
+										<div class="col-lg">
+
+											<div class="row alert alert-warning" style="padding-left: 10px;">
+												Before you proceed, make sure the hands are already properly oriented to prevent overlap.
+											</div>
+
+											<!-- RIGHT HAND -->
+											<div class="row" style="padding-left: 10px;">
+
+												<strong>LEFT HAND SITE&emsp;</strong>
+												<div class="form-check form-check-inline">
+													<input class="form-check-input" type="radio" id="hptype1" name="hptype" onclick="updatehptype();" value="fingerpart" checked>
+													<label class="form-check-label" for="hptype1">
+													Finger Part</label>&emsp;
+													<input class="form-check-input" type="radio" id="hptype2" name="hptype" onclick="updatehptype();" value="handpart">
+													<label class="form-check-label" for="hptype2">
+													Hand Part</label>
+												</div>
+
+											</div>
+
+
+											<!-- Finger Part -->
+											<div class="row" id="fingerpart_options" style="padding-top: 10px; padding-left: 10px;">
+												
+												<!-- Digits -->
+												<div class="form-group" style="padding-right: 10px;">
+													<label for="digits">Finger</label>
+													<select name="digits" id="digits" class="custom-select" onchange="reload();">
+														<option value=" " selected>None</option>
+														<option value="1">1 - Thumb</option>
+														<option value="2">2 - Index</option>
+														<option value="3">3 - Middle</option>
+														<option value="4">4 - Ring</option>
+														<option value="5">5 - Pinky</option>
+													</select>
+												</div>
+												<!-- Finger Part -->
+												<div class="form-group" style="padding-right: 10px;">
+													<label for="fingerpart">Finger Part</label>
+													<select name="fingerpart" id="fingerpart" class="custom-select" onchange="reload();">
+														<option value=" " selected>None</option>
+														<option value="tip">A - Tip</option>
+														<option value="nail">B - Nail</option>
+														<option value="pad">C - Pad</option>
+														<option value="midjoint">D - Midjoint</option>
+														<option value="base">E - Base</option>
+														<option value="side">F - Side</option>
+													</select>
+												</div>
+												<!-- Finger Side -->
+												<div class="form-group" style="padding-right: 10px;">
+													<label for="fingerside">Side</label>
+													<select name="fingerside" id="fingerside" class="custom-select" onchange="reload();">
+														<option value=" " selected>None</option>
+														<option value="dorsal">1 - Dorsal</option>
+														<option value="palmar">2 - Palmar</option>
+														<option value="radial">3 - Radial</option>
+														<option value="ulnar">4 - Ulnar</option>
+													</select>
+												</div>
+											</div>
+
+											<!-- Hand Part -->
+											<div class="row" id="handpart_options" style="padding-top: 10px; padding-left: 10px;" hidden="true">
+
+												<!-- Hand Part -->
+												<div class="form-group" style="padding-right: 10px;">
+													<label for="handpart">Hand Part</label>
+													<select name="handpart" id="handpart" class="custom-select" onchange="reload();">
+														<option value=" " selected>None</option>
+														<option value="wristback">A - Wristback</option>
+														<option value="thumbball">B - Thumb Ball</option>
+														<option value="palm">C - Palm</option>
+														<option value="handback">D - Hand Back</option>
+														<option value="thumbside">E - Thumb Side</option>
+														<option value="pinkyside">F - Pinky Side</option>
+													</select>
+												</div>
+												<!-- Hand Side -->
+												<div class="form-group" style="padding-right: 10px;">
+													<label for="handside">Side</label>
+													<select name="handside" id="handside" class="custom-select" onchange="reload();">
+														<option value=" " selected>None</option>
+														<option value="dorsal">1 - Dorsal</option>
+														<option value="palmar">2 - Palmar</option>
+														<option value="radial">3 - Radial</option>
+														<option value="ulnar">4 - Ulnar</option>
+													</select>
+												</div>
+											</div>
+
+											<!-- LEFT HAND -->
+											<div class="row" style="padding-left: 10px;">
+												<strong>RIGHT HAND SITE&emsp;</strong>
+												<div class="form-check form-check-inline">
+													<input class="form-check-input" type="radio" id="lhptype1" name="lhptype" onclick="updatelhptype();" value="fingerpart" checked>
+													<label class="form-check-label" for="lhptype1">
+													Finger Part</label>&emsp;
+													<input class="form-check-input" type="radio" id="lhptype2" name="lhptype" onclick="updatelhptype();" value="handpart">
+													<label class="form-check-label" for="lhptype2">
+													Hand Part</label>
+												</div>
+											</div>
+
+											<!-- Finger Part -->
+											<div class="row" id="lfingerpart_options" style="padding-top: 10px; padding-left: 10px;">
+												
+												<!-- Digits -->
+												<div class="form-group" style="padding-right: 10px;">
+													<label for="ldigits">Finger</label>
+													<select name="ldigits" id="ldigits" class="custom-select" onchange="reload();">
+														<option value=" " selected>None</option>
+														<option value="1">1 - Thumb</option>
+														<option value="2">2 - Index</option>
+														<option value="3">3 - Middle</option>
+														<option value="4">4 - Ring</option>
+														<option value="5">5 - Pinky</option>
+													</select>
+												</div>
+												<!-- Finger Part -->
+												<div class="form-group" style="padding-right: 10px;">
+													<label for="lfingerpart">Finger Part</label>
+													<select name="lfingerpart" id="lfingerpart" class="custom-select" onchange="reload();">
+														<option value=" " selected>None</option>
+														<option value="tip">A - Tip</option>
+														<option value="nail">B - Nail</option>
+														<option value="pad">C - Pad</option>
+														<option value="midjoint">D - Midjoint</option>
+														<option value="base">E - Base</option>
+														<option value="side">F - Side</option>
+													</select>
+												</div>
+												<!-- Finger Side -->
+												<div class="form-group" style="padding-right: 10px;">
+													<label for="lfingerside">Finger Side</label>
+													<select name="lfingerside" id="lfingerside" class="custom-select" onchange="reload();">
+														<option value=" " selected>None</option>
+														<option value="dorsal">1 - Dorsal</option>
+														<option value="palmar">2 - Palmar</option>
+														<option value="radial">3 - Radial</option>
+														<option value="ulnar">4 - Ulnar</option>
+													</select>
+												</div>
+											</div>
+
+											<!-- Hand Part -->
+											<div class="row" id="lhandpart_options" style="padding-top: 10px; padding-left: 10px;" hidden="true">
+
+												<!-- Hand Part -->
+												<div class="form-group" style="padding-right: 10px;">
+													<label for="lhandpart">Hand Part</label>
+													<select name="lhandpart" id="lhandpart" class="custom-select" onchange="reload();">
+														<option value=" " selected>None</option>
+														<option value="wristback">A - Wristback</option>
+														<option value="thumbball">B - Thumb Ball</option>
+														<option value="palm">C - Palm</option>
+														<option value="handback">D - Hand Back</option>
+														<option value="thumbside">E - Thumb Side</option>
+														<option value="pinkyside">F - Pinky Side</option>
+													</select>
+												</div>
+
+												<!-- Hand Side -->
+												<div class="form-group" style="padding-right: 10px;">
+													<label for="lhandside">Hand Side</label>
+													<select name="lhandside" id="lhandside" class="custom-select" onchange="reload();">
+														<option value=" " selected>None</option>
+														<option value="dorsal">1 - Dorsal</option>
+														<option value="palmar">2 - Palmar</option>
+														<option value="radial">3 - Radial</option>
+														<option value="ulnar">4 - Ulnar</option>
+													</select>
 												</div>
 											</div>
 										</div>
@@ -632,7 +929,7 @@
 
 						</div>
 					</form>
-					<textarea id="sigml" rows="10" class="txtaSiGMLText av0" hidden="true">{{ sigml }}</textarea>
+					<textarea id="sigml" rows="10" class="txtaSiGMLText av0">{{ sigml }}</textarea>
 				</div>
 
 			</div>

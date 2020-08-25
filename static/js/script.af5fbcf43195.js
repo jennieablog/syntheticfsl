@@ -109,6 +109,8 @@ function updatesign(){
     handconfig.setAttribute("palmor", "d");
     // Render animation
     initsigml();
+    document.getElementById("loading").innerHTML = "JASigning Avatar"
+    document.getElementById("animate").click();
 }
 
 function writesigml(sigml){
@@ -124,7 +126,7 @@ function reload(){
     var $sign_manual = $xml.find( "sign_manual" );
         
     var twohanded = document.getElementById('twohanded').checked;
-    var splitLocation = document.getElementById('split').checked;
+    var split = document.getElementById('split').checked;
 
     if (twohanded){
 
@@ -143,22 +145,35 @@ function reload(){
 
         // External Finger Direction
         var handconfig = xmlDoc.getElementsByTagName('handconfig')[0];
-        var extifidir = document.getElementById('extfidir'); 
-        handconfig.setAttribute('extfidir', extifidir.value)
-        
+        var extfidirSet = document.getElementsByName('extfidir'); 
+        for(i = 0; i < extfidirSet.length; i++) {
+            if(extfidirSet[i].checked){
+                handconfig.setAttribute('extfidir',extfidirSet[i].value)
+            }
+        }
         var lhandconfig = xmlDoc.getElementsByTagName('handconfig')[1];
-        var lextifidir = document.getElementById('lextfidir'); 
-        lhandconfig.setAttribute('extfidir', lextifidir.value)
+        var lextfidirSet = document.getElementsByName('lextfidir'); 
+        for(i = 0; i < lextfidirSet.length; i++) {
+            if(lextfidirSet[i].checked){
+                lhandconfig.setAttribute('extfidir',lextfidirSet[i].value)
+            }
+        }
 
         // Palm Orientation
-        var palmor = document.getElementById('palmor'); 
-        handconfig.setAttribute('palmor', palmor.value)
+        var palmorSet = document.getElementsByName('palmor'); 
+        for(i = 0; i < palmorSet.length; i++) {
+            if(palmorSet[i].checked){
+                handconfig.setAttribute('palmor',palmorSet[i].value)
+            }
+        }
+        var lpalmorSet = document.getElementsByName('lpalmor'); 
+        for(i = 0; i < lpalmorSet.length; i++) {
+            if(lpalmorSet[i].checked){
+                lhandconfig.setAttribute('palmor',lpalmorSet[i].value)
+            }
+        }
 
-        var lpalmor = document.getElementById('lpalmor'); 
-        lhandconfig.setAttribute('palmor', lpalmor.value)
-
-        // LOCATION
-        if (splitLocation){
+        if (split){
             $sign_manual.append('<split_location/>');
             var $split_location = $xml.find( "split_location" );
 
@@ -241,75 +256,7 @@ function reload(){
             lr_loc.setAttribute('side',lrside.value);
             var lrproximity = document.getElementById('lrproximity');
             lr_loc.setAttribute('contact',lrproximity.value);
-        }
 
-        // Write if split [etc]
-
-        // SPLIT MOTION XML SKELETON
-        $sign_manual.append('<split_motion/>');
-        var $split_motion = $xml.find( "split_motion" );
-        $split_motion.append('<rpt_motion/>');
-        $split_motion.append('<rpt_motion/>');
-        var $rpt_motion = $xml.find("rpt_motion");
-        $rpt_motion.append('<tgt_motion/>');
-
-        // RIGHT HAND MOTION ATTRIBUTES
-        
-        // Repetition
-        var rrpt = xmlDoc.getElementsByTagName('rpt_motion')[0];
-        var repeat = document.getElementById('repeat');
-        rrpt.setAttribute('repetition',repeat.value);
-        
-        // Manner
-        var tgt_motion = xmlDoc.getElementsByTagName('tgt_motion')[0];
-        // var manner = document.getElementById('manner');
-        // tgt_motion.setAttribute('manner', manner.value)
-
-        // Directed motion
-        var motiontype = document.getElementById('motiontype').value;
-        if (motiontype == "directedmotion"){
-            var directedmotion = xmlDoc.createElement("directedmotion");
-            var manner = document.getElementById('manner');
-            directedmotion.setAttribute('manner', manner.value)
-            var direction = document.getElementById('direction');
-            directedmotion.setAttribute('direction',direction.value);
-            var directed_size = document.getElementById('directed_size');
-            directedmotion.setAttribute('size',directed_size.value);
-            var curve = document.getElementById('curve');
-            directedmotion.setAttribute('curve',curve.value);
-            var curve_size = document.getElementById('curve_size');
-            directedmotion.setAttribute('curve_size',curve_size.value);
-            var ellipse_direction = document.getElementById('ellipse_direction');
-            directedmotion.setAttribute('ellipse_direction',ellipse_direction.value);
-            var zigzag_size = document.getElementById('zigzag_size');
-            directedmotion.setAttribute('zigzag_size',zigzag_size.value);
-            var zigzag_style = document.getElementById('zigzag_style');
-            directedmotion.setAttribute('zigzag_style',zigzag_style.value);
-            $xml.find("tgt_motion")[0].appendChild(directedmotion);
-        }
-        // Circular Motion
-        else if (motiontype == "circularmotion"){
-            var circularmotion = xmlDoc.createElement("circularmotion");
-            var manner = document.getElementById('manner');
-            circularmotion.setAttribute('manner', manner.value)
-            var axis = document.getElementById('axis');
-            circularmotion.setAttribute('axis',axis.value);
-            var circular_size = document.getElementById('circular_size');
-            circularmotion.setAttribute('size',circular_size.value);
-            var start = document.getElementById('start');
-            circularmotion.setAttribute('start',start.value);
-            $xml.find("tgt_motion")[0].appendChild(circularmotion);
-        }
-
-        else if (motiontype == "wristmotion") {
-            var wristmotion = xmlDoc.createElement("wristmotion");
-            var manner = document.getElementById('manner');
-            wristmotion.setAttribute('manner', manner.value);
-            var motion = document.getElementById('motion');
-            wristmotion.setAttribute('motion', motion.value);
-            var wristmotion_size = document.getElementById('wristmotion_size');
-            wristmotion.setAttribute('size', wristmotion_size.value);
-            $xml.find("tgt_motion")[0].appendChild(wristmotion);
         }
 
 
@@ -323,13 +270,20 @@ function reload(){
         var handconfig = xmlDoc.getElementsByTagName('handconfig')[0];
 
         // Update external finger direction
-        var handconfig = xmlDoc.getElementsByTagName('handconfig')[0];
-        var extifidir = document.getElementById('extfidir'); 
-        handconfig.setAttribute('extfidir', extifidir.value)
+        var extfidirSet = document.getElementsByName('extfidir'); 
+        for(i = 0; i < extfidirSet.length; i++) {
+            if(extfidirSet[i].checked){
+                handconfig.setAttribute('extfidir',extfidirSet[i].value)
+            }
+        }
 
         // Update palm orientation
-        var palmor = document.getElementById('palmor'); 
-        handconfig.setAttribute('palmor', palmor.value)
+        var palmorSet = document.getElementsByName('palmor'); 
+        for(i = 0; i < palmorSet.length; i++) {
+            if(palmorSet[i].checked){
+                handconfig.setAttribute('palmor',palmorSet[i].value)
+            }
+        }
 
         // Location
         $sign_manual.append("<location_bodyarm/>");
@@ -340,25 +294,6 @@ function reload(){
         loc.setAttribute('side',side.value);
         var proximity = document.getElementById('proximity');
         loc.setAttribute('contact',proximity.value);
-
-        // SPLIT MOTION XML SKELETON
-        $sign_manual.append('<rpt_motion/>');
-        var $rpt_motion = $xml.find("rpt_motion");
-        $rpt_motion.append('<tgt_motion/>');
-        // Repetition
-        var rrpt = xmlDoc.getElementsByTagName('rpt_motion')[0];
-        var repeat = document.getElementById('repeat');
-        rrpt.setAttribute('repetition',repeat.value);
-        
-        var motiontype = document.getElementById('motiontype').value;
-        if (motiontype == "directedmotion"){
-            // Directed motion
-            var directedmotion = xmlDoc.createElement("directedmotion");
-            var direction = document.getElementById('direction');
-            directedmotion.setAttribute('direction',direction.value);
-            $xml.find("tgt_motion")[0].appendChild(directedmotion);
-        }
-
     }
 
     // Change sigml txt in textbox
@@ -371,10 +306,9 @@ function reload(){
 }
 
 
-function activateleft(){
-    var twohanded = document.getElementById('twohanded');
+function activateleft(e){
     var leftOptions = document.getElementsByName('left');
-    if (twohanded.checked) {
+    if (e.checked) {
         for (var i = 0; i < leftOptions.length; i++) {
             leftOptions[i].removeAttribute('hidden');
         }
@@ -392,9 +326,11 @@ function updateloctype(){
     if (loctypes[0].checked) {
         document.getElementById('split_options').removeAttribute("hidden")
         document.getElementById('relative_options').setAttribute("hidden","true")
+        document.getElementById('relative_options_2').setAttribute("hidden","true")
     }
     else {
         document.getElementById('relative_options').removeAttribute("hidden")
+        document.getElementById('relative_options_2').setAttribute("hidden","true")
         document.getElementById('split_options').setAttribute("hidden","true")
     }
     reload();
@@ -422,9 +358,6 @@ function updatelhptype(){
         document.getElementById('lhandpart_options').removeAttribute("hidden")
         document.getElementById('lfingerpart_options').setAttribute("hidden","true")
     }
-}
-
-function updatemotiontype(){
 }
 
 function resetBend(finger){
@@ -462,6 +395,7 @@ function resetBend(finger){
     }
     updatesign();
 }
+
 
 function includeSign(e){
     var sentence = document.getElementById("sentence");
@@ -524,10 +458,6 @@ function backspace(){
     document.getElementById('sigml').innerHTML = sigml;
 }
 
-function updatemotion(){
-    console.log("HELLOS");
-}
-
 var delay = ( function() {
     var timer = 0;
     return function(callback, ms) {
@@ -543,11 +473,9 @@ delay(function(){
     if (handshapeForm){
         updatesign();
     } else if (signForm){
-        activateleft();
+        activateleft(document.getElementById('twohanded'));
         updateloctype();
         updatehptype();
         updatelhptype();
     }
-    document.getElementById("loading").innerHTML = "JASigning Avatar"
-    document.getElementById("animate").click();
 }, 3000 ); // end delay

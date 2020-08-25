@@ -1,30 +1,6 @@
-{% extends 'inventory/base.html' %}
+{% extends 'inventory/avatargui.html' %}
 
-
-{% block content %}
-
-			<div class="row" style="padding: 20px;">
-				<div class="col col-lg-4">
-					<div class="card text-center">
-						<h6 class="card-header">JASigning Avatar</h6>
-						<!-- Animation Box -->
-						<div style="height: 600px;">
-							<div class="card-body" style="padding:0px !important;">
-								<div class="CWASAAvatar av0" align="center" style="background-color: aliceblue;">
-								</div>
-							</div>
-							<!-- Description -->
-							<div class="card-footer bg-transparent">
-								<!-- Buttons -->
-								<div style="display: flex; align-items: center; justify-content: center; padding: 10px;">
-										<button type="button" id="animate" class="btn btn-sm btn-info bttnPlaySiGMLText av0" style="flex: 1;"><i class="fas fa-hand-sparkles"></i> Play</button>&emsp;
-										<div class="CWASAAvMenu av0 text-capitalize" style="flex:2;"></div>
-									</div>
-							</div>
-						</div>
-					</div>
-				</div>
-				<div class="col col-lg" style="padding:10px;">
+{% block info %}
 					<h4>FSL Sign Inventory</h4>
 					<div class="border" style="height:500px;overflow-y: scroll;">
 						<table class="table table-striped">
@@ -55,7 +31,7 @@
 								<a href="{% url 'sign_edit' pk=sign.pk %}" class="text-primary"><i class="fas fa-edit"></i> Edit
 								</a>
 								{% endif %}
-								<td>{{ sign.twohanded }}</td>
+								<td>{{ sign.twoHanded }}</td>
 								<td>{{ sign.hs.name }} handshape</td>
 								<td>{% if sign.loc == ' ' %} neutral space {% else %} {{ sign.loc }} {% endif %} ({{ sign.side }})</td>
 								<td>
@@ -83,8 +59,5 @@
 						<a href="{% url 'sign_new' %}" class="btn btn-sm btn-success"><i class="fas fa-plus"></i> Add new sign.</a>
 					</div>
 					{% endif %}
-				</div>
-			</div>
-			<textarea id="sigml" rows="10" class="txtaSiGMLText av0" hidden="true">{{ sigml }}</textarea>
 
 {% endblock %}

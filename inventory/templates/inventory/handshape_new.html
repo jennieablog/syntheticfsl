@@ -1,33 +1,8 @@
-{% extends 'inventory/base.html' %}
+{% extends 'inventory/avatargui.html' %}
 
-
-{% block content %}
-
-			<div class="detail">
-				<div class="detail-1">
-					<div class="card text-center">
-						<h6 id="loading" class="card-header"><img src="https://acegif.com/wp-content/uploads/loading-25.gif" width="30px"></h6>
-						<!-- Animation Box -->
-						<div style="height: 600px;">
-							<div class="card-body" style="padding:0px !important;">
-								<div class="CWASAAvatar av0" align="center" style="background-color: aliceblue;">
-								</div>
-							</div>
-							<!-- Description -->
-							<div class="card-footer bg-transparent">
-								<!-- Buttons -->
-								<div style="display: flex; align-items: center; justify-content: center; padding: 10px;">
-										<button type="button" id="animate" class="btn btn-sm btn-info bttnPlaySiGMLText av0" style="flex: 1;"><i class="fas fa-hand-sparkles"></i> Play</button>&emsp;
-										<div class="CWASAAvMenu av0 text-capitalize" style="flex:2;"></div>
-									</div>
-							</div>
-						</div>
-					</div>
-				</div>
-				<div class="detail-2" style="border-color: grey;">
+{% block info %}
 					<form method="POST" id="handconfig" style="font-size: 0.7rem;">
 						{% csrf_token %}
-						
 						<!-- Name -->
 						<div class="form-row" style="height:60px; margin: 5px;">
 							<div class="col-3">
@@ -40,7 +15,6 @@
 								<button type="submit" class="btn btn-primary btn-sm" value="save">Save</button>
 							</div>
 						</div>
-
 						<div class="container-fluid" style="width: 100%;overflow-y: scroll; overflow-x: hidden;">
 
 							<div class="row justify-content-center" style="padding: 0px 10px;">
@@ -250,11 +224,4 @@
 							</div>
 						</div>
 					</form>
-					<textarea id="sigml" rows="10" class="txtaSiGMLText av0" hidden="true">{{ sigml }}</textarea>
-
-				</div>
-
-			</div>
-
-
 {% endblock %}

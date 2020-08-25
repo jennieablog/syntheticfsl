@@ -1,45 +1,19 @@
-{% extends 'inventory/base.html' %}
+{% extends 'inventory/avatargui.html' %}
 
 
-{% block content %}
-			<div class="detail">
-				<div class="detail-1">
-					<div class="card text-center">
-						<h6 id="loading" class="card-header"><img src="https://acegif.com/wp-content/uploads/loading-25.gif" width="30px"></h6>
-						<!-- Animation Box -->
-						<div style="height: 600px;">
-							<div class="card-body" style="padding:0px !important;">
-								<div class="CWASAAvatar av0" align="center" style="background-color: aliceblue;">
-								</div>
-							</div>
-							<!-- Description -->
-							<div class="card-footer bg-transparent">
-								<!-- Buttons -->
-								<div style="display: flex; align-items: center; justify-content: center; padding: 10px;">
-										<button type="button" id="animate" class="btn btn-sm btn-info bttnPlaySiGMLText av0" style="flex: 1;"><i class="fas fa-hand-sparkles"></i> Play</button>&emsp;
-										<div class="CWASAAvMenu av0 text-capitalize" style="flex:2;"></div>
-									</div>
-							</div>
-						</div>
-					</div>
-				</div>
-				<div class="detail-2" style="border-color: grey;">
-
+{% block info %}
 					<form method="POST" id="signeditor" style="font-size: 0.7rem;">
 					{% csrf_token %}
-
-						<!-- Name -->
-						<div class="form-row" style="height:60px; margin: 5px;">
-							<div class="col-3">
+						<!-- General Info -->
+						<div class="row" style="justify-content: flex-start; height:60px;">
+							<div class="col">
 								<input type="text" name="signName" class="form-control" placeholder="Handshape Name" style="font-size: 0.7rem;" value="{{ sign.name }}">
 							</div>
 							<div class="col-5">
 								<input type="text" name="signDescription" class="form-control" placeholder="Description" style="font-size: 0.7rem;" value="{{ sign.description }}">
 							</div>
-							<div class="col-sm-auto">
-								<button type="submit" class="btn btn-primary btn-sm" value="save">Save</button>
-							</div>
-							<div class="col-sm-auto">
+							<div class="col">
+								<button type="submit" class="btn btn-success btn-sm" value="save">Save</button>
 								<a href="#" data-toggle="modal" data-target="#delete-modal" class="btn btn-danger"><i class="fas fa-trash-alt"></i></a>
 								<div class="modal fade" id="delete-modal" tabindex="-1" role="dialog" aria-labelledby="delete-modal" aria-hidden="true">
 									<div class="modal-dialog" role="document">
@@ -66,599 +40,808 @@
 						</div>
 
 						<div class="container-fluid" style="width: 100%;overflow-y: scroll; overflow-x: hidden;">
-
-							<nav style="padding-bottom: 20px;">
-								<div class="nav nav-pills" id="nav-tab" role="tablist">
+							<!-- Nav Pills -->
+							<nav>
+								<div class="nav nav-tabs" id="nav-tab" role="tablist">
 									<a class="nav-item nav-link active" id="nav-handconfig-tab" data-toggle="tab" href="#nav-handconfig" role="tab" aria-controls="nav-handconfig" aria-selected="true">Hand Configuration</a>
 									<a class="nav-item nav-link" id="nav-location-tab" data-toggle="tab" href="#nav-location" role="tab" aria-controls="nav-location" aria-selected="false">Location</a>
-									<!-- <a class="nav-item nav-link" id="nav-movement-tab" data-toggle="tab" href="#nav-movement" role="tab" aria-controls="nav-movement" aria-selected="false">Movement</a> -->
+									<a class="nav-item nav-link" id="nav-movement-tab" data-toggle="tab" href="#nav-movement" role="tab" aria-controls="nav-movement" aria-selected="false">Motion</a>
 								</div>
 							</nav>
-
-							<div class="tab-content border" id="nav-tabContent" style="height:500px; padding: 10px;overflow-y: scroll;">
-								
+							<div class="tab-content" id="nav-tabContent" style="height:500px; padding: 20px;overflow-y: scroll; background-color: ghostwhite;">
 								<div class="tab-pane fade show active" id="nav-handconfig" role="tabpanel" aria-labelledby="nav-handconfig-tab">
-									<div class="row">
-										<div class="col">
-											<h6>Set handshape.</h6>
+									<!-- Choose sign type. -->
+									<div class="row mb-3">
+										<div class="form-check form-check-inline">
+											<strong>Sign Type&emsp;</strong>
+											<input class="form-check-input" type="radio" name="signtype" onclick="activateleft();" id="onehanded" value="onehanded" checked="true">
+											<label class="form-check-label" for="onehanded">
+											One-handed</label>&emsp;
+											<input class="form-check-input" type="radio" name="signtype" onclick="activateleft();" id="twohanded" value="twohanded" {% if sign.twoHanded %} checked="true" {% endif %}>
+											<label class="form-check-label" for="twohanded">
+											Two-handed</label>
 										</div>
 									</div>
-									<!-- Handshape-->
-									<div class="row" style="padding-top: 10px;">
-										<div class="col-sm-auto">
-											<div class="form-check">
-												<input name="twohanded" type="checkbox" class="form-check-input" id="twohanded" onclick="activateleft(this);" {% if sign.twohanded == True %} checked {% endif %}>
-												<label class="form-check-label" for="twohanded">Two-handed?</label>
-											</div>
-										</div>
-										<div class="col-sm-auto">
-											<div class="form-row">
-												<div class="form-group">
-													<label for="handshape">Right handshape</label>
-													<select name="handshape" id="handshape" class="custom-select" onchange="reload();">
-														{% for hs in handshapes %}
-														<option value="{{ hs.pk }}" data="{{ hs.sigmlStr | safe }}" {% if sign.hs.pk == hs.pk %} selected="true" {% endif %}>{{ hs.name }}: {{ hs.description}}</option>
-														{% endfor %}
-													</select>
-												</div>
-											</div>
-										</div>
-										<div class="col-sm-auto">
-											<div class="form-row" name="left" hidden="true">
-												<div class="form-group">
-													<label for="l_handshape">Left handshape</label>
-													<select name="l_handshape" id="l_handshape" class="custom-select" onchange="reload();">
-														{% for hs in handshapes %}
-														<option value="{{ hs.pk }}" data="{{ hs.sigmlStr | safe }}" {% if sign.lhs.pk == hs.pk %} selected="true" {% endif %}>{{ hs.name }}: {{ hs.description}}</option>
-														{% endfor %}
-													</select>
-												</div>
-											</div>
-										</div>										
-									</div><hr>
 
-									<!-- RIGHT HAND -->
+									<!-- Right Hand Configuration -->
+									<div class="row mb-2">
+										<strong>Right Hand Configuration</strong>
+									</div>
 									<div class="row">
-										<div class="col">
-											<h6>Set right hand configuration.</h6>
+										<!-- Handshape -->
+										<div class="form-group" style="padding-right: 20px;">
+											<label for="handshape">Handshape</label>
+											<select name="handshape" id="handshape" class="custom-select" onchange="reload();">
+												{% for hs in handshapes %}
+												<option value="{{ hs.pk }}" data="{{ hs.sigmlStr | safe }}" {% if sign.rightHandshape.pk == hs.pk %} selected="true" {% endif %}>{{ hs.name }}: {{ hs.description}}</option>
+												{% endfor %}
+											</select>
+										</div>
+										<!-- External Finger Direction -->
+										<div class="form-group" style="padding-right: 20px;">
+											<label for="extfidir">Extended Finger Direction</label>
+											<select name="extfidir" id="extfidir" class="custom-select" onchange="reload();">
+												<option value="u" {% if sign.rightFingerDirection == 'u' %} selected="true" {% endif %}>(1) Up</option>
+												<option value="ur" {% if sign.rightFingerDirection == 'ur' %} selected="true" {% endif %}>(2) Up-right</option>
+												<option value="r" {% if sign.rightFingerDirection == 'r' %} selected="true" {% endif %}>(3) Right</option>
+												<option value="dr" {% if sign.rightFingerDirection == 'dr' %} selected="true" {% endif %}>(4) Down-right</option>
+												<option value="d" {% if sign.rightFingerDirection == 'd' %} selected="true" {% endif %}>(5) Down</option>
+												<option value="dl" {% if sign.rightFingerDirection == 'dl' %} selected="true" {% endif %}>(6) Down-left</option>
+												<option value="l" {% if sign.rightFingerDirection == 'l' %} selected="true" {% endif %}>(7) Left</option>
+												<option value="ul" {% if sign.rightFingerDirection == 'ul' %} selected="true" {% endif %}>(8) Up-left</option>
+												<option value="o" {% if sign.rightFingerDirection == 'o' %} selected="true" {% endif %}>(9) Out</option>
+												<option value="or" {% if sign.rightFingerDirection == 'or' %} selected="true" {% endif %}>(10) Up-left</option>
+												<option value="ir" {% if sign.rightFingerDirection == 'ir' %} selected="true" {% endif %}>(11) In-right</option>
+												<option value="i" {% if sign.rightFingerDirection == 'i' %} selected="true" {% endif %}>(12) In</option>
+												<option value="il" {% if sign.rightFingerDirection == 'il' %} selected="true" {% endif %}>(13) In-left</option>
+												<option value="ol" {% if sign.rightFingerDirection == 'ol' %} selected="true" {% endif %}>(14) Out-left</option>
+												<option value="ui" {% if sign.rightFingerDirection == 'ui' %} selected="true" {% endif %}>(15) Up-in</option>
+												<option value="uo" {% if sign.rightFingerDirection == 'uo' %} selected="true" {% endif %}>(16) Up-out</option>
+												<option value="do" {% if sign.rightFingerDirection == 'do' %} selected="true" {% endif %}>(17) Down-out</option> 
+												<option value="di" {% if sign.rightFingerDirection == 'di' %} selected="true" {% endif %}>(18) Down-in</option>
+												<option value="uol" {% if sign.rightFingerDirection == 'uol' %} selected="true" {% endif %}>(19) Up-out-left</option>
+												<option value="dol" {% if sign.rightFingerDirection == 'dol' %} selected="true" {% endif %}>(20) Down-out-left</option>
+												<option value="dil" {% if sign.rightFingerDirection == 'dil' %} selected="true" {% endif %}>(21) Down-in-left</option>
+												<option value="uil" {% if sign.rightFingerDirection == 'uil' %} selected="true" {% endif %}>(22) Up-in-left</option>
+												<option value="uor" {% if sign.rightFingerDirection == 'uor' %} selected="true" {% endif %}>(23) Up-out-right</option>
+												<option value="dor" {% if sign.rightFingerDirection == 'dor' %} selected="true" {% endif %}>(24) Down-out-left</option>
+												<option value="dir" {% if sign.rightFingerDirection == 'dir' %} selected="true" {% endif %}>(25) Down-in-left</option>
+												<option value="uir" {% if sign.rightFingerDirection == 'uir' %} selected="true" {% endif %}>(26) Up-in-right</option>
+											</select>
+										</div>
+										<!-- Palm Orientation -->
+										<div class="form-group">
+											<label for="palmor">Palm Orientation</label>
+											<select name="palmor" id="palmor" class="custom-select" onchange="reload();">
+												<option value="d" {% if sign.rightPalmOrientation == 'd' %} selected="true" {% endif %}>(A) Down</option>
+												<option value="u" {% if sign.rightPalmOrientation == 'u' %} selected="true" {% endif %}>(B) Up</option>
+												<option value="l" {% if sign.rightPalmOrientation == 'l' %} selected="true" {% endif %}>(C) Left</option>
+												<option value="r" {% if sign.rightPalmOrientation == 'r' %} selected="true" {% endif %}>(D) Right</option>
+												<option value="dl" {% if sign.rightPalmOrientation == 'dl' %} selected="true" {% endif %}>(E) Down-left</option>
+												<option value="dr" {% if sign.rightPalmOrientation == 'dr' %} selected="true" {% endif %}>(F) Down-right</option>
+												<option value="ul" {% if sign.rightPalmOrientation == 'ul' %} selected="true" {% endif %}>(G) Up-left</option>
+												<option value="ur" {% if sign.rightPalmOrientation == 'ur' %} selected="true" {% endif %}>(H) Up-right</option>
+											</select>
 										</div>
 									</div>
-									<!-- ORIENTATION-->
-									<div class="row">
-										<div class="col-7">
-											<p style="text-align: center;">Set extended finger direction.</p>
-											<div class="row" style="padding-top:20px;">
-												<div class="col-4">
-													<img src="https://imgur.com/aJwHLm9.png" height="150px" alt=""><br>
-													<p style="text-align: center;">Frontal</p>
-													<div class="form-check">
-														<input class="form-check-input" type="radio" name="extfidir" onclick="reload();" id="u" value="u" checked>
-														<label class="form-check-label" for="u">
-														1: UP
-														</label>
-														<input class="form-check-input" type="radio" name="extfidir" onclick="reload();" id="ur" value="ur" {% if sign.efd == 'ur' %} checked="true" {% endif %}>
-														<label class="form-check-label" for="ur">
-														2: UP-RIGHT
-														</label>
-														<input class="form-check-input" type="radio" name="extfidir" onclick="reload();" id="r" value="r" {% if sign.efd == 'r' %} checked="true" {% endif %}>
-														<label class="form-check-label" for="r">
-														3: RIGHT
-														</label>
-														<input class="form-check-input" type="radio" name="extfidir" onclick="reload();" id="dr" value="dr" {% if sign.efd == 'dr' %} checked="true" {% endif %}>
-														<label class="form-check-label" for="dr">
-														4: DOWN-RIGHT
-														</label>
-														<input class="form-check-input" type="radio" name="extfidir" onclick="reload();" id="d" value="d" {% if sign.efd == 'd' %} checked="true" {% endif %}>
-														<label class="form-check-label" for="d">
-														5: DOWN
-														</label>
-														<input class="form-check-input" type="radio" name="extfidir" onclick="reload();" id="dl" value="dl" {% if sign.efd == 'dl' %} checked="true" {% endif %}>
-														<label class="form-check-label" for="dl">
-														6: DOWN-LEFT
-														</label>
-														<input class="form-check-input" type="radio" name="extfidir" onclick="reload();" id="l" value="l" {% if sign.efd == 'l' %} checked="true" {% endif %}>
-														<label class="form-check-label" for="l">
-														7: LEFT
-														</label>
-														<input class="form-check-input" type="radio" name="extfidir" onclick="reload();" id="ul" value="ul" {% if sign.efd == 'ul' %} checked="true" {% endif %}>
-														<label class="form-check-label" for="ul">
-														8: UP-LEFT
-														</label>
-													</div>
-												</div>
-												<div class="col-4">
-													
-													<img src="https://imgur.com/qCRaQ1q.png" height="150px" alt="">
-													<p style="text-align: center;">Axial</p>
 
-													<input class="form-check-input" type="radio" name="extfidir" onclick="reload();" id="o" value="o" {% if sign.efd == 'o' %} checked="true" {% endif %}>
-													<label class="form-check-label" for="o">
-													9: OUT
-													</label>
-													<input class="form-check-input" type="radio" name="extfidir" onclick="reload();" id="or" value="or" {% if sign.efd == 'or' %} checked="true" {% endif %}>
-													<label class="form-check-label" for="or">
-													10: OUT-RIGHT
-													</label>
-													<input class="form-check-input" type="radio" name="extfidir" onclick="reload();" id="ir" value="ir" {% if sign.efd == 'ir' %} checked="true" {% endif %}>
-													<label class="form-check-label" for="ir">
-													11: IN-RIGHT
-													</label>
-													<input class="form-check-input" type="radio" name="extfidir" onclick="reload();" id="i" value="i" {% if sign.efd == 'i' %} checked="true" {% endif %}>
-													<label class="form-check-label" for="i">
-													12: IN
-													</label>
-													<input class="form-check-input" type="radio" name="extfidir" onclick="reload();" id="il" value="il" {% if sign.efd == 'il' %} checked="true" {% endif %}>
-													<label class="form-check-label" for="il">
-													13: IN-LEFT
-													</label>
-													<input class="form-check-input" type="radio" name="extfidir" onclick="reload();" id="ol" value="ol" {% if sign.efd == 'ol' %} checked="true" {% endif %}>
-													<label class="form-check-label" for="ol">
-													14: OUT-LEFT
-													</label>
-												</div>
-												<div class="col-4">
-													<img src="https://imgur.com/Oskn77f.png" height="150px" alt="">
-													<p style="text-align: center;">Sagittal</p>
-
-													<input class="form-check-input" type="radio" name="extfidir" onclick="reload();" id="ui" value="ui" {% if sign.efd == 'ui' %} checked="true" {% endif %}>
-													<label class="form-check-label" for="ui">
-													15: UP-IN
-													</label>
-													<input class="form-check-input" type="radio" name="extfidir" onclick="reload();" id="uo" value="uo" {% if sign.efd == 'uo' %} checked="true" {% endif %}>
-													<label class="form-check-label" for="uo">
-													16: UP-OUT
-													</label>
-													<input class="form-check-input" type="radio" name="extfidir" onclick="reload();" id="do" value="do" {% if sign.efd == 'do' %} checked="true" {% endif %}>
-													<label class="form-check-label" for="do">
-													17: DOWN-OUT
-													</label>
-													<input class="form-check-input" type="radio" name="extfidir" onclick="reload();" id="di" value="di" {% if sign.efd == 'di' %} checked="true" {% endif %}>
-													<label class="form-check-label" for="di">
-													18: DOWN-IN
-													</label>
-												</div>
-											</div>
-											<div class="row" style="padding: 0 20px 0 0;">
-												<div class="col" style="padding-top: 10px;">
-													<p style="text-align: center;">Axial + Sagittal</p>
-													<div class="form-check">
-														<input class="form-check-input" type="radio" name="extfidir" onclick="reload();" id="uol" value="uol" {% if sign.efd == 'uol' %} checked="true" {% endif %}>
-														<label class="form-check-label" for="uol">
-														19: UP-OUT-LEFT
-														</label>
-														<input class="form-check-input" type="radio" name="extfidir" onclick="reload();" id="dol" value="dol" {% if sign.efd == 'dol' %} checked="true" {% endif %}>
-														<label class="form-check-label" for="dol">
-														20: DOWN-OUT-LEFT
-														</label>
-														<input class="form-check-input" type="radio" name="extfidir" onclick="reload();" id="dil" value="dil" {% if sign.efd == 'dil' %} checked="true" {% endif %}>
-														<label class="form-check-label" for="dil">
-														21: DOWN-IN-LEFT
-														</label>
-														<input class="form-check-input" type="radio" name="extfidir" onclick="reload();" id="uil" value="uil" {% if sign.efd == 'uil' %} checked="true" {% endif %}>
-														<label class="form-check-label" for="uil">
-														22: UP-IN-LEFT
-														</label>
-														<input class="form-check-input" type="radio" name="extfidir" onclick="reload();" id="uor" value="uor" {% if sign.efd == 'uor' %} checked="true" {% endif %}>
-														<label class="form-check-label" for="uor">
-														23: UP-OUT-RIGHT
-														</label>
-														<input class="form-check-input" type="radio" name="extfidir" onclick="reload();" id="dor" value="dor" {% if sign.efd == 'dor' %} checked="true" {% endif %}>
-														<label class="form-check-label" for="dor">
-														24: DOWN-OUT-RIGHT
-														</label>
-														<input class="form-check-input" type="radio" name="extfidir" onclick="reload();" id="dir" value="dir" {% if sign.efd == 'dir' %} checked="true" {% endif %}>
-														<label class="form-check-label" for="dir">
-														25: DOWN-IN-RIGHT
-														</label>
-														<input class="form-check-input" type="radio" name="extfidir" onclick="reload();" id="uir" value="uir" {% if sign.efd == 'uir' %} checked="true" {% endif %}>
-														<label class="form-check-label" for="uir">
-														26: UP-IN-RIGHT
-														</label>
-													</div>
-												</div>
-											</div>
-										</div>
-										<div class="col">
-											<p style="text-align: center;">Set palm orientation.</p>
-											<div class="row" style="margin:0px;padding: 10px;">
-												<div class="col" style="text-align: center;padding: 0px;">
-													<img src="https://imgur.com/kdhdKhC.png" alt="" width="70px"><br>
-													<div class="custom-control custom-radio custom-control-inline">
-														<input type="radio" id="palmd" name="palmor" onclick="reload();" class="custom-control-input" value="d" checked>
-														<label class="custom-control-label" for="palmd">DOWN</label>
-													</div>
-												</div>
-												<div class="col" style="text-align: center;padding: 0px;">
-													<img src="https://imgur.com/ReGLQCl.png" alt="" width="70px"><br>
-													<div class="custom-control custom-radio custom-control-inline">
-														<input type="radio" id="palmu" name="palmor" onclick="reload();" class="custom-control-input" value="u" {% if sign.ori == 'u' %} checked="true" {% endif %}>
-														<label class="custom-control-label" for="palmu">UP</label>
-													</div>
-												</div>
-											</div>
-											<div class="row" style="margin:0px;padding: 10px;">
-												<div class="col" style="text-align: center;padding: 0px;">
-													<img src="https://imgur.com/90Q1sgb.png" alt="" width="70px"><br>
-													<div class="custom-control custom-radio custom-control-inline">
-														<input type="radio" id="palml" name="palmor" onclick="reload();" class="custom-control-input" value="l" {% if sign.ori == 'l' %} checked="true" {% endif %}>
-														<label class="custom-control-label" for="palml">LEFT</label>
-													</div>
-												</div>
-												<div class="col" style="text-align: center;padding: 0px;">
-													<img src="https://imgur.com/bdlboe8.png" alt="" width="70px"><br>
-													<div class="custom-control custom-radio custom-control-inline">
-														<input type="radio" id="palmr" name="palmor" onclick="reload();" class="custom-control-input" value="r" {% if sign.ori == 'r' %} checked="true" {% endif %}>
-														<label class="custom-control-label" for="palmr">RIGHT</label>
-													</div>
-												</div>
-											</div>
-											<div class="row" style="margin:0px;padding: 10px;">
-												<div class="col" style="text-align: center;padding: 0px;">
-													<img src="https://imgur.com/KgdplGC.png" alt="" width="70px"><br>
-													<div class="custom-control custom-radio custom-control-inline">
-														<input type="radio" id="palmdl" name="palmor" onclick="reload();" class="custom-control-input" value="dl" {% if sign.ori == 'dl' %} checked="true" {% endif %}>
-														<label class="custom-control-label" for="palmdl">DOWN-LEFT</label>
-													</div>
-												</div>
-												<div class="col" style="text-align: center;padding: 0px;">
-													<img src="https://imgur.com/TnZqS2h.png" alt="" width="70px"><br>
-													<div class="custom-control custom-radio custom-control-inline">
-														<input type="radio" id="palmdr" name="palmor" onclick="reload();" class="custom-control-input" value="dr" {% if sign.ori == 'dr' %} checked="true" {% endif %}>
-														<label class="custom-control-label" for="palmdr">DOWN-RIGHT</label>
-													</div>
-												</div>
-											</div>
-											<div class="row" style="margin:0px;padding: 10px;">
-												<div class="col" style="text-align: center;padding: 0px;">
-													<img src="https://imgur.com/jMT7rRb.png" alt="" width="70px"><br>
-													<div class="custom-control custom-radio custom-control-inline">
-														<input type="radio" id="palmul" name="palmor" onclick="reload();" class="custom-control-input" value="ul" {% if sign.ori == 'ul' %} checked="true" {% endif %}>
-														<label class="custom-control-label" for="palmul">UP-LEFT</label>
-													</div>
-												</div>
-												<div class="col" style="text-align: center;padding: 0px;">
-													<img src="https://imgur.com/Mq3La9P.png" alt="" width="70px"><br>
-													<div class="custom-control custom-radio custom-control-inline">
-														<input type="radio" id="palmur" name="palmor" onclick="reload();" class="custom-control-input" value="ur" {% if sign.ori == 'ur' %} checked="true" {% endif %}>
-														<label class="custom-control-label" for="palmur">UP-RIGHT</label>
-													</div>
-												</div>
-											</div>
-										</div>
-									</div><hr>
-
-									<!-- LEFT HAND -->
-									<div name="left" hidden="true">
-										<div class="row">
-											<div class="col">
-												<h6>Set left hand configuration.</h6>
-											</div>
-										</div>
-										<div class="row">
-											<div class="col-7">
-												<p style="text-align: center;">Set extended finger direction.</p>
-												<div class="row" style="padding-top:20px;">
-													<div class="col-4">
-														<img src="https://imgur.com/aJwHLm9.png" height="150px" alt=""><br>
-														<p style="text-align: center;">Frontal</p>
-														<div class="form-check">
-															<input class="form-check-input" type="radio" name="lextfidir" onclick="reload();" id="l_u" value="u" checked>
-															<label class="form-check-label" for="l_u">
-															1: UP
-															</label>
-															<input class="form-check-input" type="radio" name="lextfidir" onclick="reload();" id="l_ur" value="ur" {% if sign.lefd == 'u' %} checked="true" {% endif %}>
-															<label class="form-check-label" for="l_ur">
-															2: UP-RIGHT
-															</label>
-															<input class="form-check-input" type="radio" name="lextfidir" onclick="reload();" id="l_r" value="r" {% if sign.lefd == 'r' %} checked="true" {% endif %}>
-															<label class="form-check-label" for="l_r">
-															3: RIGHT
-															</label>
-															<input class="form-check-input" type="radio" name="lextfidir" onclick="reload();" id="l_dr" value="dr" {% if sign.lefd == 'dr' %} checked="true" {% endif %}>
-															<label class="form-check-label" for="l_dr">
-															4: DOWN-RIGHT
-															</label>
-															<input class="form-check-input" type="radio" name="lextfidir" onclick="reload();" id="l_d" value="d" {% if sign.lefd == 'd' %} checked="true" {% endif %}>
-															<label class="form-check-label" for="l_d">
-															5: DOWN
-															</label>
-															<input class="form-check-input" type="radio" name="lextfidir" onclick="reload();" id="l_dl" value="dl" {% if sign.lefd == 'dl' %} checked="true" {% endif %}>
-															<label class="form-check-label" for="l_dl">
-															6: DOWN-LEFT
-															</label>
-															<input class="form-check-input" type="radio" name="lextfidir" onclick="reload();" id="l_l" value="l" {% if sign.lefd == 'l' %} checked="true" {% endif %}>
-															<label class="form-check-label" for="l_l">
-															7: LEFT
-															</label>
-															<input class="form-check-input" type="radio" name="lextfidir" onclick="reload();" id="l_ul" value="ul" {% if sign.lefd == 'ul' %} checked="true" {% endif %}>
-															<label class="form-check-label" for="l_ul">
-															8: UP-LEFT
-															</label>
-														</div>
-													</div>
-													<div class="col-4">
-														
-														<img src="https://imgur.com/qCRaQ1q.png" height="150px" alt="">
-														<p style="text-align: center;">Axial</p>
-
-														<input class="form-check-input" type="radio" name="lextfidir" onclick="reload();" id="l_o" value="o" {% if sign.lefd == 'o' %} checked="true" {% endif %}>
-														<label class="form-check-label" for="l_o">
-														9: OUT
-														</label>
-														<input class="form-check-input" type="radio" name="lextfidir" onclick="reload();" id="l_or" value="or" {% if sign.lefd == 'or' %} checked="true" {% endif %}>
-														<label class="form-check-label" for="l_or">
-														10: OUT-RIGHT
-														</label>
-														<input class="form-check-input" type="radio" name="lextfidir" onclick="reload();" id="l_ir" value="ir" {% if sign.lefd == 'ir' %} checked="true" {% endif %}>
-														<label class="form-check-label" for="l_ir">
-														11: IN-RIGHT
-														</label>
-														<input class="form-check-input" type="radio" name="lextfidir" onclick="reload();" id="l_i" value="i" {% if sign.lefd == 'i' %} checked="true" {% endif %}>
-														<label class="form-check-label" for="l_i">
-														12: IN
-														</label>
-														<input class="form-check-input" type="radio" name="lextfidir" onclick="reload();" id="l_il" value="il" {% if sign.lefd == 'il' %} checked="true" {% endif %}>
-														<label class="form-check-label" for="l_il">
-														13: IN-LEFT
-														</label>
-														<input class="form-check-input" type="radio" name="lextfidir" onclick="reload();" id="l_ol" value="ol" {% if sign.lefd == 'ol' %} checked="true" {% endif %}>
-														<label class="form-check-label" for="l_ol">
-														14: OUT-LEFT
-														</label>
-													</div>
-													<div class="col-4">
-														<img src="https://imgur.com/Oskn77f.png" height="150px" alt="">
-														<p style="text-align: center;">Sagittal</p>
-
-														<input class="form-check-input" type="radio" name="lextfidir" onclick="reload();" id="l_ui" value="ui" {% if sign.lefd == 'ui' %} checked="true" {% endif %}>
-														<label class="form-check-label" for="l_ui">
-														15: UP-IN
-														</label>
-														<input class="form-check-input" type="radio" name="lextfidir" onclick="reload();" id="l_uo" value="uo" {% if sign.lefd == 'uo' %} checked="true" {% endif %}>
-														<label class="form-check-label" for="l_uo">
-														16: UP-OUT
-														</label>
-														<input class="form-check-input" type="radio" name="lextfidir" onclick="reload();" id="l_do" value="do" {% if sign.lefd == 'do' %} checked="true" {% endif %}>
-														<label class="form-check-label" for="l_do">
-														17: DOWN-OUT
-														</label>
-														<input class="form-check-input" type="radio" name="lextfidir" onclick="reload();" id="l_di" value="di" {% if sign.lefd == 'di' %} checked="true" {% endif %}>
-														<label class="form-check-label" for="l_di">
-														18: DOWN-IN
-														</label>
-													</div>
-												</div>
-												<div class="row" style="padding: 0 20px 0 0;">
-													<div class="col" style="padding-top: 10px;">
-														<p style="text-align: center;">Axial + Sagittal</p>
-														<div class="form-check">
-															<input class="form-check-input" type="radio" name="lextfidir" onclick="reload();" id="l_uol" value="uol" {% if sign.lefd == 'uol' %} checked="true" {% endif %}>
-															<label class="form-check-label" for="l_uol">
-															19: UP-OUT-LEFT
-															</label>
-															<input class="form-check-input" type="radio" name="lextfidir" onclick="reload();" id="l_dol" value="dol" {% if sign.lefd == 'dol' %} checked="true" {% endif %}>
-															<label class="form-check-label" for="l_dol">
-															20: DOWN-OUT-LEFT
-															</label>
-															<input class="form-check-input" type="radio" name="lextfidir" onclick="reload();" id="l_dil" value="dil" {% if sign.lefd == 'dil' %} checked="true" {% endif %}>
-															<label class="form-check-label" for="l_dil">
-															21: DOWN-IN-LEFT
-															</label>
-															<input class="form-check-input" type="radio" name="lextfidir" onclick="reload();" id="l_uil" value="uil" {% if sign.lefd == 'uil' %} checked="true" {% endif %}>
-															<label class="form-check-label" for="l_uil">
-															22: UP-IN-LEFT
-															</label>
-															<input class="form-check-input" type="radio" name="lextfidir" onclick="reload();" id="l_uor" value="uor" {% if sign.lefd == 'uor' %} checked="true" {% endif %}>
-															<label class="form-check-label" for="l_uor">
-															23: UP-OUT-RIGHT
-															</label>
-															<input class="form-check-input" type="radio" name="lextfidir" onclick="reload();" id="l_dor" value="dor" {% if sign.lefd == 'dor' %} checked="true" {% endif %}>
-															<label class="form-check-label" for="l_dor">
-															24: DOWN-OUT-RIGHT
-															</label>
-															<input class="form-check-input" type="radio" name="lextfidir" onclick="reload();" id="l_dir" value="dir" {% if sign.lefd == 'dir' %} checked="true" {% endif %}>
-															<label class="form-check-label" for="l_dir">
-															25: DOWN-IN-RIGHT
-															</label>
-															<input class="form-check-input" type="radio" name="lextfidir" onclick="reload();" id="l_uir" value="uir" {% if sign.lefd == 'uir' %} checked="true" {% endif %}>
-															<label class="form-check-label" for="l_uir">
-															26: UP-IN-RIGHT
-															</label>
-														</div>
-													</div>
-												</div>
-											</div>
-											<div class="col">
-												<p style="text-align: center;">Set palm orientation.</p>
-												<div class="row" style="margin:0px;padding: 10px;">
-													<div class="col" style="text-align: center;padding: 0px;">
-														<img src="https://imgur.com/kdhdKhC.png" alt="" width="70px"><br>
-														<div class="custom-control custom-radio custom-control-inline">
-															<input type="radio" id="l_palmd" name="lpalmor" onclick="reload();" class="custom-control-input" value="d" checked>
-															<label class="custom-control-label" for="l_palmd">DOWN</label>
-														</div>
-													</div>
-													<div class="col" style="text-align: center;padding: 0px;">
-														<img src="https://imgur.com/ReGLQCl.png" alt="" width="70px"><br>
-														<div class="custom-control custom-radio custom-control-inline">
-															<input type="radio" id="l_palmu" name="lpalmor" onclick="reload();" class="custom-control-input" value="u" {% if sign.lori == 'u' %} checked="true" {% endif %}>
-															<label class="custom-control-label" for="l_palmu">UP</label>
-														</div>
-													</div>
-												</div>
-												<div class="row" style="margin:0px;padding: 10px;">
-													<div class="col" style="text-align: center;padding: 0px;">
-														<img src="https://imgur.com/90Q1sgb.png" alt="" width="70px"><br>
-														<div class="custom-control custom-radio custom-control-inline">
-															<input type="radio" id="l_palml" name="lpalmor" onclick="reload();" class="custom-control-input" value="l" {% if sign.lori == 'l' %} checked="true" {% endif %}>
-															<label class="custom-control-label" for="l_palml">LEFT</label>
-														</div>
-													</div>
-													<div class="col" style="text-align: center;padding: 0px;">
-														<img src="https://imgur.com/bdlboe8.png" alt="" width="70px"><br>
-														<div class="custom-control custom-radio custom-control-inline">
-															<input type="radio" id="l_palmr" name="lpalmor" onclick="reload();" class="custom-control-input" value="r" {% if sign.lori == 'r' %} checked="true" {% endif %}>
-															<label class="custom-control-label" for="l_palmr">RIGHT</label>
-														</div>
-													</div>
-												</div>
-												<div class="row" style="margin:0px;padding: 10px;">
-													<div class="col" style="text-align: center;padding: 0px;">
-														<img src="https://imgur.com/KgdplGC.png" alt="" width="70px"><br>
-														<div class="custom-control custom-radio custom-control-inline">
-															<input type="radio" id="l_palmdl" name="lpalmor" onclick="reload();" class="custom-control-input" value="dl" {% if sign.lori == 'dl' %} checked="true" {% endif %}>
-															<label class="custom-control-label" for="l_palmdl">DOWN-LEFT</label>
-														</div>
-													</div>
-													<div class="col" style="text-align: center;padding: 0px;">
-														<img src="https://imgur.com/TnZqS2h.png" alt="" width="70px"><br>
-														<div class="custom-control custom-radio custom-control-inline">
-															<input type="radio" id="l_palmdr" name="lpalmor" onclick="reload();" class="custom-control-input" value="dr" {% if sign.lori == 'dr' %} checked="true" {% endif %}>
-															<label class="custom-control-label" for="l_palmdr">DOWN-RIGHT</label>
-														</div>
-													</div>
-												</div>
-												<div class="row" style="margin:0px;padding: 10px;">
-													<div class="col" style="text-align: center;padding: 0px;">
-														<img src="https://imgur.com/jMT7rRb.png" alt="" width="70px"><br>
-														<div class="custom-control custom-radio custom-control-inline">
-															<input type="radio" id="l_palmul" name="lpalmor" onclick="reload();" class="custom-control-input" value="ul" {% if sign.lori == 'ul' %} checked="true" {% endif %}>
-															<label class="custom-control-label" for="l_palmul">UP-LEFT</label>
-														</div>
-													</div>
-													<div class="col" style="text-align: center;padding: 0px;">
-														<img src="https://imgur.com/Mq3La9P.png" alt="" width="70px"><br>
-														<div class="custom-control custom-radio custom-control-inline">
-															<input type="radio" id="l_palmur" name="lpalmor" onclick="reload();" class="custom-control-input" value="ur" {% if sign.lori == 'ur' %} checked="true" {% endif %}>
-															<label class="custom-control-label" for="l_palmur">UP-RIGHT</label>
-														</div>
-													</div>
-												</div>
-											</div>
-										</div><hr>
+									<!-- Left Hand Configuration -->
+									<div class="row mb-2" name="left" hidden="true">
+										<strong>Left Hand Configuration</strong>
 									</div>
+									<div class="row" name="left" hidden="true">
+										<div class="form-group" style="padding-right: 20px;">
+											<label for="l_handshape">Left handshape</label>
+											<select name="l_handshape" id="l_handshape" class="custom-select" onchange="reload();">
+												{% for hs in handshapes %}
+												<option value="{{ hs.pk }}" data="{{ hs.sigmlStr | safe }}" {% if sign.leftHandshape.pk == hs.pk %} selected="true" {% endif %}>{{ hs.name }}: {{ hs.description}}</option>
+												{% endfor %}
+											</select>
+										</div>
+										<!-- External Finger Direction -->
+										<div class="form-group" style="padding-right: 20px;">
+											<label for="lextfidir">Extended Finger Direction</label>
+											<select name="lextfidir" id="lextfidir" class="custom-select" onchange="reload();">
+												<option value="u" {% if sign.leftFingerDirection == 'u' %} selected="true" {% endif %}>(1) Up</option>
+												<option value="ur" {% if sign.leftFingerDirection == 'ur' %} selected="true" {% endif %}>(2) Up-right</option>
+												<option value="r" {% if sign.leftFingerDirection == 'r' %} selected="true" {% endif %}>(3) Right</option>
+												<option value="dr" {% if sign.leftFingerDirection == 'dr' %} selected="true" {% endif %}>(4) Down-right</option>
+												<option value="d" {% if sign.leftFingerDirection == 'd' %} selected="true" {% endif %}>(5) Down</option>
+												<option value="dl" {% if sign.leftFingerDirection == 'dl' %} selected="true" {% endif %}>(6) Down-left</option>
+												<option value="l" {% if sign.leftFingerDirection == 'l' %} selected="true" {% endif %}>(7) Left</option>
+												<option value="ul" {% if sign.leftFingerDirection == 'ul' %} selected="true" {% endif %}>(8) Up-left</option>
+												<option value="o" {% if sign.leftFingerDirection == 'o' %} selected="true" {% endif %}>(9) Out</option>
+												<option value="or" {% if sign.leftFingerDirection == 'or' %} selected="true" {% endif %}>(10) Up-left</option>
+												<option value="ir" {% if sign.leftFingerDirection == 'ir' %} selected="true" {% endif %}>(11) In-right</option>
+												<option value="i" {% if sign.leftFingerDirection == 'i' %} selected="true" {% endif %}>(12) In</option>
+												<option value="il" {% if sign.leftFingerDirection == 'il' %} selected="true" {% endif %}>(13) In-left</option>
+												<option value="ol" {% if sign.leftFingerDirection == 'ol' %} selected="true" {% endif %}>(14) Out-left</option>
+												<option value="ui" {% if sign.leftFingerDirection == 'ui' %} selected="true" {% endif %}>(15) Up-in</option>
+												<option value="uo" {% if sign.leftFingerDirection == 'uo' %} selected="true" {% endif %}>(16) Up-out</option>
+												<option value="do" {% if sign.leftFingerDirection == 'do' %} selected="true" {% endif %}>(17) Down-out</option> 
+												<option value="di" {% if sign.leftFingerDirection == 'di' %} selected="true" {% endif %}>(18) Down-in</option>
+												<option value="uol" {% if sign.leftFingerDirection == 'uol' %} selected="true" {% endif %}>(19) Up-out-left</option>
+												<option value="dol" {% if sign.leftFingerDirection == 'dol' %} selected="true" {% endif %}>(20) Down-out-left</option>
+												<option value="dil" {% if sign.leftFingerDirection == 'dil' %} selected="true" {% endif %}>(21) Down-in-left</option>
+												<option value="uil" {% if sign.leftFingerDirection == 'uil' %} selected="true" {% endif %}>(22) Up-in-left</option>
+												<option value="uor" {% if sign.leftFingerDirection == 'uor' %} selected="true" {% endif %}>(23) Up-out-right</option>
+												<option value="dor" {% if sign.leftFingerDirection == 'dor' %} selected="true" {% endif %}>(24) Down-out-left</option>
+												<option value="dir" {% if sign.leftFingerDirection == 'dir' %} selected="true" {% endif %}>(25) Down-in-left</option>
+												<option value="uir" {% if sign.leftFingerDirection == 'uir' %} selected="true" {% endif %}>(26) Up-in-right</option>
+											</select>
+										</div>
+										<!-- Palm Orientation -->
+										<div class="form-group">
+											<label for="lpalmor">Palm Orientation</label>
+											<select name="lpalmor" id="lpalmor" class="custom-select" onchange="reload();">
+												<option value="d" {% if sign.leftPalmOrientation == 'd' %} selected="true" {% endif %}>(A) Down</option>
+												<option value="u" {% if sign.leftPalmOrientation == 'u' %} selected="true" {% endif %}>(B) Up</option>
+												<option value="l" {% if sign.leftPalmOrientation == 'l' %} selected="true" {% endif %}>(C) Left</option>
+												<option value="r" {% if sign.leftPalmOrientation == 'r' %} selected="true" {% endif %}>(D) Right</option>
+												<option value="dl" {% if sign.leftPalmOrientation == 'dl' %} selected="true" {% endif %}>(E) Down-left</option>
+												<option value="dr" {% if sign.leftPalmOrientation == 'dr' %} selected="true" {% endif %}>(F) Down-right</option>
+												<option value="ul" {% if sign.leftPalmOrientation == 'ul' %} selected="true" {% endif %}>(G) Up-left</option>
+												<option value="ur" {% if sign.leftPalmOrientation == 'ur' %} selected="true" {% endif %}>(H) Up-right</option>
+											</select>
+										</div>
+									</div>
+
 
 								</div>
 
+								<!-- LOCATION -->
 								<div class="tab-pane fade" id="nav-location" role="tabpanel" aria-labelledby="nav-location-tab">
-									<div class="row justify-content-center" style="padding: 0px 10px;">
-										<div class="col-lg-5" style="text-align: center; padding: 0px;">
-											<strong>Body Parts</strong><br>
-											<img src="https://imgur.com/uJoJCmA.png" width="300px" height="420px" alt="">
+									<!-- Location Type -->
+									<div class="row mb-3" name="left" {% if not sign.twoHanded %} hidden="true" {% endif %}>
+										<div class="form-check form-check-inline">
+											<strong>Location Type&emsp;</strong>
+											<input class="form-check-input" type="radio" name="loctype" onclick="updateloctype();" id="split" value="split" {% if sign.locationType == 'split' %} checked="true" {% endif %}>
+											<label class="form-check-label" for="split">
+											Split</label>&emsp;
+											<input class="form-check-input" type="radio" name="loctype" onclick="updateloctype();" id="relative" value="relative" {% if sign.locationType == 'relative' %} checked="true" {% endif %}>
+											<label class="form-check-label" for="relative">
+											Relative</label>
 										</div>
+									</div>
+									<!-- SPLIT LOCAITON -->
+									<div class="row" id="split_options">
 										<div class="col-lg">
-											<div class="row" style="padding-left: 10px;">
-												<h6>Set right hand location.</h6>
+											<!-- RIGHT HAND LOCATION -->
+											<div class="row mb-2">
+												<strong>Right Hand Location</strong>
 											</div>
-											<div class="row" style="padding-left: 10px;">
-												<div class="form-group" style="padding-right: 10px;">
+											<div class="row" id="split_options_right">
+												<!-- Location -->
+												<div class="form-group" style="padding-right: 20px;">
 													<label for="bodypart">Body part</label>
 													<select name="bodypart" id="bodypart" class="custom-select" onchange="reload();">
 														<option value=" " selected>Neutral space</option>
-														<option value="head" {% if sign.loc == 'head' %} selected="true" {% endif %}>(0) Head</option>
-														<option value="headtop" {% if sign.loc == 'headtop' %} selected="true" {% endif %}>(1) Top of the head</option>
-														<option value="forehead" {% if sign.loc == 'forehead' %} selected="true" {% endif %}>(2) Forehead</option>
-														<option value="eyebrows" {% if sign.loc == 'eyebrows' %} selected="true" {% endif %}>(3) Eyebrows</option>
-														<option value="uppereyelid" {% if sign.loc == 'uppereyelid' %} selected="true" {% endif %}>(4) Eyes</option>
-														<option value="nose" {% if sign.loc == 'nose' %} selected="true" {% endif %}>(5) Nose</option>
-														<option value="ear" {% if sign.loc == 'ear' %} selected="true" {% endif %}>(6) Ears</option>
-														<option value="cheek" {% if sign.loc == 'cheek' %} selected="true" {% endif %}>(7) Cheek</option>
-														<option value="lips" {% if sign.loc == 'lips' %} selected="true" {% endif %}>(8) Lips</option>
-														<option value="chin" {% if sign.loc == 'chin' %} selected="true" {% endif %}>(9) Chin</option>
-														<option value="neck" {% if sign.loc == 'neck' %} selected="true" {% endif %}>(10) Neck</option>
-														<option value="shoulders" {% if sign.loc == 'shoulders' %} selected="true" {% endif %}>(11) Shoulders</option>
-														<option value="chest" {% if sign.loc == 'chest' %} selected="true" {% endif %}>(12) Chest</option>
-														<option value="stomach" {% if sign.loc == 'stomach' %} selected="true" {% endif %}>(13) Stomach</option>
-														<option value="belowstomach" {% if sign.loc == 'belowstomach' %} selected="true" {% endif %}>(14) Crotch</option>
+														<option value="head" {% if sign.rightLocation == 'head' %} selected="true" {% endif %}>(0) Head</option>
+														<option value="headtop" {% if sign.rightLocation == 'headtop' %} selected="true" {% endif %}>(1) Top of the head</option>
+														<option value="forehead" {% if sign.rightLocation == 'forehead' %} selected="true" {% endif %}>(2) Forehead</option>
+														<option value="eyebrows" {% if sign.rightLocation == 'eyebrows' %} selected="true" {% endif %}>(3) Eyebrows</option>
+														<option value="uppereyelid" {% if sign.rightLocation == 'uppereyelid' %} selected="true" {% endif %}>(4) Eyes</option>
+														<option value="nose" {% if sign.rightLocation == 'nose' %} selected="true" {% endif %}>(5) Nose</option>
+														<option value="ear" {% if sign.rightLocation == 'ear' %} selected="true" {% endif %}>(6) Ears</option>
+														<option value="cheek" {% if sign.rightLocation == 'cheek' %} selected="true" {% endif %}>(7) Cheek</option>
+														<option value="lips" {% if sign.rightLocation == 'lips' %} selected="true" {% endif %}>(8) Lips</option>
+														<option value="chin" {% if sign.rightLocation == 'chin' %} selected="true" {% endif %}>(9) Chin</option>
+														<option value="neck" {% if sign.rightLocation == 'neck' %} selected="true" {% endif %}>(10) Neck</option>
+														<option value="shoulders" {% if sign.rightLocation == 'shoulders' %} selected="true" {% endif %}>(11) Shoulders</option>
+														<option value="chest" {% if sign.rightLocation == 'chest' %} selected="true" {% endif %}>(12) Chest</option>
+														<option value="stomach" {% if sign.rightLocation == 'stomach' %} selected="true" {% endif %}>(13) Stomach</option>
+														<option value="belowstomach" {% if sign.rightLocation == 'belowstomach' %} selected="true" {% endif %}>(14) Crotch</option>
 													</select>
 												</div>
+												<!-- Side -->
 												<div class="form-group" style="padding-right: 10px;">
-													<label for="side">Relative location</label>
+													<label for="side">Side</label>
 													<select name="side" id="side" class="custom-select" onchange="reload();">
 														<option value=" " selected>Center (default)</option>
-														<option value="right_at" {% if sign.side == 'right_at' %} selected="true" {% endif %}>Right</option>
-														<option value="left_at" {% if sign.side == 'left_at' %} selected="true" {% endif %}>Left</option>
-														<option value="right_beside" {% if sign.side == 'right_beside' %} selected="true" {% endif %}>Far right</option>
-														<option value="left_beside" {% if sign.side == 'left_beside' %} selected="true" {% endif %}>Far left</option>
+														<option value="right_at" {% if sign.rightLocationSide == 'right_at' %} selected="true" {% endif %}>Right</option>
+														<option value="left_at" {% if sign.rightLocationSide == 'left_at' %} selected="true" {% endif %}>Left</option>
+														<option value="right_beside" {% if sign.rightLocationSide == 'right_beside' %} selected="true" {% endif %}>Far right</option>
+														<option value="left_beside" {% if sign.rightLocationSide == 'left_beside' %} selected="true" {% endif %}>Far left</option>
 													</select>
 												</div>
+												<!-- Contact -->
 												<div class="form-group">
 													<label for="proximity">Proximity level</label>
 													<select name="proximity" id="proximity" class="custom-select" onchange="reload();">
 														<option value=" " selected>Default</option>
-														<option value="touch" {% if sign.contact == 'touch' %} selected="true" {% endif %}>A - Touching</option>
-														<option value="close" {% if sign.contact == 'close' %} selected="true" {% endif %}>B - Close</option>
-														<option value="armextended" {% if sign.contact == 'armextended' %} selected="true" {% endif %}>C - Distant</option>
+														<option value="touch" {% if sign.rightLocationContact == 'touch' %} selected="true" {% endif %}>A - Touching</option>
+														<option value="close" {% if sign.rightLocationContact == 'close' %} selected="true" {% endif %}>B - Close</option>
+														<option value="armextended" {% if sign.rightLocationContact == 'armextended' %} selected="true" {% endif %}>C - Distant</option>
 													</select>
 												</div>
 											</div>
-											<div class="row" style="padding-left: 10px;" name="left" hidden="true">
-												<h6>Set left hand location.</h6>
+											<!-- LEFT HAND LOCATION -->
+											<div class="row mb-2" name="left" hidden="true">
+												<strong>Left Hand Location</strong>
 											</div>
-											<div class="row" style="padding-left: 10px;" name="left" hidden="true">
+											<div class="row" id="split_options_left" name="left" hidden="true">
+												<!-- Location -->
 												<div class="form-group" style="padding-right: 10px;">
 													<label for="lbodypart">Body part</label>
 													<select name="lbodypart" id="lbodypart" class="custom-select" onchange="reload();">
 														<option value=" " selected>Neutral space</option>
-														<option value="head" {% if sign.lloc == 'head' %} selected="true" {% endif %}>(0) Head</option>
-														<option value="headtop" {% if sign.lloc == 'headtop' %} selected="true" {% endif %}>(1) Top of the head</option>
-														<option value="forehead" {% if sign.lloc == 'forehead' %} selected="true" {% endif %}>(2) Forehead</option>
-														<option value="eyebrows" {% if sign.lloc == 'eyebrows' %} selected="true" {% endif %}>(3) Eyebrows</option>
-														<option value="uppereyelid" {% if sign.lloc == 'uppereyelid' %} selected="true" {% endif %}>(4) Eyes</option>
-														<option value="nose" {% if sign.lloc == 'nose' %} selected="true" {% endif %}>(5) Nose</option>
-														<option value="ear" {% if sign.lloc == 'ear' %} selected="true" {% endif %}>(6) Ears</option>
-														<option value="cheek" {% if sign.lloc == 'cheek' %} selected="true" {% endif %}>(7) Cheek</option>
-														<option value="lips" {% if sign.lloc == 'lips' %} selected="true" {% endif %}>(8) Lips</option>
-														<option value="chin" {% if sign.lloc == 'chin' %} selected="true" {% endif %}>(9) Chin</option>
-														<option value="neck" {% if sign.lloc == 'neck' %} selected="true" {% endif %}>(10) Neck</option>
-														<option value="shoulders" {% if sign.lloc == 'shoulders' %} selected="true" {% endif %}>(11) Shoulders</option>
-														<option value="chest" {% if sign.lloc == 'chest' %} selected="true" {% endif %}>(12) Chest</option>
-														<option value="stomach" {% if sign.lloc == 'stomach' %} selected="true" {% endif %}>(13) Stomach</option>
-														<option value="belowstomach" {% if sign.lloc == 'belowstomach' %} selected="true" {% endif %}>(14) Crotch</option>
+														<option value="head" {% if sign.leftLocation == 'head' %} selected="true" {% endif %}>(0) Head</option>
+														<option value="headtop" {% if sign.leftLocation == 'headtop' %} selected="true" {% endif %}>(1) Top of the head</option>
+														<option value="forehead" {% if sign.leftLocation == 'forehead' %} selected="true" {% endif %}>(2) Forehead</option>
+														<option value="eyebrows" {% if sign.leftLocation == 'eyebrows' %} selected="true" {% endif %}>(3) Eyebrows</option>
+														<option value="uppereyelid" {% if sign.leftLocation == 'uppereyelid' %} selected="true" {% endif %}>(4) Eyes</option>
+														<option value="nose" {% if sign.leftLocation == 'nose' %} selected="true" {% endif %}>(5) Nose</option>
+														<option value="ear" {% if sign.leftLocation == 'ear' %} selected="true" {% endif %}>(6) Ears</option>
+														<option value="cheek" {% if sign.leftLocation == 'cheek' %} selected="true" {% endif %}>(7) Cheek</option>
+														<option value="lips" {% if sign.leftLocation == 'lips' %} selected="true" {% endif %}>(8) Lips</option>
+														<option value="chin" {% if sign.leftLocation == 'chin' %} selected="true" {% endif %}>(9) Chin</option>
+														<option value="neck" {% if sign.leftLocation == 'neck' %} selected="true" {% endif %}>(10) Neck</option>
+														<option value="shoulders" {% if sign.leftLocation == 'shoulders' %} selected="true" {% endif %}>(11) Shoulders</option>
+														<option value="chest" {% if sign.leftLocation == 'chest' %} selected="true" {% endif %}>(12) Chest</option>
+														<option value="stomach" {% if sign.leftLocation == 'stomach' %} selected="true" {% endif %}>(13) Stomach</option>
+														<option value="belowstomach" {% if sign.leftLocation == 'belowstomach' %} selected="true" {% endif %}>(14) Crotch</option>
 													</select>
 												</div>
+												<!-- Side -->
 												<div class="form-group" style="padding-right: 10px;">
 													<label for="lside">Relative location</label>
 													<select name="lside" id="lside" class="custom-select" onchange="reload();">
 														<option value=" " selected>Center (default)</option>
-														<option value="right_at" {% if sign.lside == 'right_at' %} selected="true" {% endif %}>Right</option>
-														<option value="left_at" {% if sign.lside == 'left_at' %} selected="true" {% endif %}>Left</option>
-														<option value="right_beside" {% if sign.lside == 'right_beside' %} selected="true" {% endif %}>Far right</option>
-														<option value="left_beside" {% if sign.lside == 'left_beside' %} selected="true" {% endif %}>Far left</option>
+														<option value="right_at" {% if sign.leftLocationSide == 'right_at' %} selected="true" {% endif %}>Right</option>
+														<option value="left_at" {% if sign.leftLocationSide == 'left_at' %} selected="true" {% endif %}>Left</option>
+														<option value="right_beside" {% if sign.leftLocationSide == 'right_beside' %} selected="true" {% endif %}>Far right</option>
+														<option value="left_beside" {% if sign.leftLocationSide == 'left_beside' %} selected="true" {% endif %}>Far left</option>
 													</select>
 												</div>
+												<!-- Contact -->
 												<div class="form-group">
 													<label for="lproximity">Proximity level</label>
 													<select name="lproximity" id="lproximity" class="custom-select" onchange="reload();">
 														<option value=" " selected>Default</option>
-														<option value="touch" {% if sign.lcontact == 'touch' %} selected="true" {% endif %}>A - Touching</option>
-														<option value="close" {% if sign.lcontact == 'close' %} selected="true" {% endif %}>B - Close</option>
-														<option value="armextended" {% if sign.lcontact == 'armextended' %} selected="true" {% endif %}>C - Distant</option>
+														<option value="touch" {% if sign.leftLocationContact == 'touch' %} selected="true" {% endif %}>A - Touching</option>
+														<option value="close" {% if sign.leftLocationContact == 'close' %} selected="true" {% endif %}>B - Close</option>
+														<option value="armextended" {% if sign.leftLocationContact == 'armextended' %} selected="true" {% endif %}>C - Distant</option>
 													</select>
 												</div>
 											</div>
+										</div>
+									</div>
+									<!-- RELATIVE OPTIONS -->
+									<div class="row" id="relative_options" hidden="true">
+										<div class="col">
+											<!-- Both Hand Location -->
+											<div class="row mb-2">
+												<strong>Location of Both Hands</strong>
+											</div>
 											<div class="row">
-												<div class="col" style="text-align: center;">
-													<strong>Proximity Levels</strong><br><br>
-													<img src="https://imgur.com/5N2bHHY.png" alt="">
+												<!-- Constellation Location -->
+												<div class="form-group" style="padding-right: 10px;">
+													<label for="lrbodypart">Body Part</label>
+													<select name="lrbodypart" id="lrbodypart" class="custom-select" onchange="reload();">
+														<option value=" " selected>Neutral space</option>
+														<option value="head" {% if sign.constellationLocation == 'head' %} selected="true" {% endif %}>(0) Head</option>
+														<option value="headtop" {% if sign.constellationLocation == 'headtop' %} selected="true" {% endif %}>(1) Top of the head</option>
+														<option value="forehead" {% if sign.constellationLocation == 'forehead' %} selected="true" {% endif %}>(2) Forehead</option>
+														<option value="eyebrows" {% if sign.constellationLocation == 'eyebrows' %} selected="true" {% endif %}>(3) Eyebrows</option>
+														<option value="uppereyelid" {% if sign.constellationLocation == 'uppereyelid' %} selected="true" {% endif %}>(4) Eyes</option>
+														<option value="nose" {% if sign.constellationLocation == 'nose' %} selected="true" {% endif %}>(5) Nose</option>
+														<option value="ear" {% if sign.constellationLocation == 'ear' %} selected="true" {% endif %}>(6) Ears</option>
+														<option value="cheek" {% if sign.constellationLocation == 'cheek' %} selected="true" {% endif %}>(7) Cheek</option>
+														<option value="lips" {% if sign.constellationLocation == 'lips' %} selected="true" {% endif %}>(8) Lips</option>
+														<option value="chin" {% if sign.constellationLocation == 'chin' %} selected="true" {% endif %}>(9) Chin</option>
+														<option value="neck" {% if sign.constellationLocation == 'neck' %} selected="true" {% endif %}>(10) Neck</option>
+														<option value="shoulders" {% if sign.constellationLocation == 'shoulders' %} selected="true" {% endif %}>(11) Shoulders</option>
+														<option value="chest" {% if sign.constellationLocation == 'chest' %} selected="true" {% endif %}>(12) Chest</option>
+														<option value="stomach" {% if sign.constellationLocation == 'stomach' %} selected="true" {% endif %}>(13) Stomach</option>
+														<option value="belowstomach" {% if sign.constellationLocation == 'belowstomach' %} selected="true" {% endif %}>(14) Crotch</option>
+													</select>
+												</div>
+												<!-- Constellation Location Side -->
+												<div class="form-group" style="padding-right: 10px;">
+													<label for="lrside">Side</label>
+													<select name="lrside" id="lrside" class="custom-select" onchange="reload();">
+														<option value=" " selected>Center (default)</option>
+														<option value="right_at" {% if sign.constellationLocationSide == 'right_at' %} selected="true" {% endif %}>Right</option>
+														<option value="left_at" {% if sign.constellationLocationSide == 'left_at' %} selected="true" {% endif %}>Left</option>
+														<option value="right_beside" {% if sign.constellationLocationSide == 'right_beside' %} selected="true" {% endif %}>Far right</option>
+														<option value="left_beside" {% if sign.constellationLocationSide == 'left_beside' %} selected="true" {% endif %}>Far left</option>
+													</select>
+												</div>
+												<!-- Constellation Location Contact -->
+												<div class="form-group" style="padding-right: 10px;">
+													<label for="lrproximity">Contact to Body Part</label>
+													<select name="lrproximity" id="lrproximity" class="custom-select" onchange="reload();">
+														<option value=" " selected>Default</option>
+														<option value="touch" {% if sign.constellationLocationContact == 'touch' %} selected="true" {% endif %}>A - Touching</option>
+														<option value="close" {% if sign.constellationLocationContact == 'close' %} selected="true" {% endif %}>B - Close</option>
+														<option value="armextended" {% if sign.constellationLocationContact == 'armextended' %} selected="true" {% endif %}>C - Distant</option>
+													</select>
+												</div>
+												<!-- Constellation Contact -->
+												<div class="form-group">
+													<label for="lrproximity_rel">Contact Between Hands</label>
+													<select name="lrproximity_rel" id="lrproximity_rel" class="custom-select" onchange="reload();">
+														<option value=" " selected>Default</option>
+														<option value="touch" {% if sign.constellationContact == 'touch' %} selected="true" {% endif %}>A - Touching</option>
+														<option value="close" {% if sign.constellationContact == 'close' %} selected="true" {% endif %}>B - Close</option>
+													</select>
+												</div>
+											</div>
+
+											<!-- LEFT HAND SITE -->
+											<div class="row mb-2">
+												<strong>Left Hand Site Type&emsp;</strong>
+												<div class="form-check form-check-inline">
+													<input class="form-check-input" type="radio" id="hptype1" name="hptype" onclick="updatehptype();" value="fingerpart" {% if sign.rightContactType == "fingerpart" %} checked {% endif %}>
+													<label class="form-check-label" for="hptype1">
+													Finger Part</label>&emsp;
+													<input class="form-check-input" type="radio" id="hptype2" name="hptype" onclick="updatehptype();" value="handpart" {% if sign.rightContactType == "handpart" %} checked {% endif %}>
+													<label class="form-check-label" for="hptype2">
+													Hand Part</label>
+												</div>
+											</div>
+											<!-- Finger Part -->
+											<div class="row" id="fingerpart_options">
+												<!-- Digits -->
+												<div class="form-group" style="padding-right: 10px;">
+													<label for="digits">Finger</label>
+													<select name="digits" id="digits" class="custom-select" onchange="reload();">
+														<option value=" " selected>None</option>
+														<option value="1" {% if sign.rightContactFinger == "1" %} selected {% endif %}>1 - Thumb</option>
+														<option value="2" {% if sign.rightContactFinger == "2" %} selected {% endif %}>2 - Index</option>
+														<option value="3" {% if sign.rightContactFinger == "3" %} selected {% endif %}>3 - Middle</option>
+														<option value="4" {% if sign.rightContactFinger == "4" %} selected {% endif %}>4 - Ring</option>
+														<option value="5" {% if sign.rightContactFinger == "5" %} selected {% endif %}>5 - Pinky</option>
+													</select>
+												</div>
+												<!-- Finger Part -->
+												<div class="form-group" style="padding-right: 10px;">
+													<label for="fingerpart">Finger Part</label>
+													<select name="fingerpart" id="fingerpart" class="custom-select" onchange="reload();">
+														<option value=" " selected>None</option>
+														<option value="tip" {% if sign.rightContactPart == "tip" %} selected {% endif %}>A - Tip</option>
+														<option value="nail" {% if sign.rightContactPart == "nail" %} selected {% endif %}>B - Nail</option>
+														<option value="pad" {% if sign.rightContactPart == "pad" %} selected {% endif %}>C - Pad</option>
+														<option value="midjoint" {% if sign.rightContactPart == "midjoint" %} selected {% endif %}>D - Midjoint</option>
+														<option value="base" {% if sign.rightContactPart == "base" %} selected {% endif %}>E - Base</option>
+														<option value="side" {% if sign.rightContactPart == "side" %} selected {% endif %}>F - Side</option>
+													</select>
+												</div>
+												<!-- Finger Side -->
+												<div class="form-group" style="padding-right: 10px;">
+													<label for="fingerside">Finger Side</label>
+													<select name="fingerside" id="fingerside" class="custom-select" onchange="reload();">
+														<option value=" " selected>None</option>
+														<option value="dorsal" {% if sign.rightContactSide == "dorsal" %} selected {% endif %}>1 - Dorsal</option>
+														<option value="palmar" {% if sign.rightContactSide == "palmar" %} selected {% endif %}>2 - Palmar</option>
+														<option value="radial" {% if sign.rightContactSide == "radial" %} selected {% endif %}>3 - Radial</option>
+														<option value="ulnar" {% if sign.rightContactSide == "ulnar" %} selected {% endif %}>4 - Ulnar</option>
+													</select>
+												</div>
+											</div>
+
+											<!-- Hand Part -->
+											<div class="row" id="handpart_options" hidden="true">
+												<!-- Hand Part -->
+												<div class="form-group" style="padding-right: 10px;">
+													<label for="handpart">Hand Part</label>
+													<select name="handpart" id="handpart" class="custom-select" onchange="reload();">
+														<option value=" " selected>None</option>
+														<option value="wristback" {% if sign.rightContactPart == "wristback" %} selected {% endif %}>A - Wristback</option>
+														<option value="thumbball" {% if sign.rightContactPart == "thumbball" %} selected {% endif %}>B - Thumb Ball</option>
+														<option value="palm" {% if sign.rightContactPart == "palm" %} selected {% endif %}>C - Palm</option>
+														<option value="handback" {% if sign.rightContactPart == "handback" %} selected {% endif %}>D - Hand Back</option>
+														<option value="thumbside" {% if sign.rightContactPart == "thumbside" %} selected {% endif %}>E - Thumb Side</option>
+														<option value="pinkyside" {% if sign.rightContactPart == "pinkyside" %} selected {% endif %}>F - Pinky Side</option>
+													</select>
+												</div>
+												<!-- Hand Side -->
+												<div class="form-group" style="padding-right: 10px;">
+													<label for="handside">Hand Side</label>
+													<select name="handside" id="handside" class="custom-select" onchange="reload();">
+														<option value=" " selected>None</option>
+														<option value="dorsal" {% if sign.rightContactSide == "dorsal" %} selected {% endif %}>1 - Dorsal</option>
+														<option value="palmar" {% if sign.rightContactSide == "palmar" %} selected {% endif %}>2 - Palmar</option>
+														<option value="radial" {% if sign.rightContactSide == "radial" %} selected {% endif %}>3 - Radial</option>
+														<option value="ulnar" {% if sign.rightContactSide == "ulnar" %} selected {% endif %}>4 - Ulnar</option>
+													</select>
+												</div>
+											</div>
+
+											<!-- RIGHT HAND SITE -->
+											<div class="row mb-2">
+												<strong>Right Hand Site Type&emsp;</strong>
+												<div class="form-check form-check-inline">
+													<input class="form-check-input" type="radio" id="lhptype1" name="lhptype" onclick="updatelhptype();" value="fingerpart" {% if sign.leftContactType == "fingerpart" %} checked {% endif %}>
+													<label class="form-check-label" for="lhptype1">
+													Finger Part</label>&emsp;
+													<input class="form-check-input" type="radio" id="lhptype2" name="lhptype" onclick="updatelhptype();" value="handpart" {% if sign.leftContactType == "handpart" %} checked {% endif %}>
+													<label class="form-check-label" for="lhptype2">
+													Hand Part</label>
+												</div>
+											</div>
+											<!-- Finger Part -->
+											<div class="row" id="lfingerpart_options">
+												<!-- Digits -->
+												<div class="form-group" style="padding-right: 10px;">
+													<label for="ldigits">Finger</label>
+													<select name="ldigits" id="ldigits" class="custom-select" onchange="reload();">
+														<option value=" " selected>None</option>
+														<option value="1" {% if sign.leftContactFinger == "1" %} selected {% endif %}>1 - Thumb</option>
+														<option value="2" {% if sign.leftContactFinger == "2" %} selected {% endif %}>2 - Index</option>
+														<option value="3" {% if sign.leftContactFinger == "3" %} selected {% endif %}>3 - Middle</option>
+														<option value="4" {% if sign.leftContactFinger == "4" %} selected {% endif %}>4 - Ring</option>
+														<option value="5" {% if sign.leftContactFinger == "5" %} selected {% endif %}>5 - Pinky</option>
+													</select>
+												</div>
+												<!-- Finger Part -->
+												<div class="form-group" style="padding-right: 10px;">
+													<label for="lfingerpart">Finger Part</label>
+													<select name="lfingerpart" id="lfingerpart" class="custom-select" onchange="reload();">
+														<option value=" " selected>None</option>
+														<option value="tip" {% if sign.leftContactPart == "tip" %} selected {% endif %}>A - Tip</option>
+														<option value="nail" {% if sign.leftContactPart == "nail" %} selected {% endif %}>B - Nail</option>
+														<option value="pad" {% if sign.leftContactPart == "pad" %} selected {% endif %}>C - Pad</option>
+														<option value="midjoint" {% if sign.leftContactPart == "midjoint" %} selected {% endif %}>D - Midjoint</option>
+														<option value="base" {% if sign.leftContactPart == "base" %} selected {% endif %}>E - Base</option>
+														<option value="side" {% if sign.leftContactPart == "side" %} selected {% endif %}>F - Side</option>
+													</select>
+												</div>
+												<!-- Finger Side -->
+												<div class="form-group" style="padding-right: 10px;">
+													<label for="lfingerside">Finger Side</label>
+													<select name="lfingerside" id="lfingerside" class="custom-select" onchange="reload();">
+														<option value=" " selected>None</option>
+														<option value="dorsal" {% if sign.leftContactSide == "dorsal" %} selected {% endif %}>1 - Dorsal</option>
+														<option value="palmar" {% if sign.leftContactSide == "palmar" %} selected {% endif %}>2 - Palmar</option>
+														<option value="radial" {% if sign.leftContactSide == "radial" %} selected {% endif %}>3 - Radial</option>
+														<option value="ulnar" {% if sign.leftContactSide == "ulnar" %} selected {% endif %}>4 - Ulnar</option>
+													</select>
+												</div>
+											</div>
+											<!-- Hand Part -->
+											<div class="row" id="lhandpart_options" hidden="true">
+												<div class="form-group" style="padding-right: 10px;">
+													<label for="lhandpart">Hand Part</label>
+													<select name="lhandpart" id="lhandpart" class="custom-select" onchange="reload();">
+														<option value=" " selected>None</option>
+														<option value="wristback" {% if sign.leftContactPart == "wristback" %} selected {% endif %}>A - Wristback</option>
+														<option value="thumbball" {% if left.rightContactPart == "thumbball" %} selected {% endif %}>B - Thumb Ball</option>
+														<option value="palm" {% if left.rightContactPart == "palm" %} selected {% endif %}>C - Palm</option>
+														<option value="handback" {% if sign.leftContactPart == "handback" %} selected {% endif %}>D - Hand Back</option>
+														<option value="thumbside" {% if sign.leftContactPart == "thumbside" %} selected {% endif %}>E - Thumb Side</option>
+														<option value="pinkyside" {% if sign.leftContactPart == "pinkyside" %} selected {% endif %}>F - Pinky Side</option>
+													</select>
+												</div>
+												<!-- Hand Side -->
+												<div class="form-group" style="padding-right: 10px;">
+													<label for="lhandside">Hand Side</label>
+													<select name="lhandside" id="lhandside" class="custom-select" onchange="reload();">
+														<option value=" " selected>None</option>
+														<option value="dorsal" {% if sign.leftContactSide == "dorsal" %} selected {% endif %}>1 - Dorsal</option>
+														<option value="palmar" {% if sign.leftContactSide == "palmar" %} selected {% endif %}>2 - Palmar</option>
+														<option value="radial" {% if sign.leftContactSide == "radial" %} selected {% endif %}>3 - Radial</option>
+														<option value="ulnar" {% if sign.leftContactSide == "ulnar" %} selected {% endif %}>4 - Ulnar</option>
+													</select>
 												</div>
 											</div>
 										</div>
 									</div>
 								</div>
 
-								<!-- <div class="tab-pane fade" id="nav-movement" role="tabpanel" aria-labelledby="nav-movement-tab">
-									<div class="row justify-content-center" style="padding: 0px 10px;">
-										Movement stuff
+								<div class="tab-pane fade" id="nav-movement" role="tabpanel" aria-labelledby="nav-movement-tab">
+
+									<div class="row mb-3" name="left">
+										<div class="form-check form-check-inline">
+											<strong>Motion Definition Type&emsp;</strong>
+											<input class="form-check-input" type="radio" name="motiontype" id="splitmotion" value="splitmotion">
+											<label class="form-check-label" for="splitmotion">
+											Split</label>&emsp;
+											<input class="form-check-input" type="radio" name="motiontype" id="symmetric" value="symmetric">
+											<label class="form-check-label" for="symmetric">
+											Symmetric (in phase)</label>&emsp;
+											<input class="form-check-input" type="radio" name="motiontype" id="outofphase" value="outofphase">
+											<label class="form-check-label" for="outofphase">
+											Symmetric (out of phase)</label>&emsp;
+											
+										</div>
 									</div>
-								</div> -->
+
+									<div class="row mb-2">
+										<strong>RIGHT HAND</strong>
+									</div>
+
+									<div class="row">
+										<!-- Motion Type -->
+										<div class="form-group" style="padding-right: 10px;">
+											<label for="motiontype">Motion Type</label>
+											<select id="motiontype" name="motiontype" class="custom-select" onchange="reload();">
+												<option value="nomotion" selected>No motion</option>
+												<option value="changeposture">Change posture</option>
+												<option value="directedmotion">Directed</option>
+												<option value="circularmotion">Circular</option>
+												<option value="wristmotion">Wrist</option>
+												<option value="fingerplay">Fingerplay</option>
+											</select>
+										</div>
+										<!-- Manner of Motion -->
+										<div class="form-group" style="padding-right: 10px;">
+											<label for="manner">Manner of Motion</label>
+											<select name="manner" id="manner" class="custom-select" onchange="reload();">
+												<option value="normal" selected>Normal</option>
+												<option value="fast">Fast</option>
+												<option value="slow">Slow</option>
+												<option value="tense">Tense</option>
+												<option value="rest">Slack</option>
+											</select>
+										</div>
+										<!-- Repeat -->
+										<div class="form-group" style="padding-right: 10px;">
+											<label for="repeat">Repeat</label>
+											<select id="repeat" name="repeat" class="custom-select" onchange="reload();">
+												<option value=" " selected>None</option>
+												<option value="fromstart">Once from start</option>
+												<option value="fromstart_several">Twice from start</option>
+												<option value="reverse">To and fro</option>
+												<option value="tofroto">To and fro and to</option>
+											</select>
+										</div>
+									</div>
+
+									<!-- DIRECTED MOTION -->
+									<div class="row" hidden="true">
+										<div class="col">
+											<div class="row mb-2">
+												<strong>Directed Motion Attributes</strong>
+											</div>
+											<div class="row">
+												<div class="form-group" style="padding-right: 10px;">
+													<label for="direction">General Direction</label>
+													<select name="direction" id="direction" class="custom-select" onchange="reload();">
+														<option value=" ">None</option>
+														<option value="u" {% if sign.rightFingerDirection == 'u' %} selected="true" {% endif %}>(1) Up</option>
+														<option value="ur" {% if sign.rightFingerDirection == 'ur' %} selected="true" {% endif %}>(2) Up-right</option>
+														<option value="r" {% if sign.rightFingerDirection == 'r' %} selected="true" {% endif %}>(3) Right</option>
+														<option value="dr" {% if sign.rightFingerDirection == 'dr' %} selected="true" {% endif %}>(4) Down-right</option>
+														<option value="d" {% if sign.rightFingerDirection == 'd' %} selected="true" {% endif %}>(5) Down</option>
+														<option value="dl" {% if sign.rightFingerDirection == 'dl' %} selected="true" {% endif %}>(6) Down-left</option>
+														<option value="l" {% if sign.rightFingerDirection == 'l' %} selected="true" {% endif %}>(7) Left</option>
+														<option value="ul" {% if sign.rightFingerDirection == 'ul' %} selected="true" {% endif %}>(8) Up-left</option>
+														<option value="o" {% if sign.rightFingerDirection == 'o' %} selected="true" {% endif %}>(9) Out</option>
+														<option value="or" {% if sign.rightFingerDirection == 'or' %} selected="true" {% endif %}>(10) Up-left</option>
+														<option value="ir" {% if sign.rightFingerDirection == 'ir' %} selected="true" {% endif %}>(11) In-right</option>
+														<option value="i" {% if sign.rightFingerDirection == 'i' %} selected="true" {% endif %}>(12) In</option>
+														<option value="il" {% if sign.rightFingerDirection == 'il' %} selected="true" {% endif %}>(13) In-left</option>
+														<option value="ol" {% if sign.rightFingerDirection == 'ol' %} selected="true" {% endif %}>(14) Out-left</option>
+														<option value="ui" {% if sign.rightFingerDirection == 'ui' %} selected="true" {% endif %}>(15) Up-in</option>
+														<option value="uo" {% if sign.rightFingerDirection == 'uo' %} selected="true" {% endif %}>(16) Up-out</option>
+														<option value="do" {% if sign.rightFingerDirection == 'do' %} selected="true" {% endif %}>(17) Down-out</option> 
+														<option value="di" {% if sign.rightFingerDirection == 'di' %} selected="true" {% endif %}>(18) Down-in</option>
+														<option value="uol" {% if sign.rightFingerDirection == 'uol' %} selected="true" {% endif %}>(19) Up-out-left</option>
+														<option value="dol" {% if sign.rightFingerDirection == 'dol' %} selected="true" {% endif %}>(20) Down-out-left</option>
+														<option value="dil" {% if sign.rightFingerDirection == 'dil' %} selected="true" {% endif %}>(21) Down-in-left</option>
+														<option value="uil" {% if sign.rightFingerDirection == 'uil' %} selected="true" {% endif %}>(22) Up-in-left</option>
+														<option value="uor" {% if sign.rightFingerDirection == 'uor' %} selected="true" {% endif %}>(23) Up-out-right</option>
+														<option value="dor" {% if sign.rightFingerDirection == 'dor' %} selected="true" {% endif %}>(24) Down-out-left</option>
+														<option value="dir" {% if sign.rightFingerDirection == 'dir' %} selected="true" {% endif %}>(25) Down-in-left</option>
+														<option value="uir" {% if sign.rightFingerDirection == 'uir' %} selected="true" {% endif %}>(26) Up-in-right</option>
+													</select>
+												</div>
+												<div class="form-group" style="padding-right: 10px;">
+													<label for="directed_size">Size</label>
+													<select id="directed_size" name="directed_size" class="custom-select" onchange="reload();">
+														<option value=" " selected>Normal</option>
+														<option value="small">Small</option>
+														<option value="big">Big</option>
+													</select>
+												</div>
+											</div>
+										</div>
+										<div class="col">
+											<div class="row mb-2">
+												<strong>Curve Attributes</strong>
+											</div>
+											<div class="row">
+												<div class="form-group" style="padding-right: 10px;">
+													<label for="curve">Curve Direction</label>
+													<select id="curve" name="curve" class="custom-select" onchange="reload();">
+														<option value=" " selected>None</option>
+														<option value="u" {% if sign.rightFingerDirection == 'u' %} selected="true" {% endif %}>(1) Up</option>
+														<option value="ur" {% if sign.rightFingerDirection == 'ur' %} selected="true" {% endif %}>(2) Up-right</option>
+														<option value="r" {% if sign.rightFingerDirection == 'r' %} selected="true" {% endif %}>(3) Right</option>
+														<option value="dr" {% if sign.rightFingerDirection == 'dr' %} selected="true" {% endif %}>(4) Down-right</option>
+														<option value="d" {% if sign.rightFingerDirection == 'd' %} selected="true" {% endif %}>(5) Down</option>
+														<option value="dl" {% if sign.rightFingerDirection == 'dl' %} selected="true" {% endif %}>(6) Down-left</option>
+														<option value="l" {% if sign.rightFingerDirection == 'l' %} selected="true" {% endif %}>(7) Left</option>
+														<option value="ul" {% if sign.rightFingerDirection == 'ul' %} selected="true" {% endif %}>(8) Up-left</option>
+													</select>
+												</div>
+												<div class="form-group" style="padding-right: 10px;">
+													<label for="curve_size">Size</label>
+													<select id="curve_size" name="curve_size" class="custom-select" onchange="reload();">
+														<option value=" " selected>Normal</option>
+														<option value="small">Small</option>
+														<option value="big">Big</option>
+													</select>
+												</div>
+											</div>
+											<!-- Zigzag Attr -->
+											<div class="row">
+												<div class="col">
+													<div class="row mb-2">
+														<strong>Zigzag/Wave Attributes</strong>
+													</div>
+													<div class="row">
+														<div class="form-group" style="padding-right: 10px;">
+															<label for="zigzag_style">Style</label>
+															<select id="zigzag_style" name="zigzag_style" class="custom-select" onchange="reload();">
+																<option value=" " selected>None</option>
+																<option value="zigzag">Zigzag</option>
+																<option value="wavy">Wavy</option>
+															</select>
+														</div>
+														<div class="form-group" style="padding-right: 10px;">
+															<label for="ellipse_direction">Ellipse Direction</label>
+															<select id="ellipse_direction" name="ellipse_direction" class="custom-select" onchange="reload();">
+																<option value=" " selected>None</option>
+																<option value="h">(1) Horizontal</option>
+																<option value="ur">(2) Up-right</option>
+																<option value="v">(3) Vertical</option>
+																<option value="ul">(4) Up-left</option>
+															</select>
+														</div>
+														<div class="form-group" style="padding-right: 10px;">
+															<label for="zigzag_size">Size</label>
+															<select id="zigzag_size" name="zigzag_size" class="custom-select" onchange="reload();">
+																<option value=" " selected>Normal</option>
+																<option value="small">Small</option>
+																<option value="big">Big</option>
+															</select>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+
+									<!-- CIRCULAR MOTION -->
+									<div class="row" hidden="true">
+										<div class="col">
+											<div class="row mb-2">
+												<strong>Circular Motion Attributes</strong>
+											</div>
+											<div class="row">
+												<div class="form-group" style="padding-right: 10px;">
+													<label for="axis">Axis</label>
+													<select id="axis" name="axis" class="custom-select" onchange="reload();">
+														<option value=" " selected>None</option>
+														<option value="u" {% if sign.rightFingerDirection == 'u' %} selected="true" {% endif %}>(1) Up</option>
+														<option value="ur" {% if sign.rightFingerDirection == 'ur' %} selected="true" {% endif %}>(2) Up-right</option>
+														<option value="r" {% if sign.rightFingerDirection == 'r' %} selected="true" {% endif %}>(3) Right</option>
+														<option value="dr" {% if sign.rightFingerDirection == 'dr' %} selected="true" {% endif %}>(4) Down-right</option>
+														<option value="d" {% if sign.rightFingerDirection == 'd' %} selected="true" {% endif %}>(5) Down</option>
+														<option value="dl" {% if sign.rightFingerDirection == 'dl' %} selected="true" {% endif %}>(6) Down-left</option>
+														<option value="l" {% if sign.rightFingerDirection == 'l' %} selected="true" {% endif %}>(7) Left</option>
+														<option value="ul" {% if sign.rightFingerDirection == 'ul' %} selected="true" {% endif %}>(8) Up-left</option>
+														<option value="o" {% if sign.rightFingerDirection == 'o' %} selected="true" {% endif %}>(9) Out</option>
+														<option value="or" {% if sign.rightFingerDirection == 'or' %} selected="true" {% endif %}>(10) Up-left</option>
+														<option value="ir" {% if sign.rightFingerDirection == 'ir' %} selected="true" {% endif %}>(11) In-right</option>
+														<option value="i" {% if sign.rightFingerDirection == 'i' %} selected="true" {% endif %}>(12) In</option>
+														<option value="il" {% if sign.rightFingerDirection == 'il' %} selected="true" {% endif %}>(13) In-left</option>
+														<option value="ol" {% if sign.rightFingerDirection == 'ol' %} selected="true" {% endif %}>(14) Out-left</option>
+														<option value="ui" {% if sign.rightFingerDirection == 'ui' %} selected="true" {% endif %}>(15) Up-in</option>
+														<option value="uo" {% if sign.rightFingerDirection == 'uo' %} selected="true" {% endif %}>(16) Up-out</option>
+														<option value="do" {% if sign.rightFingerDirection == 'do' %} selected="true" {% endif %}>(17) Down-out</option> 
+														<option value="di" {% if sign.rightFingerDirection == 'di' %} selected="true" {% endif %}>(18) Down-in</option>
+														<option value="uol" {% if sign.rightFingerDirection == 'uol' %} selected="true" {% endif %}>(19) Up-out-left</option>
+														<option value="dol" {% if sign.rightFingerDirection == 'dol' %} selected="true" {% endif %}>(20) Down-out-left</option>
+														<option value="dil" {% if sign.rightFingerDirection == 'dil' %} selected="true" {% endif %}>(21) Down-in-left</option>
+														<option value="uil" {% if sign.rightFingerDirection == 'uil' %} selected="true" {% endif %}>(22) Up-in-left</option>
+														<option value="uor" {% if sign.rightFingerDirection == 'uor' %} selected="true" {% endif %}>(23) Up-out-right</option>
+														<option value="dor" {% if sign.rightFingerDirection == 'dor' %} selected="true" {% endif %}>(24) Down-out-left</option>
+														<option value="dir" {% if sign.rightFingerDirection == 'dir' %} selected="true" {% endif %}>(25) Down-in-left</option>
+														<option value="uir" {% if sign.rightFingerDirection == 'uir' %} selected="true" {% endif %}>(26) Up-in-right</option>
+													</select>
+												</div>
+												<div class="form-group" style="padding-right: 10px;">
+													<label for="circular_size">Size</label>
+													<select id="circular_size" name="circular_size" class="custom-select" onchange="reload();">
+														<option value=" " selected>Normal</option>
+														<option value="small">Small</option>
+														<option value="big">Big</option>
+													</select>
+												</div>
+												<div class="form-group" style="padding-right: 10px;">
+													<label for="start">Starting Point</label>
+													<select id="start" name="start" class="custom-select" onchange="reload();">
+														<option value=" " selected>None</option>
+														<option value="u" {% if sign.rightFingerDirection == 'u' %} selected="true" {% endif %}>(1) Up</option>
+														<option value="ur" {% if sign.rightFingerDirection == 'ur' %} selected="true" {% endif %}>(2) Up-right</option>
+														<option value="r" {% if sign.rightFingerDirection == 'r' %} selected="true" {% endif %}>(3) Right</option>
+														<option value="dr" {% if sign.rightFingerDirection == 'dr' %} selected="true" {% endif %}>(4) Down-right</option>
+														<option value="d" {% if sign.rightFingerDirection == 'd' %} selected="true" {% endif %}>(5) Down</option>
+														<option value="dl" {% if sign.rightFingerDirection == 'dl' %} selected="true" {% endif %}>(6) Down-left</option>
+														<option value="l" {% if sign.rightFingerDirection == 'l' %} selected="true" {% endif %}>(7) Left</option>
+														<option value="ul" {% if sign.rightFingerDirection == 'ul' %} selected="true" {% endif %}>(8) Up-left</option>
+													</select>
+												</div>
+											</div>
+										</div>
+									</div>
+
+									<!-- WRIST MOTION -->
+									<div class="row">
+										<div class="col">
+											<div class="row mb-2">
+												<strong>Wrist Motion Attributes</strong>
+											</div>
+											<div class="row">
+												<div class="form-group" style="padding-right: 10px;">
+													<label for="motion">Movement</label>
+													<select id="motion" name="motion" class="custom-select" onchange="reload();">
+														<option value=" " selected>None</option>
+														<option value="nodding">Nodding</option>
+														<option value="swinging">Swinging</option>
+														<option value="twisting">Twisting</option>
+														<option value="stircw">Stir (clockwise)</option>
+														<option value="stirccw">Stir (counter-clockwise)</option>
+													</select>
+												</div>
+												<div class="form-group" style="padding-right: 10px;">
+													<label for="wristmotion_size">Size</label>
+													<select id="wristmotion_size" name="wristmotion_size" class="custom-select" onchange="reload();">
+														<option value=" " selected>Normal</option>
+														<option value="small">Small</option>
+														<option value="big">Big</option>
+													</select>
+												</div>
+											</div>
+										</div>
+									</div>
+
+									<hr>
+									
+									<div class="row mb-2" name="left">
+										<strong>LEFT HAND</strong>
+									</div>
+
+									<div class="row" name="left">
+										<!-- Motion Type -->
+										<div class="form-group" style="padding-right: 10px;">
+											<label for="x">Motion Type</label>
+											<select name="x" class="custom-select">
+												<option value="x" selected>No motion</option>
+												<option value="x" selected>Directed</option>
+												<option value="x" selected>Circular</option>
+												<option value="x" selected>Wrist</option>
+												<option value="x" selected>Fingerplay</option>
+											</select>
+										</div>
+										<!-- Manner of Motion -->
+										<div class="form-group" style="padding-right: 10px;">
+											<label for="y">Manner of Motion</label>
+											<select name="y" class="custom-select">
+												<option value="y" selected>None</option>
+											</select>
+										</div>
+										<!-- Repeat -->
+										<div class="form-group" style="padding-right: 10px;">
+											<label for="z">Repeat</label>
+											<select name="z" class="custom-select">
+												<option value="z" selected>None</option>
+											</select>
+										</div>
+									</div>
+
+
+
+
+
+
+									
+								</div>
 							</div>
 
 						</div>
 					</form>
-					<textarea id="sigml" rows="10" class="txtaSiGMLText av0" hidden="true">{{ sigml }}</textarea>
-				</div>
-
-			</div>
-
 {% endblock %}

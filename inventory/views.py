@@ -143,26 +143,93 @@ def sign_new(request):
 	context = {'handshapes' : handshapes}
 	if request.method == "POST":
 		print(request.POST)
+		
+		# Name
 		name = request.POST.get('signName')
+		
+		# Description
 		description = request.POST.get('signDescription')
-		twohanded = request.POST.get('twohanded')
-		if twohanded == 'on':
-			twohanded = True;
+
+		# Two Handed
+		signtype = request.POST.get('signtype')
+		if signtype == 'twohanded':
+			twoHanded = True;
 		else:
-			twohanded = False;
-		hs = request.POST.get('handshape')
-		lhs = request.POST.get('l_handshape')
-		efd = request.POST.get('extfidir')
-		lefd = request.POST.get('lextfidir')
-		ori = request.POST.get('palmor')
-		lori = request.POST.get('lpalmor')
-		loc = request.POST.get('bodypart')
-		contact = request.POST.get('proximity')
-		side = request.POST.get('side')
-		lloc = request.POST.get('lbodypart')
-		lcontact = request.POST.get('lside')
-		lside = request.POST.get('lproximity')
-		sign = Sign(name=name, description=description, twohanded=twohanded, hs=Handshape.objects.get(id=hs), lhs=Handshape.objects.get(id=lhs), efd=efd, lefd=lefd, ori=ori, lori=lori, loc=loc, contact=contact, side=side, lloc=lloc, lcontact=lcontact, lside=lside)
+			twoHanded = False;
+
+		# Right Hand
+		rightHandshape = request.POST.get('handshape')
+		rightFingerDirection = request.POST.get('extfidir')
+		rightPalmOrientation = request.POST.get('palmor')
+		leftHandshape = request.POST.get('l_handshape')
+		leftFingerDirection = request.POST.get('lextfidir')
+		leftPalmOrientation = request.POST.get('lpalmor')
+
+		# Location Definition
+		locationType = request.POST.get('loctype')
+
+		# Split Location
+		rightLocation = request.POST.get('bodypart')
+		rightLocationSide = request.POST.get('side')
+		rightLocationContact = request.POST.get('proximity')
+		leftLocation = request.POST.get('lbodypart')
+		leftLocationSide = request.POST.get('lside')
+		leftLocationContact = request.POST.get('lproximity')
+
+		# Hand Constellation
+		constellationContact = request.POST.get('lrproximity_rel')
+		constellationLocation = request.POST.get('lrbodypart')
+		constellationLocationSide = request.POST.get('lrside')
+		constellationLocationContact = request.POST.get('lrproximity')
+		rightContactType = request.POST.get('hptype')
+		if (rightContactType == "fingerpart"):
+			rightContactFinger = request.POST.get('digits')
+			rightContactPart = request.POST.get('fingerpart')
+			rightContactSide = request.POST.get('fingerside')
+		else:
+			rightContactFinger = ""
+			rightContactPart = request.POST.get('handpart')
+			rightContactSide = request.POST.get('handside')
+		leftContactType = request.POST.get('lhptype')
+		if (leftContactType == "fingerpart"):
+			leftContactFinger = request.POST.get('ldigits')
+			leftContactPart = request.POST.get('lfingerpart')
+			leftContactSide = request.POST.get('lfingerside')
+		else:
+			leftContactFinger = ""
+			leftContactPart = request.POST.get('lhandpart')
+			leftContactSide = request.POST.get('lhandside')
+
+		sign = Sign(
+			name=name,
+			description=description,
+			twoHanded=twoHanded,
+			rightHandshape=Handshape.objects.get(id=rightHandshape),
+			rightFingerDirection=rightFingerDirection,
+			rightPalmOrientation=rightPalmOrientation,
+			leftHandshape=Handshape.objects.get(id=leftHandshape),
+			leftFingerDirection=leftFingerDirection,
+			leftPalmOrientation=leftPalmOrientation,
+			locationType=locationType,
+			rightLocation=rightLocation,
+			rightLocationSide=rightLocationSide,
+			rightLocationContact=rightLocationContact,
+			leftLocation=leftLocation,
+			leftLocationSide=leftLocationSide,
+			leftLocationContact=leftLocationContact,
+			constellationContact=constellationContact,
+			constellationLocation=constellationLocation,
+			constellationLocationSide=constellationLocationSide,
+			constellationLocationContact=constellationLocationContact,
+			rightContactType=rightContactType,
+			leftContactType=leftContactType,
+			rightContactFinger=rightContactFinger,
+			rightContactPart=rightContactPart,
+			rightContactSide=rightContactSide,
+			leftContactFinger=leftContactFinger,
+			leftContactPart=leftContactPart,
+			leftContactSide=leftContactSide,
+		)
 		sign.sigml = sign.sigmlfy();
 		sign.save();
 		return redirect('sign_list')
@@ -175,26 +242,63 @@ def sign_edit(request, pk):
 	sign = Sign.objects.get(id=pk)
 
 	if request.method == "POST":
-
+		print(request.POST)
+		# General Information
 		sign.name = request.POST.get('signName')
 		sign.description = request.POST.get('signDescription')
-		twohanded = request.POST.get('twohanded')
-		if twohanded == 'on':
-			sign.twohanded = True;
+
+		# Two Handed
+		signtype = request.POST.get('signtype')
+		if signtype == 'twohanded':
+			sign.twoHanded = True;
 		else:
-			sign.twohanded = False;
-		sign.hs = Handshape.objects.get(id=request.POST.get('handshape'))
-		sign.lhs = Handshape.objects.get(id=request.POST.get('l_handshape'))
-		sign.efd = request.POST.get('extfidir')
-		sign.lefd = request.POST.get('lextfidir')
-		sign.ori = request.POST.get('palmor')
-		sign.lori = request.POST.get('lpalmor')
-		sign.loc = request.POST.get('bodypart')
-		sign.contact = request.POST.get('proximity')
-		sign.side = request.POST.get('side')
-		sign.lloc = request.POST.get('lbodypart')
-		sign.lcontact = request.POST.get('lproximity')
-		sign.lside = request.POST.get('lside')
+			sign.twoHanded = False;
+
+		# Initial Configuration
+		sign.rightHandshape = Handshape.objects.get(id=request.POST.get('handshape'))
+		sign.rightFingerDirection = request.POST.get('extfidir')
+		sign.rightPalmOrientation = request.POST.get('palmor')
+		sign.leftHandshape = Handshape.objects.get(id=request.POST.get('l_handshape'))
+		sign.leftFingerDirection = request.POST.get('lextfidir')
+		sign.leftPalmOrientation = request.POST.get('lpalmor')
+
+		# Location Definition
+		sign.locationType = request.POST.get('loctype')
+
+		# Split Location
+		sign.rightLocation = request.POST.get('bodypart')
+		sign.rightLocationSide = request.POST.get('side')
+		sign.rightLocationContact = request.POST.get('proximity')
+		sign.leftLocation = request.POST.get('lbodypart')
+		sign.leftLocationSide = request.POST.get('lside')
+		sign.leftLocationContact = request.POST.get('lproximity')
+
+		# Hand Constellation
+		sign.constellationContact = request.POST.get('lrproximity_rel')
+		sign.constellationLocation = request.POST.get('lrbodypart')
+		sign.constellationLocationSide = request.POST.get('lrside')
+		sign.constellationLocationContact = request.POST.get('lrproximity')
+
+		sign.rightContactType = request.POST.get('hptype')
+		if (sign.rightContactType == "fingerpart"):
+			sign.rightContactFinger = request.POST.get('digits')
+			sign.rightContactPart = request.POST.get('fingerpart')
+			sign.rightContactSide = request.POST.get('fingerside')
+		else:
+			sign.rightContactFinger = ""
+			sign.rightContactPart = request.POST.get('handpart')
+			sign.rightContactSide = request.POST.get('handside')
+
+		sign.leftContactType = request.POST.get('lhptype')
+		if (sign.leftContactType == "fingerpart"):
+			sign.leftContactFinger = request.POST.get('ldigits')
+			sign.leftContactPart = request.POST.get('lfingerpart')
+			sign.leftContactSide = request.POST.get('lfingerside')
+		else:
+			sign.leftContactFinger = ""
+			sign.leftContactPart = request.POST.get('lhandpart')
+			sign.leftContactSide = request.POST.get('lhandside')
+
 		sign.sigml = sign.sigmlfy()
 		sign.save();
 		return redirect('sign_list')
