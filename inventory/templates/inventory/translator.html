@@ -9,22 +9,22 @@
 		FSL Translator
 	</h6>
 
-	<div class="card-body" id="sentence"></div>
+	<div class="card-body" id="sentence" style="height:150px;"></div>
 
-	<div class="card-body text-right">
+	<div class="card-body text-right" style="height:60px;">
 		<button type="button" class="btn btn-sm btn-success" onclick="generateSentence();"><i class="fas fa-play"></i>&nbsp;</button>
 		<button type="button" class="btn btn-sm btn-danger" onclick="backspace();"><i class="fas fa-backspace"></i>&nbsp;</button>
 		<button type="button" class="btn btn-sm btn-secondary" onclick="clearSentence();">Reset</button>
 	</div>
 	
-	<div class="card-footer">
+	<div class="card-footer" style="height:60px;">
 		<form style="margin-bottom: 0px;">
 		<input id="user-input" class="form-control form-control-sm w-100" type="text" placeholder="Search for an FSL sign in the database to include in your sentence." aria-label="Search">
 		</form>
 	</div>
 
-	<div class="card-body">
-		<div id="replaceable-content" style="font-size: 0.7rem;height:100%;overflow-y:scroll;">
+	<div class="card-body" style="height:290px;">
+		<div id="replaceable-content" style="font-size: 0.7rem;height:200px;overflow-y:scroll;">
 				{% include 'inventory/translator-partial.html' %}
 		</div>
 	</div>
