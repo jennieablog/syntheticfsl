@@ -1,0 +1,7 @@
+<select name="{{name}}" id="{{name}}" class="custom-select" onchange="reload();">
+	<option value=" " selected>Center (default)</option>
+	<option value="right_at" {% if side == 'right_at' %} selected="true" {% endif %}>Right</option>
+	<option value="left_at" {% if side == 'left_at' %} selected="true" {% endif %}>Left</option>
+	<option value="right_beside" {% if side == 'right_beside' %} selected="true" {% endif %}>Far right</option>
+	<option value="left_beside" {% if side == 'left_beside' %} selected="true" {% endif %}>Far left</option>
+</select>

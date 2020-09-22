@@ -1,0 +1,9 @@
+<select name="{{name}}" id="{{name}}" class="custom-select" onchange="reload();">
+	<option value=" " selected>None</option>
+	<option value="wristback" {% if handpart == "wristback" %} selected {% endif %}>Wristback</option>
+	<option value="thumbball" {% if handpart == "thumbball" %} selected {% endif %}>Thumb Ball</option>
+	<option value="palm" {% if handpart == "palm" %} selected {% endif %}>Palm</option>
+	<option value="handback" {% if handpart == "handback" %} selected {% endif %}>Hand Back</option>
+	<option value="thumbside" {% if handpart == "thumbside" %} selected {% endif %}>Thumb Side</option>
+	<option value="pinkyside" {% if handpart == "pinkyside" %} selected {% endif %}>Pinky Side</option>
+</select>

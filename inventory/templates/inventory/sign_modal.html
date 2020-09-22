@@ -1,0 +1,678 @@
+<!-- Modal -->
+<div class="modal fade" id="motionModal" tabindex="-1" role="dialog" aria-labelledby="motionModalLabel" aria-hidden="true">
+
+	<div class="modal-dialog modal-lg" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+			<h5 class="modal-title" id="motionModalLabel">New Modal</h5>
+			<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+				<span aria-hidden="true">&times;</span>
+			</button>
+      </div>
+
+      <!-- BODY -->
+      <div class="modal-body" style="height: 500px;overflow-y: scroll;">
+
+
+      		<!-- General Attributes: Motions, Manner, Reps-->
+			<div class="alert alert-secondary">
+				<div class="row">
+					<!-- Motions -->
+					<div class="form-group col-6" style="padding-right: 10px; margin-bottom: 10px;">
+						<label for="motions"><strong>Motion Type/s</strong></label>
+						<input class="form-control" id="motions" type="text" style="background-color: white;font-size: 0.7rem;" disabled/>
+					</div>
+					<!-- Manner of Motion -->
+					<div class="form-group" style="padding-right: 10px; margin-bottom: 10px;">
+						<label for="manner"><strong>Manner</strong></label>
+						<select name="manner" id="manner" class="custom-select" onchange="reloadModal();">
+							<option value="normal" selected>Normal</option>
+							<option value="fast">Fast</option>
+							<option value="slow">Slow</option>
+							<option value="tense">Tense</option>
+							<option value="rest">Slack</option>
+						</select>
+					</div>
+					<!-- Repeat -->
+					<div class="form-group" style="padding-right: 10px; margin-bottom: 10px;">
+						<label for="repetition"><strong>Repetitions</strong></label>
+						<select id="repetition" name="repetition" class="custom-select" onchange="reloadModal();">
+							<option value="None" selected>None</option>
+							<option value="fromstart">Once from start</option>
+							<option value="fromstart_several">Twice from start</option>
+							<option value="reverse">To and fro</option>
+							<option value="tofroto">To and fro and to</option>
+						</select>
+					</div>
+				</div>
+			</div>
+
+			<!-- Directed Motion -->
+			<div class="alert alert-secondary">
+				<div class="row">
+					<div class="form-check">
+				    	<input type="checkbox" data-toggle="collapse" data-target="#seqdirectedattributes" class="form-check-input" id="seqdirected" onclick="reloadModal();">
+				    	<label class="form-check-label" for="seqdirected"><strong>Include directed motion.</strong></label>
+				  	</div>
+				</div>
+			</div>
+			<div class="alert collapse" id="seqdirectedattributes">
+				<div class="row">
+					<div class="col">
+						<div class="row mb-2">
+							<strong>Directed Motion Attributes</strong>
+						</div>
+						<div class="row">
+							<div class="form-group" style="padding-right: 10px;">
+								<label for="direction">General Direction</label>
+								<select name="direction" id="direction" class="custom-select" onchange="reloadModal();">
+									<option value="none">None</option>
+									<option value="u">Up</option>
+									<option value="ur">Up-right</option>
+									<option value="r">Right</option>
+									<option value="dr">Down-right</option>
+									<option value="d">Down</option>
+									<option value="dl">Down-left</option>
+									<option value="l">Left</option>
+									<option value="ul">Up-left</option>
+									<option value="o">Out</option>
+									<option value="or">Out-right</option>
+									<option value="ir">In-right</option>
+									<option value="i">In</option>
+									<option value="il">In-left</option>
+									<option value="ol">Out-left</option>
+									<option value="ui">Up-in</option>
+									<option value="uo">Up-out</option>
+									<option value="do">Down-out</option> 
+									<option value="di">Down-in</option>
+									<option value="uol">Up-out-left</option>
+									<option value="dol">Down-out-left</option>
+									<option value="dil">Down-in-left</option>
+									<option value="uil">Up-in-left</option>
+									<option value="uor">Up-out-right</option>
+									<option value="dor">Down-out-left</option>
+									<option value="dir">Down-in-left</option>
+									<option value="uir">Up-in-right</option>
+								</select>
+							</div>
+							<div class="form-group" style="padding-right: 10px;">
+								<label for="directed_size">Size</label>
+								<select id="directed_size" name="directed_size" class="custom-select" onchange="reloadModal();">
+									<option value="normal">Normal</option>
+									<option value="small">Small</option>
+									<option value="big">Big</option>
+								</select>
+							</div>
+						</div>
+					</div>
+					<div class="col">
+						<div class="row mb-2">
+							<strong>Curve Attributes (optional)</strong>
+						</div>
+						<div class="row">
+							<div class="form-group" style="padding-right: 10px;">
+								<label for="curve">Curve Direction</label>
+								<select id="curve" name="curve" class="custom-select" onchange="reloadModal();">
+									<option value="none" selected>None</option>
+									<option value="u">Up</option>
+									<option value="ur">Up-right</option>
+									<option value="r">Right</option>
+									<option value="dr">Down-right</option>
+									<option value="d">Down</option>
+									<option value="dl">Down-left</option>
+									<option value="l">Left</option>
+									<option value="ul">Up-left</option>
+								</select>
+							</div>
+							<div class="form-group" style="padding-right: 10px;">
+								<label for="curve_size">Size</label>
+								<select id="curve_size" name="curve_size" class="custom-select" onchange="reloadModal();">
+									<option value="normal">Normal</option>
+									<option value="small">Small</option>
+									<option value="big">Big</option>
+								</select>
+							</div>
+						</div>
+						<!-- Zigzag Attr -->
+						<div class="row">
+							<div class="col">
+								<div class="row mb-2">
+									<strong>Zigzag/Wave Attributes (optional)</strong>
+								</div>
+								<div class="row">
+									<div class="form-group" style="padding-right: 10px;">
+										<label for="zigzag_style">Style</label>
+										<select id="zigzag_style" name="zigzag_style" class="custom-select" onchange="reloadModal();">
+											<option value="none">None</option>
+											<option value="zigzag">Zigzag</option>
+											<option value="wavy">Wavy</option>
+										</select>
+									</div>
+									<div class="form-group" style="padding-right: 10px;">
+										<label for="ellipse_direction">Ellipse Direction</label>
+										<select id="ellipse_direction" name="ellipse_direction" class="custom-select" onchange="reloadModal();">
+											<option value="none" selected>None</option>
+											<option value="h">Horizontal</option>
+											<option value="ur">Up-right</option>
+											<option value="v">Vertical</option>
+											<option value="ul">Up-left</option>
+										</select>
+									</div>
+									<div class="form-group" style="padding-right: 10px;">
+										<label for="zigzag_size">Size</label>
+										<select id="zigzag_size" name="zigzag_size" class="custom-select" onchange="reloadModal();">
+											<option value="none">Normal</option>
+											<option value="small">Small</option>
+											<option value="big">Big</option>
+										</select>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- Circular Motion -->
+			<div class="alert alert-secondary">
+				<div class="row">
+					<div class="form-check">
+				    	<input type="checkbox" data-toggle="collapse" data-target="#seqcircularattributes" class="form-check-input" id="seqcircular" onclick="reloadModal();">
+				    	<label class="form-check-label" for="seqcircular"><strong>Include circular motion.</strong></label>
+				  	</div>
+				</div>
+			</div>
+			<div class="alert collapse" id="seqcircularattributes">
+				<div class="row">
+					<div class="col">
+						<div class="row mb-2">
+							<strong>Circular Motion Attributes</strong>
+						</div>
+						<div class="row">
+							<div class="form-group" style="padding-right: 10px;">
+								<label for="axis">Axis</label>
+								<select id="axis" name="axis" class="custom-select" onchange="reloadModal();">
+									<option value=" " selected>None</option>
+									<option value="u">Up</option>
+									<option value="ur">Up-right</option>
+									<option value="r">Right</option>
+									<option value="dr">Down-right</option>
+									<option value="d">Down</option>
+									<option value="dl">Down-left</option>
+									<option value="l">Left</option>
+									<option value="ul">Up-left</option>
+									<option value="o">Out</option>
+									<option value="or">Out-right</option>
+									<option value="ir">In-right</option>
+									<option value="i">In</option>
+									<option value="il">In-left</option>
+									<option value="ol">Out-left</option>
+									<option value="ui">Up-in</option>
+									<option value="uo">Up-out</option>
+									<option value="do">Down-out</option> 
+									<option value="di">Down-in</option>
+									<option value="uol">Up-out-left</option>
+									<option value="dol">Down-out-left</option>
+									<option value="dil">Down-in-left</option>
+									<option value="uil">Up-in-left</option>
+									<option value="uor">Up-out-right</option>
+									<option value="dor">Down-out-left</option>
+									<option value="dir">Down-in-left</option>
+									<option value="uir">Up-in-right</option>
+								</select>
+							</div>
+							<div class="form-group" style="padding-right: 10px;">
+								<label for="circular_size">Size</label>
+								<select id="circular_size" name="circular_size" class="custom-select" onchange="reloadModal();">
+									<option value=" " selected>Normal</option>
+									<option value="small">Small</option>
+									<option value="big">Big</option>
+								</select>
+							</div>
+							<div class="form-group" style="padding-right: 10px;">
+								<label for="start">Starting Point</label>
+								<select id="start" name="start" class="custom-select" onchange="reloadModal();">
+									<option value="none">None</option>
+									<option value="u">Up</option>
+									<option value="ur">Up-right</option>
+									<option value="r">Right</option>
+									<option value="dr">Down-right</option>
+									<option value="d">Down</option>
+									<option value="dl">Down-left</option>
+									<option value="l">Left</option>
+									<option value="ul">Up-left</option>
+								</select>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- Wrist Motion -->
+			<div class="alert alert-secondary">
+				<div class="row">
+					<div class="form-check">
+					    	<input type="checkbox" data-toggle="collapse" data-target="#seqwristattributes" class="form-check-input" id="seqwrist" onclick="reloadModal();">
+					    	<label class="form-check-label" for="seqwrist"><strong>Include wrist motion.</strong></label>
+					</div>
+				</div>
+			</div>
+			<div class="alert collapse" id="seqwristattributes">
+				<div class="row">
+					<div class="col">
+						<div class="row mb-2">
+							<strong>Wrist Motion Attributes</strong>
+						</div>
+						<div class="row">
+							<div class="form-group" style="padding-right: 10px;">
+								<label for="motion">Movement</label>
+								<select id="motion" name="motion" class="custom-select" onchange="reloadModal();">
+									<option value=" " selected>None</option>
+									<option value="nodding">Nodding</option>
+									<option value="swinging">Swinging</option>
+									<option value="twisting">Twisting</option>
+									<option value="stircw">Stir (clockwise)</option>
+									<option value="stirccw">Stir (counter-clockwise)</option>
+								</select>
+							</div>
+							<div class="form-group" style="padding-right: 10px;">
+								<label for="size">Size</label>
+								<select id="size" name="size" class="custom-select" onchange="reloadModal();">
+									<option value="normal" selected>Normal</option>
+									<option value="small">Small</option>
+									<option value="big">Big</option>
+								</select>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- Fingerplay -->
+			<div class="alert alert-secondary">
+				<div class="row">
+					<div class="form-check">
+				    	<input type="checkbox" class="form-check-input" id="seqfingerplay" onclick="reloadModal();">
+				    	<label class="form-check-label" for="seqfingerplay"><strong>Include fingerplay.</strong></label>
+					</div>
+				</div>
+			</div>
+
+			<!-- Target Configuration -->
+			<div class="alert alert-secondary">
+				<div class="row">
+					<div class="form-check">
+				    	<input type="checkbox" data-toggle="collapse" data-target="#seqconfigattributes" class="form-check-input" id="seqconfig" onclick="reloadModal();">
+				    	<label class="form-check-label" for="seqconfig"><strong>Set target configuration.</strong></label>
+					</div>
+				</div>
+			</div>
+			<!-- FINAL CONFIG -->
+			<div class="alert collapse" id="seqconfigattributes">
+				<!-- Right Config -->
+				<div class="row">						
+					<!-- Handshape -->
+					<div class="form-group" style="padding-right: 20px;">
+						<label id="right_handshape_label_modal" for="finalhandshape">Handshape</label>
+						<select name="finalhandshape" id="finalhandshape" class="custom-select" onchange="reloadModal();">
+							{% for hs in handshapes %}
+							<option value="{{ hs.pk }}" data="{{ hs.sigmlStr | safe }}">{{ hs.name }}</option>
+							{% endfor %}
+						</select>
+					</div>
+					<!-- External Finger Direction -->
+					<div class="form-group" style="padding-right: 20px;">
+						<label for="finalextfidir">Extended Finger Direction</label>
+						<select name="finalextfidir" id="finalextfidir" class="custom-select" onchange="reloadModal();">
+							<option value="none">None</option>
+							<option value="u">Up</option>
+							<option value="ur">Up-right</option>
+							<option value="r">Right</option>
+							<option value="dr">Down-right</option>
+							<option value="d">Down</option>
+							<option value="dl">Down-left</option>
+							<option value="l">Left</option>
+							<option value="ul">Up-left</option>
+							<option value="o">Out</option>
+							<option value="or">Out-right</option>
+							<option value="ir">In-right</option>
+							<option value="i">In</option>
+							<option value="il">In-left</option>
+							<option value="ol">Out-left</option>
+							<option value="ui">Up-in</option>
+							<option value="uo">Up-out</option>
+							<option value="do">Down-out</option> 
+							<option value="di">Down-in</option>
+							<option value="uol">Up-out-left</option>
+							<option value="dol">Down-out-left</option>
+							<option value="dil">Down-in-left</option>
+							<option value="uil">Up-in-left</option>
+							<option value="uor">Up-out-right</option>
+							<option value="dor">Down-out-left</option>
+							<option value="dir">Down-in-left</option>
+							<option value="uir">Up-in-right</option>
+						</select>
+					</div>
+					<!-- Palm Orientation -->
+					<div class="form-group">
+						<label for="finalpalmor">Palm Orientation</label>
+						<select name="finalpalmor" id="finalpalmor" class="custom-select" onchange="reloadModal();">
+							<option value="d">Down</option>
+							<option value="u">Up</option>
+							<option value="l">Left</option>
+							<option value="r">Right</option>
+							<option value="dl">Down-left</option>
+							<option value="dr">Down-right</option>
+							<option value="ul">Up-left</option>
+							<option value="ur">Up-right</option>
+						</select>
+					</div>
+				</div>
+				<!-- Left Config -->
+				<div id="seqconfigattributes_left" class="row">
+					<!-- Handshape -->
+					<div class="form-group" style="padding-right: 20px;">
+						<label for="lfinalhandshape">Left Handshape</label>
+						<select name="lfinalhandshape" id="lfinalhandshape" class="custom-select" onchange="reloadModal();">
+							{% for hs in handshapes %}
+							<option value="{{ hs.pk }}" data="{{ hs.sigmlStr | safe }}">{{ hs.name }}</option>
+							{% endfor %}
+						</select>
+					</div>
+					<!-- External Finger Direction -->
+					<div class="form-group" style="padding-right: 20px;">
+						<label for="lfinalextfidir">Extended Finger Direction</label>
+						<select name="lfinalextfidir" id="lfinalextfidir" class="custom-select" onchange="reloadModal();">
+							<option value="none">None</option>
+							<option value="u">Up</option>
+							<option value="ur">Up-right</option>
+							<option value="r">Right</option>
+							<option value="dr">Down-right</option>
+							<option value="d">Down</option>
+							<option value="dl">Down-left</option>
+							<option value="l">Left</option>
+							<option value="ul">Up-left</option>
+							<option value="o">Out</option>
+							<option value="or">Out-right</option>
+							<option value="ir">In-right</option>
+							<option value="i">In</option>
+							<option value="il">In-left</option>
+							<option value="ol">Out-left</option>
+							<option value="ui">Up-in</option>
+							<option value="uo">Up-out</option>
+							<option value="do">Down-out</option> 
+							<option value="di">Down-in</option>
+							<option value="uol">Up-out-left</option>
+							<option value="dol">Down-out-left</option>
+							<option value="dil">Down-in-left</option>
+							<option value="uil">Up-in-left</option>
+							<option value="uor">Up-out-right</option>
+							<option value="dor">Down-out-left</option>
+							<option value="dir">Down-in-left</option>
+							<option value="uir">Up-in-right</option>
+						</select>
+					</div>
+					<!-- Palm Orientation -->
+					<div class="form-group">
+						<label for="lfinalpalmor">Palm Orientation</label>
+						<select name="lfinalpalmor" id="lfinalpalmor" class="custom-select" onchange="reloadModal();">
+							<option value="d">Down</option>
+							<option value="u">Up</option>
+							<option value="l">Left</option>
+							<option value="r">Right</option>
+							<option value="dl">Down-left</option>
+							<option value="dr">Down-right</option>
+							<option value="ul">Up-left</option>
+							<option value="ur">Up-right</option>
+						</select>
+					</div>
+				</div>
+			</div>
+
+			<!-- Target Location -->
+			<div class="alert alert-secondary" data-toggle="collapse" data-target="#seqlocationattributes" >
+				<div class="row">
+					<div class="form-check">
+				    	<input type="checkbox" class="form-check-input" id="seqlocation" onclick="reloadModal();">
+				    	<label class="form-check-label" for="seqlocation"><strong>Set target body part location.</strong></label>
+					</div>
+				</div>
+			</div>
+			<div class="alert collapse" id="seqlocationattributes">
+				<div class="row">
+					<!-- Location -->
+					<div class="form-group" style="padding-right: 20px;">
+						<label for="finalbodypart">Body part</label>
+						<select name="finalbodypart" id="finalbodypart" class="custom-select" onchange="reloadModal();">
+							<option value="neutralspace">Neutral space</option>
+							<option value="head">Head</option>
+							<option value="headtop">Top of the head</option>
+							<option value="forehead">Forehead</option>
+							<option value="eyebrows">Eyebrows</option>
+							<option value="uppereyelid">Eyes</option>
+							<option value="nose">Nose</option>
+							<option value="ear">Ears</option>
+							<option value="cheek">Cheek</option>
+							<option value="lips">Lips</option>
+							<option value="chin">Chin</option>
+							<option value="neck">Neck</option>
+							<option value="shoulders">Shoulders</option>
+							<option value="chest">Chest</option>
+							<option value="stomach">Stomach</option>
+							<option value="belowstomach">Crotch</option>
+						</select>
+					</div>
+					<!-- Side -->
+					<div class="form-group" style="padding-right: 10px;">
+						<label for="finalside">Side</label>
+						<select name="finalside" id="finalside" class="custom-select" onchange="reloadModal();">
+							<option value=" ">Center (default)</option>
+							<option value="right_at">Right</option>
+							<option value="left_at">Left</option>
+							<option value="right_beside">Far right</option>
+							<option value="left_beside">Far left</option>
+						</select>
+					</div>
+					<!-- Contact -->
+					<div class="form-group">
+						<label for="finalproximity">Proximity level</label>
+						<select name="finalproximity" id="finalproximity" class="custom-select" onchange="reloadModal();">
+							<option value=" " selected>Default</option>
+							<option value="touch">Touching</option>
+							<option value="close">Close</option>
+							<option value="armextended">Distant</option>
+						</select>
+					</div>
+				</div>			
+			</div>
+
+			<!-- Hand Constellation for Symmetric -->
+			<div class="alert alert-secondary" data-toggle="collapse" data-target="#seqconstellationattributes">
+				<div class="row">
+					<div class="form-check">
+				    	<input type="checkbox" class="form-check-input" id="seqconstellation" onclick="reloadModal();">
+				    	<label class="form-check-label" for="seqconstellation"><strong>Set target hand constellation (for symmetric motion only).</strong></label>
+					</div>
+				</div>
+			</div>
+			<div class="alert collapse" id="seqconstellationattributes">
+				<!-- Figure out first how to process data in JavaScript -->
+				<!-- Contact -->
+				<div class="row mb-2">
+					<label for="lrproximity_rel_modal"><strong>Contact Between Hands</strong></label>
+					<select id="lrproximity_rel_modal" class="custom-select" onchange="reloadModal();">
+						<option value=" " selected>Default</option>
+						<option value="touch">Touching</option>
+						<option value="close">Close</option>
+						<option value="armextended">Distant</option>
+					</select>
+				</div>
+				<!-- RIGHT HAND SITE -->
+				<div class="row mb-2">
+					<strong>Right Hand Site Type&emsp;</strong>
+					<div class="form-check form-check-inline">
+						<input class="form-check-input" type="radio" name="lhptype_modal" id="lhptype1_modal" onclick="showHandSiteOptionsLeftModal();reloadModal();" value="fingerpart" checked>
+						<label class="form-check-label" for="lhptype1_modal">
+						Finger Part</label>&emsp;
+						<input class="form-check-input" type="radio" name="lhptype_modal" id="lhptype2_modal" onclick="showHandSiteOptionsLeftModal();reloadModal();" value="handpart">
+						<label class="form-check-label" for="lhptype2_modal">
+						Hand Part</label>
+					</div>
+				</div>
+				<!-- Finger Part -->
+				<div class="row" id="lfingerpart_options_modal">
+					<!-- Digits -->
+					<div class="form-group" style="padding-right: 10px;">
+						<label for="ldigits_modal">Finger</label>
+						<select id="ldigits_modal" class="custom-select" onchange="reloadModal();">
+							<option value=" ">None</option>
+							<option value="1">Thumb</option>
+							<option value="2">Index</option>
+							<option value="3">Middle</option>
+							<option value="4">Ring</option>
+							<option value="5">Pinky</option>
+						</select>
+					</div>
+					<!-- Finger Part -->
+					<div class="form-group" style="padding-right: 10px;">
+						<label for="lfingerpart_modal">Finger Part</label>
+						<select id="lfingerpart_modal" class="custom-select" onchange="reloadModal();">
+							<option value=" ">None</option>
+							<option value="tip">Tip</option>
+							<option value="nail">Nail</option>
+							<option value="pad">Pad</option>
+							<option value="midjoint">Midjoint</option>
+							<option value="base">Base</option>
+							<option value="side">Side</option>
+						</select>
+
+					</div>
+					<!-- Finger Side -->
+					<div class="form-group" style="padding-right: 10px;">
+						<label for="lfingerside_modal">Finger Side</label>
+						<select id="lfingerside_modal" class="custom-select" onchange="reloadModal();">
+							<option value=" " selected>None</option>
+							<option value="dorsal">Dorsal</option>
+							<option value="palmar">Palmar</option>
+							<option value="radial">Radial</option>
+							<option value="ulnar">Ulnar</option>
+						</select>
+					</div>
+				</div>
+				<!-- Hand Part -->
+				<div class="row" id="lhandpart_options_modal" hidden="true">
+					<div class="form-group" style="padding-right: 10px;">
+						<label for="lhandpart_modal">Hand Part</label>
+						<select id="lhandpart_modal" class="custom-select" onchange="reloadModal();">
+							<option value=" " selected>None</option>
+							<option value="wristback">Wristback</option>
+							<option value="thumbball">Thumb Ball</option>
+							<option value="palm">Palm</option>
+							<option value="handback">Hand Back</option>
+							<option value="thumbside">Thumb Side</option>
+							<option value="pinkyside">Pinky Side</option>
+						</select>
+					</div>
+					<!-- Hand Side -->
+					<div class="form-group" style="padding-right: 10px;">
+						<label for="lhandside_modal">Hand Side</label>
+						<select id="lhandside_modal" class="custom-select" onchange="reloadModal();">
+							<option value=" " selected>None</option>
+							<option value="dorsal">Dorsal</option>
+							<option value="palmar">Palmar</option>
+							<option value="radial">Radial</option>
+							<option value="ulnar">Ulnar</option>
+						</select>
+					</div>
+				</div>
+				<!-- LEFT HAND SITE -->
+				<div class="row mb-2">
+					<strong>Left Hand Site Type&emsp;</strong>
+					<div class="form-check form-check-inline">
+						<input class="form-check-input" type="radio" name="hptype_modal" id="hptype1_modal" onclick="showHandSiteOptionsModal();reloadModal();" value="fingerpart" checked>
+						<label class="form-check-label" for="hptype1_modal">
+						Finger Part</label>&emsp;
+						<input class="form-check-input" type="radio" name="hptype_modal" id="hptype2_modal" onclick="showHandSiteOptionsModal();reloadModal();" value="handpart">
+						<label class="form-check-label" for="hptype2_modal">
+						Hand Part</label>
+					</div>
+				</div>
+				<!-- Finger Part -->
+				<div class="row" id="fingerpart_options_modal">
+					<!-- Digits -->
+					<div class="form-group" style="padding-right: 10px;">
+						<label for="digits_modal">Finger</label>
+						<select id="digits_modal" class="custom-select" onchange="reloadModal();">
+							<option value=" ">None</option>
+							<option value="1">Thumb</option>
+							<option value="2">Index</option>
+							<option value="3">Middle</option>
+							<option value="4">Ring</option>
+							<option value="5">Pinky</option>
+						</select>
+					</div>
+					<!-- Finger Part -->
+					<div class="form-group" style="padding-right: 10px;">
+						<label for="fingerpart_modal">Finger Part</label>
+						<select id="fingerpart_modal" class="custom-select" onchange="reloadModal();">
+							<option value=" ">None</option>
+							<option value="tip">Tip</option>
+							<option value="nail">Nail</option>
+							<option value="pad">Pad</option>
+							<option value="midjoint">Midjoint</option>
+							<option value="base">Base</option>
+							<option value="side">Side</option>
+						</select>
+
+					</div>
+					<!-- Finger Side -->
+					<div class="form-group" style="padding-right: 10px;">
+						<label for="fingerside_modal">Finger Side</label>
+						<select id="fingerside_modal" class="custom-select" onchange="reloadModal();">
+							<option value=" " selected>None</option>
+							<option value="dorsal">Dorsal</option>
+							<option value="palmar">Palmar</option>
+							<option value="radial">Radial</option>
+							<option value="ulnar">Ulnar</option>
+						</select>
+					</div>
+				</div>
+				<!-- Hand Part -->
+				<div class="row" id="handpart_options_modal" hidden="true">
+					<div class="form-group" style="padding-right: 10px;">
+						<label for="handpart_modal">Hand Part</label>
+						<select id="handpart_modal" class="custom-select" onchange="reloadModal();">
+							<option value=" " selected>None</option>
+							<option value="wristback">Wristback</option>
+							<option value="thumbball">Thumb Ball</option>
+							<option value="palm">Palm</option>
+							<option value="handback">Hand Back</option>
+							<option value="thumbside">Thumb Side</option>
+							<option value="pinkyside">Pinky Side</option>
+						</select>
+					</div>
+					<!-- Hand Side -->
+					<div class="form-group" style="padding-right: 10px;">
+						<label for="handside_modal">Hand Side</label>
+						<select id="handside_modal" class="custom-select" onchange="reloadModal();">
+							<option value=" " selected>None</option>
+							<option value="dorsal">Dorsal</option>
+							<option value="palmar">Palmar</option>
+							<option value="radial">Radial</option>
+							<option value="ulnar">Ulnar</option>
+						</select>
+					</div>
+				</div>
+			</div>
+
+			<textarea id="modalSigml"></textarea>
+
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button id="saveModalButton" type="button" class="btn btn-primary" data-dismiss="modal" onclick="saveModal(this);" value="">Save</button>
+      </div>
+    </div>
+  </div>
+</div>

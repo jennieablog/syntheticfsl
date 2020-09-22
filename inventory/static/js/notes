@@ -1,0 +1,85 @@
+Motion for Twohanded
+
+	Symmetric
+		1. Get all sigml from document and concatenate into single string. (name=rightSeq)
+		2. CALL initSingleMotionSequence and pass the string.
+
+	Split Motion
+		1. Create new split_motion element.
+		
+		= RIGHT HAND = 
+		2. Get all sigml from document (name=rightSeq) and concatenate into single string.
+		3. CALL initSingleMotionSequence and pass the string.
+		4. Store the result to variable.
+		5. Append the element to split_motion.
+		= LEFT HAND = 
+		6. Get all sigml from document (name=leftSeq) and concatenate into single string.
+		7. CALL initSingleMotionSequence and pass the string.
+		8. Store the result to variable.
+		9. Append the element to split_motion.
+
+		10. Append split_motion to sign_manual.
+
+
+
+
+1. initSingleMotionSequence [OK]
+
+	Returns a seq_motion element.
+
+	ACTION ITEMS
+	=> Get code block from reload();
+	=> +PARAMS
+		- initial (bool)
+	=> initSingleMotionSequence should receive:
+		1. initial
+			if true, it should append directly to sign_manual.
+			else, it should return the seq_motion element.
+		2. motionSequence
+			string of motions
+
+
+
+2. resetModal(e, +PREFIX):
+
+	Resets the modal into default values.
+	Uses the "Add new" button as reference.
+
+	ACTION ITEMS
+	=> Replace the names of the fields in sign_modal.html. remove "right"
+	=> What does the New SeqId block within resetModal() do?
+		- So that the save button has id with the latest seq id of the corresponding table.
+		- The actual Save Button is passed to saveModal(e);
+
+	=> +PARAMS
+		- hand: "right" or "left_" 
+		- for counting the current number of elements within the corresponding table.
+
+3. saveModal(e, +PREFIX):
+
+	Adds new row to corresponding table.
+
+	ACTION ITEMS
+	=> +PARAMS
+		- prefix: "right" or "left_"
+	=> update setAttribute("id", PREFIX + SEQID + /attrname/);
+
+4. loadModal
+
+
+UPDATE TABLE NUMBERING
+DELETE MOTION SEQUENCE
+
+NOTES:
+
+	=> We need only to replace the "rightseq" with "seq" only
+	=> We need to convert rightSeq into a variable called prefix (name already taken?)
+
+
+ADD NEW:
+
+1. Click Add new button => resetModal(e);
+	
+	- reset modal assigns seq id to id and hand to name of save button
+
+

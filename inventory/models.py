@@ -1,5 +1,6 @@
 from django.conf import settings
 from django.db import models
+from django_mysql.models import ListTextField
 from django.utils import timezone
 
 import xml.etree.ElementTree as ET
@@ -162,7 +163,7 @@ class Sign(models.Model):
 	leftPalmOrientation = models.CharField(max_length=5, verbose_name='Left Palm Orientation', default='')
 
 	# Location Definition
-	locationType = models.CharField(max_length=5, verbose_name='Location Type', default='')
+	locationType = models.CharField(max_length=10, verbose_name='Location Type', default='')
 
 	# Split Location
 	rightLocation = models.CharField(max_length=20, verbose_name='Right Hand Location', default='')
@@ -190,7 +191,25 @@ class Sign(models.Model):
 	leftContactPart = models.CharField(max_length=20, verbose_name='Right Contact Side', default='')
 	leftContactSide = models.CharField(max_length=20, verbose_name='Right Contact Side', default='')
 	
-	sigml = models.TextField(default="<sigml></sigml>")
+	sigml = models.TextField(default="<sigml></sigml>");
+
+	rightMotionSequence = ListTextField(base_field=models.CharField(max_length=1000), size=10,)
+	rightMotionTags = ListTextField(base_field=models.CharField(max_length=500), size=10,)
+	rightTargetConfigs = ListTextField(base_field=models.CharField(max_length=500), size=10,)
+	rightTargetLocs = ListTextField(base_field=models.CharField(max_length=500), size=10,)
+
+	leftMotionSequence = ListTextField(base_field=models.CharField(max_length=1000), size=10,)
+	leftMotionTags = ListTextField(base_field=models.CharField(max_length=500), size=10,)
+	leftTargetConfigs = ListTextField(base_field=models.CharField(max_length=500), size=10,)
+	leftTargetLocs = ListTextField(base_field=models.CharField(max_length=500), size=10,)
+
+	# NON DOM
+	nondom = models.BooleanField(default=False)
+
+	# SYMMETRY
+	motionType = models.CharField(max_length=10, verbose_name='Motion Type', default='split')
+	symmetry = models.CharField(max_length=7, verbose_name='Symmetry', default='split')
+	outofphase = models.BooleanField(default=False)
 
 	def __str__(self):
 		return self.name
@@ -199,6 +218,8 @@ class Sign(models.Model):
 		# Default ordering by name, alphabetically
 		ordering = ['name']
 
+
+	# DELETE THIS SOON.
 	def sigmlfy(self):
 		
 		sigml = ET.Element('sigml')

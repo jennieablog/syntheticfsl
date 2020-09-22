@@ -1,0 +1,6 @@
+<select name="{{name}}" id="{{name}}" class="custom-select" onchange="reload();">
+	<option value=" " selected>Default</option>
+	<option value="touch" {% if contact == 'touch' %} selected="true" {% endif %}>Touching</option>
+	<option value="close" {% if contact == 'close' %} selected="true" {% endif %}>Close</option>
+	<option value="armextended" {% if contact == 'armextended' %} selected="true" {% endif %}>Distant</option>
+</select>

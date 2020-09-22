@@ -22,7 +22,7 @@
 						<tbody>
 							{% for sign in signs %}
 							<tr>
-								<td><button class="btn btn-sm btn-success" style="font-size: 0.5rem;" onclick="writesigml('{{ sign.sigmlfy }}');"><i class="fas fa-play"></i></button></td>
+								<td><button class="btn btn-sm btn-success" style="font-size: 0.5rem;" onclick="writesigml('{{ sign.sigml }}');"><i class="fas fa-play"></i></button></td>
 								<td>{{ sign.name }}</td>
 								<td>{{ sign.description }}</td>
 								{% if user.is_authenticated %}

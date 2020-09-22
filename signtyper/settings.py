@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'inventory.apps.InventoryConfig',
     'corsheaders',
+    'django_mysql',
 ]
 
 MIDDLEWARE = [

@@ -1,0 +1,10 @@
+<select name="{{name}}" id="{{name}}" class="custom-select" onchange="reload();">
+	<option value="d" {% if palmor == 'd' %} selected="true" {% endif %}>(A) Down</option>
+	<option value="u" {% if palmor == 'u' %} selected="true" {% endif %}>(B) Up</option>
+	<option value="l" {% if palmor == 'l' %} selected="true" {% endif %}>(C) Left</option>
+	<option value="r" {% if palmor == 'r' %} selected="true" {% endif %}>(D) Right</option>
+	<option value="dl" {% if palmor == 'dl' %} selected="true" {% endif %}>(E) Down-left</option>
+	<option value="dr" {% if palmor == 'dr' %} selected="true" {% endif %}>(F) Down-right</option>
+	<option value="ul" {% if palmor == 'ul' %} selected="true" {% endif %}>(G) Up-left</option>
+	<option value="ur" {% if palmor == 'ur' %} selected="true" {% endif %}>(H) Up-right</option>
+</select>

@@ -1,0 +1,7 @@
+<select name="{{name}}" id="{{name}}" class="custom-select" onchange="reload();">
+	<option value=" " selected>None</option>
+	<option value="dorsal" {% if side == "dorsal" %} selected {% endif %}>Dorsal</option>
+	<option value="palmar" {% if side == "palmar" %} selected {% endif %}>Palmar</option>
+	<option value="radial" {% if side == "radial" %} selected {% endif %}>Radial</option>
+	<option value="ulnar" {% if side == "ulnar" %} selected {% endif %}>Ulnar</option>
+</select>

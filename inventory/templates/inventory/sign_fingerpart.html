@@ -1,0 +1,9 @@
+<select name="{{name}}" id="{{name}}" class="custom-select" onchange="reload();">
+	<option value=" " selected>None</option>
+	<option value="tip" {% if fingerpart == "tip" %} selected {% endif %}>Tip</option>
+	<option value="nail" {% if fingerpart == "nail" %} selected {% endif %}>Nail</option>
+	<option value="pad" {% if fingerpart == "pad" %} selected {% endif %}>Pad</option>
+	<option value="midjoint" {% if fingerpart == "midjoint" %} selected {% endif %}>Midjoint</option>
+	<option value="base" {% if fingerpart == "base" %} selected {% endif %}>Base</option>
+	<option value="side" {% if fingerpart == "side" %} selected {% endif %}>Side</option>
+</select>

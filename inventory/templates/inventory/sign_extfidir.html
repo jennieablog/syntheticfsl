@@ -1,0 +1,28 @@
+<select name="{{name}}" id="{{name}}" class="custom-select" onchange="reload();">
+	<option value="u" {% if extfidir == 'u' %} selected="true" {% endif %}>Up</option>
+	<option value="ur" {% if extfidir == 'ur' %} selected="true" {% endif %}>Up-right</option>
+	<option value="r" {% if extfidir == 'r' %} selected="true" {% endif %}>Right</option>
+	<option value="dr" {% if extfidir == 'dr' %} selected="true" {% endif %}>Down-right</option>
+	<option value="d" {% if extfidir == 'd' %} selected="true" {% endif %}>Down</option>
+	<option value="dl" {% if extfidir == 'dl' %} selected="true" {% endif %}>Down-left</option>
+	<option value="l" {% if extfidir == 'l' %} selected="true" {% endif %}>Left</option>
+	<option value="ul" {% if extfidir == 'ul' %} selected="true" {% endif %}>Up-left</option>
+	<option value="o" {% if extfidir == 'o' %} selected="true" {% endif %}>Out</option>
+	<option value="or" {% if extfidir == 'or' %} selected="true" {% endif %}>Out-right</option>
+	<option value="ir" {% if extfidir == 'ir' %} selected="true" {% endif %}>In-right</option>
+	<option value="i" {% if extfidir == 'i' %} selected="true" {% endif %}>In</option>
+	<option value="il" {% if extfidir == 'il' %} selected="true" {% endif %}>In-left</option>
+	<option value="ol" {% if extfidir == 'ol' %} selected="true" {% endif %}>Out-left</option>
+	<option value="ui" {% if extfidir == 'ui' %} selected="true" {% endif %}>Up-in</option>
+	<option value="uo" {% if extfidir == 'uo' %} selected="true" {% endif %}>Up-out</option>
+	<option value="do" {% if extfidir == 'do' %} selected="true" {% endif %}>Down-out</option> 
+	<option value="di" {% if extfidir == 'di' %} selected="true" {% endif %}>Down-in</option>
+	<option value="uol" {% if extfidir == 'uol' %} selected="true" {% endif %}>Up-out-left</option>
+	<option value="dol" {% if extfidir == 'dol' %} selected="true" {% endif %}>Down-out-left</option>
+	<option value="dil" {% if extfidir == 'dil' %} selected="true" {% endif %}>Down-in-left</option>
+	<option value="uil" {% if extfidir == 'uil' %} selected="true" {% endif %}>Up-in-left</option>
+	<option value="uor" {% if extfidir == 'uor' %} selected="true" {% endif %}>Up-out-right</option>
+	<option value="dor" {% if extfidir == 'dor' %} selected="true" {% endif %}>Down-out-left</option>
+	<option value="dir" {% if extfidir == 'dir' %} selected="true" {% endif %}>Down-in-left</option>
+	<option value="uir" {% if extfidir == 'uir' %} selected="true" {% endif %}>Up-in-right</option>
+</select>

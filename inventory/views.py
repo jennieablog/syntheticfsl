@@ -200,6 +200,8 @@ def sign_new(request):
 			leftContactPart = request.POST.get('lhandpart')
 			leftContactSide = request.POST.get('lhandside')
 
+		sigml = request.POST.get('sigml')
+
 		sign = Sign(
 			name=name,
 			description=description,
@@ -229,8 +231,8 @@ def sign_new(request):
 			leftContactFinger=leftContactFinger,
 			leftContactPart=leftContactPart,
 			leftContactSide=leftContactSide,
+			sigml=sigml,
 		)
-		sign.sigml = sign.sigmlfy();
 		sign.save();
 		return redirect('sign_list')
 	return render(request, 'inventory/sign_new.html', context)
@@ -242,7 +244,10 @@ def sign_edit(request, pk):
 	sign = Sign.objects.get(id=pk)
 
 	if request.method == "POST":
-		print(request.POST)
+		
+		# print(request.POST);
+		# print(request.POST.getlist("rightSeq"));
+
 		# General Information
 		sign.name = request.POST.get('signName')
 		sign.description = request.POST.get('signDescription')
@@ -299,12 +304,42 @@ def sign_edit(request, pk):
 			sign.leftContactPart = request.POST.get('lhandpart')
 			sign.leftContactSide = request.POST.get('lhandside')
 
-		sign.sigml = sign.sigmlfy()
+		sign.sigml = request.POST.get('sigml')
+
+		sign.rightMotionSequence = request.POST.getlist("rightSeq");
+		sign.rightMotionTags = request.POST.getlist("rightSeqMotionTag");
+		sign.rightTargetConfigs = request.POST.getlist("rightSeqTargetConfig");
+		sign.rightTargetLocs = request.POST.getlist("rightSeqTargetLoc");
+
+		sign.leftMotionSequence = request.POST.getlist("left_Seq");
+		sign.leftMotionTags = request.POST.getlist("left_SeqMotionTag");
+		sign.leftTargetConfigs = request.POST.getlist("left_SeqTargetConfig");
+		sign.leftTargetLocs = request.POST.getlist("left_SeqTargetLoc");
+
+		nondom = request.POST.get('nondom');
+		if nondom == "true":
+			sign.nondom = True;
+
+		motionType = request.POST.get("motiondefinition");
+		sign.motionType = motionType;
+		if motionType == "symmetric":
+			sign.symmetry = request.POST.get("symmetry");
+			outofphase = request.POST.get("outofphase");
+			if outofphase == "true":
+				sign.outofphase = True;
+			else:
+				sign.outofphase = False;
+		else:
+			sign.symmetry = "none"
+
 		sign.save();
 		return redirect('sign_list')
 
 	handshapes = Handshape.objects.all()
-	context = {'handshapes' : handshapes, 'sign' : sign}
+	rightMotionList = zip(sign.rightMotionSequence, sign.rightMotionTags, sign.rightTargetConfigs, sign.rightTargetLocs);
+	leftMotionList = zip(sign.leftMotionSequence, sign.leftMotionTags, sign.leftTargetConfigs, sign.leftTargetLocs);
+	context = {'handshapes' : handshapes, 'sign' : sign, 'rightMotionList' : rightMotionList, 'leftMotionList' : leftMotionList}
+
 	return render(request, 'inventory/sign_edit.html', context)
 
 # Delete a sign.
@@ -332,7 +367,7 @@ def translator(request):
 					sign = Sign.objects.filter(name=c.upper())
 					if sign:
 						signs.append(sign[0])
-						sigml = sigml + sign[0].sigmlfy()[7:-8]
+						sigml = sigml + sign[0].sigml[7:-8]
 						query = query + c.upper()
 
 			if query:

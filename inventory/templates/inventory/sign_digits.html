@@ -1,0 +1,8 @@
+<select name="{{name}}" id="{{name}}" class="custom-select" onchange="reload();">
+	<option value=" " selected>None</option>
+	<option value="1" {% if digits == "1" %} selected {% endif %}>Thumb</option>
+	<option value="2" {% if digits == "2" %} selected {% endif %}>Index</option>
+	<option value="3" {% if digits == "3" %} selected {% endif %}>Middle</option>
+	<option value="4" {% if digits == "4" %} selected {% endif %}>Ring</option>
+	<option value="5" {% if digits == "5" %} selected {% endif %}>Pinky</option>
+</select>
