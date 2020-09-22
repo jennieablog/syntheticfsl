@@ -8,9 +8,6 @@ A database application for signing exact English in Filipino Sign Language (FSL)
 - Gestural SiGML data are stored in a database for retrieval.
 - A graphical user interface is built on top of the database to allow easier editing of signs.
 
-## SyntheSign
-SignTyper offers a tool called `SyntheSign`, which automatically converts HamNoSys symbols to synthetic sign animation.
-
 ## Current Progress
 Inventories of FSL handshapes and basic signs are being uploaded to be used for indexing a small lexicon for FSL signs.
 
