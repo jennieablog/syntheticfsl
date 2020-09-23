@@ -3,7 +3,7 @@
 {% block info %}
 
 <div class="card">
-	<h6 class="card-header">Handshapes</h6>
+	<h6 class="card-header" style="height:50px;">Handshape Inventory</h6>
 	
 	<div class="card-body" style="padding: 0px;height:500px;overflow-y: scroll;">
 	  	<table class="table table-striped">
@@ -12,14 +12,14 @@
 					<th scope="col">PLAY</th>
 					<th scope="col">Name</th>
 					<th scope="col">Description</th>
-					{% if user.is_authenticated %}
-					<th scope="col">Options</th>
-					{% endif %}
 					<th scope="col">handshape</th>
 					<th scope="col">thumbpos</th>
 					<th scope="col">specialfingers</th>
 					<th scope="col">mainbend</th>
 					<th scope="col">individualbend</th>
+					{% if user.is_authenticated %}
+					<th scope="col">Options</th>
+					{% endif %}
 				</tr>
 			</thead>
 			<tbody>
@@ -28,11 +28,6 @@
 					<td><button class="btn btn-sm btn-success" style="font-size: 0.5rem;" onclick="writesigml('{{ hs.sigml }}');"><i class="fas fa-play"></i></button></td>
 					<td>{{ hs.name }}</td>
 					<td>{{ hs.description }}</td>
-					{% if user.is_authenticated %}
-					<td>
-					<a href="{% url 'handshape_edit' pk=hs.pk %}" class="text-primary"><i class="fas fa-edit"></i> Edit
-					</a>
-					{% endif %}
 					<td>{{ hs.handshape }}</td>
 					<td>{{ hs.thumbpos }}</td>
 					<td>{% if hs.specialfingers == "" %}None{% else %}{{ hs.specialfingers }}{% endif %}</td>
@@ -44,14 +39,19 @@
 						[{{ hs.bend4_1 }}, {{ hs.bend4_2 }}, {{ hs.bend4_3 }}, {{ hs.bend4_4 }}], 
 						[{{ hs.bend5_1 }}, {{ hs.bend5_2 }}, {{ hs.bend5_3 }}, {{ hs.bend5_4 }}]
 					</td>
+					{% if user.is_authenticated %}
+					<td>
+					<a href="{% url 'handshape_edit' pk=hs.pk %}" class="text-primary"><i class="fas fa-edit"></i> Edit
+					</a>
+					{% endif %}
 				</tr>
 				{% endfor %}
 			</tbody>
 		</table>
 	</div>
 
-	<div class="card-footer" style="height:60px;">
-		{% if user.is_authenticated %}<a href="{% url 'handshape_new' %}" class="btn btn-sm btn-success"><i class="fas fa-plus"></i> Add new handshape.</a>{% endif %}
+	<div class="card-footer bg-transparent" style="height:80px;">
+		{% if user.is_authenticated %}<a href="{% url 'handshape_new' %}" class="btn btn-primary"><i class="fas fa-plus"></i> New handshape</a>{% endif %}
 	</div>
 </div>
 

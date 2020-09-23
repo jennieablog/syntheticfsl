@@ -1028,12 +1028,15 @@ function saveModal(e){
         
         var col1 = document.createElement("td");
         col1.setAttribute("id",hand+"Seq"+seqid+"_motion");
+        col1.setAttribute("style","word-wrap:break-word;width:350px;");
         
         var col2 = document.createElement("td");
         col2.setAttribute("id",hand+"Seq"+seqid+"_config")
+        col2.setAttribute("style","word-wrap:break-word;width:150px;");
         
         var col3 = document.createElement("td");
-        col3.setAttribute("id",hand+"Seq"+seqid+"_loc")
+        col3.setAttribute("id",hand+"Seq"+seqid+"_loc");
+        col3.setAttribute("style","word-wrap:break-word;width:150px;");
 
         var col4 = document.createElement("td");
         var editButton = document.createElement("a");

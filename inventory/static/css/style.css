@@ -72,6 +72,10 @@ button.ham {
 	font-weight: 400;
 }
 
+.alert-secondary {
+	background-color: whitesmoke;
+}
+
 td {
 	text-align: left;
 }
@@ -107,7 +111,6 @@ input, label {
 }
 
 .nav-tabs .nav-link.active {
-	background-color: ghostwhite;
 	font-weight: 500;
 }
 

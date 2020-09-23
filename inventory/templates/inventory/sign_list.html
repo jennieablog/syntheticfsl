@@ -3,62 +3,95 @@
 {% block info %}
 
 <div class="card">
-	<h6 class="card-header">Signs</h6>
+	<h6 class="card-header" style="height:50px;">Sign Inventory</h6>
 	
-	<div class="card-body" style="padding: 0px;height:500px;overflow-y: scroll;">
-		<table class="table table-striped">
-			<thead style="font-size: 0.6rem;">
-				<tr>
-					<th scope="col">PLAY</th>
-					<th scope="col">Name</th>
-					<th scope="col">Description</th>
-					{% if user.is_authenticated %}
-					<th scope="col">Options</th>
-					{% endif %}
-					<th scope="col">Two-handed</th>
-					<th scope="col">Right</th>
-					<th scope="col">Location</th>
-					<th scope="col">Left</th>
-					<th scope="col">Location</th>
-				</tr>
-			</thead>
-			<tbody>
-				{% for sign in signs %}
-				<tr>
-					<td><button class="btn btn-sm btn-success" style="font-size: 0.5rem;" onclick="writesigml('{{ sign.sigml }}');"><i class="fas fa-play"></i></button></td>
-					<td>{{ sign.name }}</td>
-					<td>{{ sign.description }}</td>
-					{% if user.is_authenticated %}
-					<td>
-					
-					<a href="{% url 'sign_edit' pk=sign.pk %}" class="text-primary"><i class="fas fa-edit"></i> Edit
-					</a>
-					{% endif %}
-					<td>{{ sign.twoHanded }}</td>
-					<td>{{ sign.hs.name }} handshape</td>
-					<td>{% if sign.loc == ' ' %} neutral space {% else %} {{ sign.loc }} {% endif %} ({{ sign.side }})</td>
-					<td>
-						{% if sign.twohanded %}
-						{{ sign.lhs.name }} handshape, on {% if sign.lloc == ' ' %} neutral space {% else %} {{ sign.lloc }} {% endif %}
-						{% else %}
-						--
+	<div class="card-body" style="height:500px;padding: 0px;overflow-y: scroll;">
+			<table class="table table-striped mb-0">
+				<thead style="text-align: left;font-size: 0.6rem;">
+					<tr>
+						<th scope="col" style="word-wrap:break-word;width:50px;height:35px;">PLAY</th>
+						<th scope="col" style="word-wrap:break-word;width:90px;height:35px;">Name</th>
+						<th scope="col" style="word-wrap:break-word;width:150px;height:35px;">Description</th>
+						<th scope="col" style="word-wrap:break-word;width:90px;height:35px;">Type</th>
+						<th scope="col" style="word-wrap:break-word;width:110px;height:35px;">R-Handshape</th>
+						<th scope="col" style="word-wrap:break-word;width:105px;height:35px;">R-Location</th>
+						<th scope="col" style="word-wrap:break-word;width:110px;height:35px;">L-Handshape</th>
+						<th scope="col" style="word-wrap:break-word;width:105px;height:35px;">L-Location</th>
+						{% if user.is_authenticated %}
+						<th scope="col" style="word-wrap:break-word;width:50px;height:35px;"></th>
 						{% endif %}
-					</td>
-					<td>
-						{% if sign.twohanded %}
-						{% if sign.lloc == ' ' %} neutral space {% else %} {{ sign.lloc }} {% endif %} ({{ sign.lside }})
-						{% else %}
-						--
+					</tr>
+				</thead>
+				<tbody>
+					{% for sign in signs %}
+					<tr>
+						<!-- Play Button -->
+						<td style="word-wrap:break-word;width:50px;">
+							<button class="btn btn-sm btn-success" style="font-size: 0.5rem;" onclick="writesigml('{{ sign.sigml }}');"><i class="fas fa-play"></i></button>
+						</td>
+						<!-- Sign Name -->
+						<td style="word-wrap:break-word;width:90px;">
+							{{ sign.name }}
+						</td>
+						<!-- Sign Description -->
+						<td style="word-wrap:break-word;width:150px;">
+							{{ sign.description }}
+						</td>
+						<!-- Two Handed -->
+						<td style="word-wrap:break-word;width:120px;">
+							{% if sign.twoHanded %}
+								Two-handed
+							{% else %}
+								One-handed
+							{% endif %}
+						</td>
+						<!-- Right Handshape -->
+						<td style="word-wrap:break-word;width:100px;">
+							{{ sign.rightHandshape.name }}
+						</td>
+						<!-- Right Hand Location -->
+						<td style="word-wrap:break-word;width:105px;">
+							{% if sign.locationType == 'split' %}
+								{{ sign.rightLocation }}
+							{% else %}
+								{{ sign.constellationLocation }}
+							{% endif %}
+						</td>
+						<!-- Left Handshape -->
+						<td style="word-wrap:break-word;width:100px;">
+							{% if sign.twoHanded %}
+								{{ sign.leftHandshape.name }}
+							{% else %}
+								--
+							{% endif %}
+						</td>
+						<!-- Left Hand Location -->
+						<td style="word-wrap:break-word;width:105px;">
+							{% if sign.twoHanded %}
+								{% if sign.locationType == 'split' %}
+									{{ sign.leftLocation }}
+								{% else %}
+									{{ sign.constellationLocation }}
+								{% endif %}
+							{% else %}
+								--
+							{% endif %}
+						</td>
+						<!-- Edit Button  -->
+						{% if user.is_authenticated %}
+						<td style="word-wrap:break-word;width:50px;">			
+							<a href="{% url 'sign_edit' pk=sign.pk %}" class="text-primary">Edit
+							</a>
+						</td>
 						{% endif %}
-					</td>
-				</tr>
-				{% endfor %}
-			</tbody>
-		</table>
+					</tr>
+					{% endfor %}
+				</tbody>
+			</table>
 	</div>
 
-	<div class="card-footer" style="height:60px;">
-		{% if user.is_authenticated %}<a href="{% url 'sign_new' %}" class="btn btn-sm btn-success"><i class="fas fa-plus"></i> Add new sign.</a>{% endif %}
+	<div class="card-footer bg-transparent" style="height:80px;">
+		{% if user.is_authenticated %}<a href="{% url 'sign_new' %}" class="btn btn-primary"><i class="fas fa-plus"></i> New sign</a>{% endif %}
 	</div>
 </div>
 

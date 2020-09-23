@@ -3,25 +3,17 @@
 
 {% block info %}
 
-<form method="POST" id="signeditor" style="font-size: 0.7rem;" hidden>
+<form method="POST" id="signeditor" style="font-size: 0.8rem;" hidden>
 {% csrf_token %}
 
-	<div class="row" style="justify-content: flex-start; height:60px;">
-
-		<!-- name -->
-		<div class="col">
-			<input type="text" name="signName" class="form-control" placeholder="Handshape Name" style="font-size: 0.7rem;" value="{{ sign.name }}">
-		</div>
-		
-		<!-- description -->
-		<div class="col-5">
-			<input type="text" name="signDescription" class="form-control" placeholder="Description" style="font-size: 0.7rem;" value="{{ sign.description }}">
-		</div>
-
-		<!-- save & delete Buttons -->
-		<div class="col">
-			<button type="submit" class="btn btn-success btn-sm" value="save">Save</button>
-			<a href="#" data-toggle="modal" data-target="#delete-modal" class="btn btn-danger"><i class="fas fa-trash-alt"></i></a>
+	<nav>
+		<div class="nav nav-tabs" id="nav-tab" role="tablist">
+			<a class="nav-item nav-link active" id="nav-geninfo-tab" data-toggle="tab" href="#nav-geninfo" role="tab" aria-controls="nav-geninfo" aria-selected="true">General Information</a>
+			<a class="nav-item nav-link" id="nav-handconfig-tab" data-toggle="tab" href="#nav-handconfig" role="tab" aria-controls="nav-handconfig" aria-selected="true">Initial Configuration</a>
+			<a class="nav-item nav-link" id="nav-location-tab" data-toggle="tab" href="#nav-location" role="tab" aria-controls="nav-location">Initial Location</a>
+			<a class="nav-item nav-link" id="nav-movement-tab" data-toggle="tab" href="#nav-movement" role="tab" aria-controls="nav-movement" aria-selected="false">Motion Sequence</a>
+			<a><button type="submit" class="btn btn-sm btn-success" value="save" style="margin-left:10px;"><i class="fas fa-save"></i> Save</button></a>
+			<a><button data-toggle="modal" data-target="#delete-modal" class="btn btn-sm btn-danger" style="margin-left:10px;"><i class="fas fa-trash-alt"></i> Delete</button></a>
 			<div class="modal fade" id="delete-modal" tabindex="-1" role="dialog" aria-labelledby="delete-modal" aria-hidden="true">
 				<div class="modal-dialog" role="document">
 					<div class="modal-content">
@@ -44,423 +36,431 @@
 				</div>
 			</div>
 		</div>
-	</div>
+	</nav>
 
-	<!-- Sign Type-->
-	<div class="alert">
-		<div class="form-check form-check-inline">
-				<input class="form-check-input" type="radio" name="signtype" onclick="showTwoHandedOptions();" id="onehanded" value="onehanded" checked="true">
-				<label class="form-check-label" for="onehanded">
-				One-handed</label>&emsp;
-				<input class="form-check-input" type="radio" name="signtype" onclick="showTwoHandedOptions();" id="twohanded" value="twohanded" {% if sign.twoHanded %} checked="true" {% endif %}>
-				<label class="form-check-label" for="twohanded">
-				Two-handed</label>&emsp;
+	<!-- Nav Content -->
+	<div class="tab-content" id="nav-tabContent" style="padding-top:20px;">
+
+		<!-- GENERAL INFORMATION -->
+		<div class="tab-pane fade show active" id="nav-geninfo" role="tabpanel" aria-labelledby="nav-geninfo-tab">
+
+			<div class="alert alert-secondary">
+				<div class="form-group">
+					<label for="signName"><strong>Name</strong></label>
+					<input type="text" id="signName" name="signName" class="form-control" placeholder="Sign Name" value="{{ sign.name }}" style="font-size:0.8rem;">
+				</div>
+				<div class="form-group">
+					<label for="signDescription"><strong>Description</strong></label>
+					<input type="text" id="signDescription" name="signDescription" class="form-control" placeholder="Description" value="{{ sign.description }}" style="font-size:0.8rem;">
+				</div>
+			</div>
+
+			
+			<div class="alert alert-secondary">
+				<div class="form-group">
+					<label><strong>Sign Type</strong></label>
+					<div class="form-check form-check-inline">
+							<input class="form-check-input" type="radio" name="signtype" onclick="showTwoHandedOptions();" id="onehanded" value="onehanded" checked="true">
+							<label class="form-check-label" for="onehanded">
+							One-handed</label>&emsp;
+							<input class="form-check-input" type="radio" name="signtype" onclick="showTwoHandedOptions();" id="twohanded" value="twohanded" {% if sign.twoHanded %} checked="true" {% endif %}>
+							<label class="form-check-label" for="twohanded">
+							Two-handed</label>&emsp;
+					</div>
+					<div class="form-check form-check-inline" id="nondom_option">
+						<input class="form-check-input" type="checkbox" id="nondom" name="nondom" onclick="reload();" value="true" {% if sign.nondom %} checked {% endif %}>
+						<label class="form-check-label" for="nondom"> Use left hand.</label>
+					</div>
+				</div>
+			</div>
 		</div>
-		<div class="form-check form-check-inline" id="nondom_option">
-			<input class="form-check-input" type="checkbox" id="nondom" name="nondom" onclick="reload();" value="true" {% if sign.nondom %} checked {% endif %}>
-			<label class="form-check-label" for="nondom"> Use left hand.</label>
+
+		<!-- INITIAL CONFIGURATION -->
+		<div class="tab-pane fade" id="nav-handconfig" role="tabpanel" aria-labelledby="nav-handconfig-tab">
+			
+			<!-- Hand Configuration -->
+			<div class="alert alert-secondary">
+				<!-- RIGHT HAND CONFIGURATION -->
+				<div class="row mb-2">
+					<strong>Right Hand Configuration</strong>
+				</div>
+				<!-- Right Hand Configuration Attributes -->
+				<div class="row">
+					<!-- Handshape -->
+					<div class="form-group" style="padding-right: 20px;">
+						<label for="handshape">Handshape</label>
+						<select name="handshape" id="handshape" class="custom-select" onchange="reload();">
+							{% for hs in handshapes %}
+							<option value="{{ hs.pk }}" data="{{ hs.sigmlStr | safe }}" {% if sign.rightHandshape.pk == hs.pk %} selected="true" {% endif %}>{{ hs.name }}: {{ hs.description}}</option>
+							{% endfor %}
+						</select>
+					</div>
+					<!-- External Finger Direction -->
+					<div class="form-group" style="padding-right: 20px;">
+						<label for="extfidir">Extended Finger Direction</label>
+						{% include 'inventory/sign_extfidir.html' with extfidir=sign.rightFingerDirection name='extfidir' %}
+					</div>
+					<!-- Palm Orientation -->
+					<div class="form-group">
+						<label for="palmor">Palm Orientation</label>
+						{% include 'inventory/sign_palmor.html' with palmor=sign.rightPalmOrientation name='palmor' %}
+					</div>
+				</div>
+			</div>
+
+			<div class="alert alert-secondary" name="left" hidden="true">
+
+				<!-- LEFT HAND CONFIGURATION -->
+				<div class="row mb-2">
+					<strong>Left Hand Configuration</strong>
+				</div>
+				<!-- Left Hand Configuration Attributes -->
+				<div class="row">
+					<!-- Handshape -->
+					<div class="form-group" style="padding-right: 20px;">
+						<label for="l_handshape">Left handshape</label>
+						<select name="l_handshape" id="l_handshape" class="custom-select" onchange="reload();">
+							{% for hs in handshapes %}
+							<option value="{{ hs.pk }}" data="{{ hs.sigmlStr | safe }}" {% if sign.leftHandshape.pk == hs.pk %} selected="true" {% endif %}>{{ hs.name }}: {{ hs.description}}</option>
+							{% endfor %}
+						</select>
+					</div>
+					<!-- External Finger Direction -->
+					<div class="form-group" style="padding-right: 20px;">
+						<label for="lextfidir">Extended Finger Direction</label>
+						{% include 'inventory/sign_extfidir.html' with extfidir=sign.leftFingerDirection name='lextfidir' %}
+					</div>
+					<!-- Palm Orientation -->
+					<div class="form-group">
+						<label for="lpalmor">Palm Orientation</label>
+						{% include 'inventory/sign_palmor.html' with palmor=sign.leftPalmOrientation name='lpalmor' %}
+					</div>	
+				</div>
+			</div>
 		</div>
+
+		<!-- INITIAL LOCATION -->
+		<div class="tab-pane fade" id="nav-location" role="tabpanel" aria-labelledby="nav-location-tab">
+			<!-- Location Type -->
+			<div class="alert alert-secondary" {% if not sign.twoHanded %} hidden="true" {% endif %} name="left">
+				<div class="row">
+					<div class="form-check form-check-inline">
+						<strong>Location Type&emsp;</strong>
+						<input class="form-check-input" type="radio" name="loctype" onclick="showLocationOptions();" id="split" value="split" {% if sign.locationType == 'split' %} checked {% endif %}>
+						<label class="form-check-label" for="split">
+						Split Location</label>&emsp;
+						<input class="form-check-input" type="radio" name="loctype" onclick="showLocationOptions();" id="relative" value="relative" {% if sign.locationType == 'relative' %} checked {% endif %}>
+						<label class="form-check-label" for="relative">
+						Hand Constellation</label>
+					</div>
+				</div>
+			</div>
+
+			<!-- Split Location Options -->
+			<div id="split_options">
+
+				<!-- RIGHT HAND LOCATION -->
+				<div class="alert alert-secondary">
+					<div class="row mb-2">
+						<strong>Right Hand Location</strong>
+					</div>
+					<div class="row" id="split_options_right">
+						<!-- Location -->
+						<div class="form-group" style="padding-right: 20px;">
+							<label for="bodypart">Body part</label>
+							{% include 'inventory/sign_bodypart.html' with bodypart=sign.rightLocation name='bodypart' %}
+						</div>
+						<!-- Side -->
+						<div class="form-group" style="padding-right: 10px;">
+							<label for="side">Side</label>
+							{% include 'inventory/sign_side.html' with side=sign.rightLocationSide name='side' %}
+						</div>
+						<!-- Contact -->
+						<div class="form-group">
+							<label for="proximity">Proximity level</label>
+							{% include 'inventory/sign_contact.html' with contact=sign.rightLocationContact name='proximity' %}
+						</div>
+					</div>
+				</div>
+
+				<!-- LEFT HAND LOCATION -->
+				<div class="alert alert-secondary" name="left" hidden="true">
+					<div class="row mb-2">
+						<strong>Left Hand Location</strong>
+					</div>
+					<div class="row" id="split_options_left" name="left" hidden="true">
+						<!-- Location -->
+						<div class="form-group" style="padding-right: 10px;">
+							<label for="lbodypart">Body part</label>
+							{% include 'inventory/sign_bodypart.html' with bodypart=sign.leftLocation name='lbodypart' %}
+						</div>
+						<!-- Side -->
+						<div class="form-group" style="padding-right: 10px;">
+							<label for="lside">Relative location</label>
+							{% include 'inventory/sign_side.html' with side=sign.leftLocationSide name='lside' %}
+						</div>
+						<!-- Contact -->
+						<div class="form-group">
+							<label for="lproximity">Proximity level</label>
+							{% include 'inventory/sign_contact.html' with contact=sign.leftLocationContact name='lproximity' %}
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- Hand Constellation Options-->
+			<div id="relative_options" hidden="true">
+				<div class="alert alert-secondary">
+					<div class="row">
+						<div class="col">
+							<!-- Both Hand Location -->
+							<div class="row mb-2">
+								<strong>Location of Both Hands</strong>
+							</div>
+							<div class="row">
+								<!-- Constellation Location -->
+								<div class="form-group" style="padding-right: 10px;">
+									<label for="lrbodypart">Body Part</label>
+									{% include 'inventory/sign_bodypart.html' with bodypart=sign.constellationLocation name='lrbodypart' %}
+								</div>
+								<!-- Constellation Location Side -->
+								<div class="form-group" style="padding-right: 10px;">
+									<label for="lrside">Side</label>
+									{% include 'inventory/sign_side.html' with side=sign.constellationLocationSide name='lrside' %}
+								</div>
+								<!-- Constellation Location Contact -->
+								<div class="form-group" style="padding-right: 10px;">
+									<label for="lrproximity">Contact to Body Part</label>
+									{% include 'inventory/sign_contact.html' with contact=sign.constellationLocationContact name='lrproximity' %}
+								</div>
+								<!-- Constellation Contact -->
+								<div class="form-group">
+									<label for="lrproximity_rel">Contact Between Hands</label>
+									{% include 'inventory/sign_contact.html' with contact=sign.constellationContact name='lrproximity_rel' %}
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<!-- RIGHT HAND SITE -->
+				<div class="alert alert-secondary">
+					<div class="row mb-2">
+						<strong>Right Hand Site Type&emsp;</strong>
+						<div class="form-check form-check-inline">
+							<input class="form-check-input" type="radio" id="lhptype1" name="lhptype" onclick="showHandSiteOptionsLeft();reload();" value="fingerpart" {% if sign.leftContactType == "fingerpart" %} checked {% endif %}>
+							<label class="form-check-label" for="lhptype1">
+							Finger Part</label>&emsp;
+							<input class="form-check-input" type="radio" id="lhptype2" name="lhptype" onclick="showHandSiteOptionsLeft();reload();" value="handpart" {% if sign.leftContactType == "handpart" %} checked {% endif %}>
+							<label class="form-check-label" for="lhptype2">
+							Hand Part</label>
+						</div>
+					</div>
+					<!-- Finger Part -->
+					<div class="row" id="lfingerpart_options">
+						<!-- Digits -->
+						<div class="form-group" style="padding-right: 10px;">
+							<label for="ldigits">Finger</label>
+							{% include 'inventory/sign_digits.html' with digits=sign.leftContactFinger name='ldigits' %}
+						</div>
+						<!-- Finger Part -->
+						<div class="form-group" style="padding-right: 10px;">
+							<label for="lfingerpart">Finger Part</label>
+							{% include 'inventory/sign_fingerpart.html' with fingerpart=sign.leftContactPart name='lfingerpart' %}
+						</div>
+						<!-- Finger Side -->
+						<div class="form-group" style="padding-right: 10px;">
+							<label for="lfingerside">Finger Side</label>
+							{% include 'inventory/sign_handside.html' with side=sign.leftContactSide name='lfingerside' %}
+						</div>
+					</div>
+					<!-- Hand Part -->
+					<div class="row" id="lhandpart_options" hidden="true">
+						<div class="form-group" style="padding-right: 10px;">
+							<label for="lhandpart">Hand Part</label>
+							{% include 'inventory/sign_handpart.html' with handpart=sign.leftContactPart name='lhandpart' %}
+
+						</div>
+						<!-- Hand Side -->
+						<div class="form-group" style="padding-right: 10px;">
+							<label for="lhandside">Hand Side</label>
+							{% include 'inventory/sign_handside.html' with side=sign.leftContactSide name='lhandside' %}
+						</div>
+					</div>
+				</div>
+
+				<!-- LEFT HAND SITE -->
+				<div class="alert alert-secondary">
+					<div class="row mb-2">
+						<strong>Left Hand Site Type&emsp;</strong>
+						<div class="form-check form-check-inline">
+							<input class="form-check-input" type="radio" id="hptype1" name="hptype" onclick="showHandSiteOptions();reload();" value="fingerpart" {% if sign.rightContactType == "fingerpart" %} checked {% endif %}>
+							<label class="form-check-label" for="hptype1">
+							Finger Part</label>&emsp;
+							<input class="form-check-input" type="radio" id="hptype2" name="hptype" onclick="showHandSiteOptions();reload();" value="handpart" {% if sign.rightContactType == "handpart" %} checked {% endif %}>
+							<label class="form-check-label" for="hptype2">
+							Hand Part</label>
+						</div>
+					</div>
+					<!-- Finger Part -->
+					<div class="row" id="fingerpart_options">
+						<!-- Digits -->
+						<div class="form-group" style="padding-right: 10px;">
+							<label for="digits">Finger</label>
+							{% include 'inventory/sign_digits.html' with digits=sign.rightContactFinger name='digits' %}
+						</div>
+						<!-- Finger Part -->
+						<div class="form-group" style="padding-right: 10px;">
+							<label for="fingerpart">Finger Part</label>
+							{% include 'inventory/sign_fingerpart.html' with fingerpart=sign.rightContactPart name='fingerpart' %}
+						</div>
+						<!-- Finger Side -->
+						<div class="form-group" style="padding-right: 10px;">
+							<label for="fingerside">Finger Side</label>
+							{% include 'inventory/sign_handside.html' with side=sign.rightContactSide name='fingerside' %}
+						</div>
+					</div>
+					<!-- Hand Part -->
+					<div class="row" id="handpart_options" hidden="true">
+						<!-- Hand Part -->
+						<div class="form-group" style="padding-right: 10px;">
+							<label for="handpart">Hand Part</label>
+							{% include 'inventory/sign_handpart.html' with handpart=sign.rightContactPart name='handpart' %}
+						</div>
+						<!-- Hand Side -->
+						<div class="form-group" style="padding-right: 10px;">
+							<label for="handside">Hand Side</label>
+							{% include 'inventory/sign_handside.html' with side=sign.rightContactSide name='handside' %}
+						</div>
+					</div>
+
+				</div>
+			</div>
+		</div>
+
+		<!-- MOTION SEQUENCE -->
+		<div class="tab-pane fade" id="nav-movement" role="tabpanel" aria-labelledby="nav-movement-tab">
+
+			<!-- MOTION DEFINITION TYPE -->
+			<div class="alert alert-secondary" name="left" hidden>
+				<div class="row">
+					<div class="form-check form-check-inline">
+						<strong>Motion Definition Type&emsp;</strong>
+						<input class="form-check-input" type="radio" name="motiondefinition" id="splitmotion" value="splitmotion" onclick="showSymmetryOptions();" {% if sign.motionType == "splitmotion" %} checked {% endif %}>
+						<label class="form-check-label" for="splitmotion">
+						Split</label>&emsp;
+						<input class="form-check-input" type="radio" name="motiondefinition" id="symmetric" value="symmetric" onclick="showSymmetryOptions();" {% if sign.motionType == "symmetric" %} checked {% endif %}>
+						<label class="form-check-label" for="symmetric">
+						Symmetric</label>&emsp;
+					</div>
+				</div>
+			</div>
+			<div class="alert alert-secondary" id="symmetry_options" name="left" hidden>
+				<div class="row">
+					<strong>Symmetry</strong>
+					<div class="col-6">
+						<select name="symmetry" id="symmetry" class="custom-select" onchange="reload();">
+							<option value="lr_symm" selected>Left-right symmetry</option>
+							<option value="ud_symm" {% if sign.symmetry == "ud_symm" %} selected {% endif %}>Up-down symmetry</option>
+							<option value="oi_symm" {% if sign.symmetry == "oi_symm" %} selected {% endif %}>Out-in symmetry</option>
+						</select>
+					</div>
+					<div class="col"></div>
+					<div class="col-4" style="padding-top: 10px;">
+						<input class="form-check-input" type="checkbox" id="outofphase" name="outofphase" onclick="reload();" value="true"{% if sign.outofphase %} checked {% endif %}>
+						<label class="form-check-label" for="outofphase"> Out of phase (for circular motions)</label>
+					</div>
+				</div>
+			</div>
+
+			<div class="alert" style="padding:0px;">
+
+				<!-- RIGHT HAND MOTION SEQUENCE -->
+				<table class="table border">
+					<thead style="text-align:left;font-size: 0.8rem;">
+						<tr>
+							<th scope="col">#</th>
+							<th scope="col" style="word-wrap:break-word;width:350px;">Right Hand Motion Sequence</th>
+							<th scope="col" style="word-wrap:break-word;width:150px;">Hand Config</th>
+							<th scope="col" style="word-wrap:break-word;width:150px;">Location</th>
+							<th scope="col" style="width:50px;">Options</th>
+							<th scope="col" hidden>SIGML</th>
+						</tr>
+					</thead>
+					<tbody id="rightSeqTableBody">
+
+						{% for motion,tag,config,loc in rightMotionList %}
+						<tr>
+							<th scope="row">{{ forloop.counter }}</th>
+							<td id="rightSeq{{forloop.counter}}_motion" style="word-wrap:break-word;width:350px;">{{tag}}</td>
+							<td id="rightSeq{{forloop.counter}}_config" style="word-wrap:break-word;width:150px;">{{config}}</td>
+							<td id="rightSeq{{forloop.counter}}_loc" style="word-wrap:break-word;width:150px;">{{loc}}</td>
+							<td>
+								<a href="#" class="text-primary" data-toggle="modal" data-target="#motionModal" name="right" id="rightSeq{{forloop.counter}}_modal" onclick="loadModal(this);">Edit</a>
+								<a href="#" class="text-danger" id="rightSeq{{forloop.counter}}_delete" onclick="deleteMotionSequence(this);">Delete</a>
+								<td hidden>
+									<input name="rightSeq" id="rightSeq{{forloop.counter}}_sigml" value="{{motion}}">
+									<input id="rightSeq{{forloop.counter}}_motion_input" name="rightSeqMotionTag" value="{{tag}}">
+									<input id="rightSeq{{forloop.counter}}_config_input" name="rightSeqTargetConfig" value="{{config}}">
+									<input id="rightSeq{{forloop.counter}}_loc_input" name="rightSeqTargetLoc" value="{{loc}}">
+								</td>
+							</td>
+						</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+				<a href="#" class="btn btn-sm btn-primary" name="right" data-toggle="modal" data-target="#motionModal" id="rightReset" onclick="resetModal(this);"><i class="fa fa-plus" aria-hidden="true"></i> New motion</a>
+			</div>
+
+			<div class="alert" id="left_motion_sequence" name="left" style="padding: 0px;" hidden>
+
+				<!-- LEFT HAND MOTION SEQUENCE -->
+				<table class="table border">
+					<thead style="text-align:left;font-size: 0.8rem;">
+						<tr>
+							<th scope="col">#</th>
+							<th scope="col" style="word-wrap:break-word;width:350px;">Left Hand Motion Sequence</th>
+							<th scope="col" style="word-wrap:break-word;width:150px;">Hand Config</th>
+							<th scope="col" style="word-wrap:break-word;width:150px;">Location</th>
+							<th scope="col" style="width:50px;">Options</th>
+							<th scope="col" hidden>SIGML</th>
+						</tr>
+					</thead>
+					<tbody id="left_SeqTableBody">
+						{% for motion,tag,config,loc in leftMotionList %}
+						<tr>
+							<th scope="row">{{ forloop.counter }}</th>
+							<td id="left_Seq{{forloop.counter}}_motion" style="word-wrap:break-word;width:350px;">{{tag}}</td>
+							<td id="left_Seq{{forloop.counter}}_config" style="word-wrap:break-word;width:150px;">{{config}}</td>
+							<td id="left_Seq{{forloop.counter}}_loc" style="word-wrap:break-word;width:150px;">{{loc}}</td>
+							<td>
+								<a href="#" class="text-primary" data-toggle="modal" data-target="#motionModal" name="right" id="left_Seq{{forloop.counter}}_modal" onclick="loadModal(this);">Edit</a>
+								<a href="#" class="text-danger" id="left_Seq{{forloop.counter}}_delete" onclick="deleteMotionSequence(this);">Delete</a>
+								<td hidden>
+									<input name="left_Seq" id="left_Seq{{forloop.counter}}_sigml" value="{{motion}}">
+									<input id="left_Seq{{forloop.counter}}_motion_input" name="left_SeqMotionTag" value="{{tag}}">
+									<input id="left_Seq{{forloop.counter}}_config_input" name="left_SeqTargetConfig" value="{{config}}">
+									<input id="left_Seq{{forloop.counter}}_loc_input" name="left_SeqTargetLoc" value="{{loc}}">
+								</td>
+							</td>
+						</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+				<a href="#" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#motionModal" id="left_Reset" name="left_" onclick="resetModal(this);"><i class="fa fa-plus" aria-hidden="true"></i> New motion</a>
+				
+			</div>
+
+			{% include 'inventory/sign_modal.html' %}
+	
+		</div>
+
 	</div>
 
 	<!-- Sign Definition -->
 	<div class="container-fluid" style="width: 100%;overflow-y: scroll; overflow-x: hidden;">
-
-		<!-- Nav Tabs -->
-		<nav>
-			<div class="nav nav-tabs" id="nav-tab" role="tablist">
-				<a class="nav-item nav-link active" id="nav-handconfig-tab" data-toggle="tab" href="#nav-handconfig" role="tab" aria-controls="nav-handconfig" aria-selected="true">Initial Configuration</a>
-				<a class="nav-item nav-link" id="nav-location-tab" data-toggle="tab" href="#nav-location" role="tab" aria-controls="nav-location">Initial Location</a>
-				<a class="nav-item nav-link" id="nav-movement-tab" data-toggle="tab" href="#nav-movement" role="tab" aria-controls="nav-movement" aria-selected="false">Motion Sequence</a>
-			</div>
-		</nav>
-
-		<!-- Nav Content -->
-		<div class="tab-content" id="nav-tabContent" style="height:500px; padding-top:20px; overflow-y: scroll; background-color: ghostwhite;">
-
-			<!-- INITIAL CONFIGURATION -->
-			<div class="tab-pane fade show active" id="nav-handconfig" role="tabpanel" aria-labelledby="nav-handconfig-tab">
-				
-				<!-- Hand Configuration -->
-				<div class="alert alert-secondary">
-					<!-- RIGHT HAND CONFIGURATION -->
-					<div class="row mb-2">
-						<strong>Right Hand Configuration</strong>
-					</div>
-					<!-- Right Hand Configuration Attributes -->
-					<div class="row">
-						<!-- Handshape -->
-						<div class="form-group" style="padding-right: 20px;">
-							<label for="handshape">Handshape</label>
-							<select name="handshape" id="handshape" class="custom-select" onchange="reload();">
-								{% for hs in handshapes %}
-								<option value="{{ hs.pk }}" data="{{ hs.sigmlStr | safe }}" {% if sign.rightHandshape.pk == hs.pk %} selected="true" {% endif %}>{{ hs.name }}: {{ hs.description}}</option>
-								{% endfor %}
-							</select>
-						</div>
-						<!-- External Finger Direction -->
-						<div class="form-group" style="padding-right: 20px;">
-							<label for="extfidir">Extended Finger Direction</label>
-							{% include 'inventory/sign_extfidir.html' with extfidir=sign.rightFingerDirection name='extfidir' %}
-						</div>
-						<!-- Palm Orientation -->
-						<div class="form-group">
-							<label for="palmor">Palm Orientation</label>
-							{% include 'inventory/sign_palmor.html' with palmor=sign.rightPalmOrientation name='palmor' %}
-						</div>
-					</div>
-				</div>
-
-				<div class="alert alert-secondary" name="left" hidden="true">
-
-					<!-- LEFT HAND CONFIGURATION -->
-					<div class="row mb-2">
-						<strong>Left Hand Configuration</strong>
-					</div>
-					<!-- Left Hand Configuration Attributes -->
-					<div class="row">
-						<!-- Handshape -->
-						<div class="form-group" style="padding-right: 20px;">
-							<label for="l_handshape">Left handshape</label>
-							<select name="l_handshape" id="l_handshape" class="custom-select" onchange="reload();">
-								{% for hs in handshapes %}
-								<option value="{{ hs.pk }}" data="{{ hs.sigmlStr | safe }}" {% if sign.leftHandshape.pk == hs.pk %} selected="true" {% endif %}>{{ hs.name }}: {{ hs.description}}</option>
-								{% endfor %}
-							</select>
-						</div>
-						<!-- External Finger Direction -->
-						<div class="form-group" style="padding-right: 20px;">
-							<label for="lextfidir">Extended Finger Direction</label>
-							{% include 'inventory/sign_extfidir.html' with extfidir=sign.leftFingerDirection name='lextfidir' %}
-						</div>
-						<!-- Palm Orientation -->
-						<div class="form-group">
-							<label for="lpalmor">Palm Orientation</label>
-							{% include 'inventory/sign_palmor.html' with palmor=sign.leftPalmOrientation name='lpalmor' %}
-						</div>	
-					</div>
-				</div>
-			</div>
-
-			<!-- INITIAL LOCATION -->
-			<div class="tab-pane fade" id="nav-location" role="tabpanel" aria-labelledby="nav-location-tab">
-				<!-- Location Type -->
-				<div class="alert alert-secondary" {% if not sign.twoHanded %} hidden="true" {% endif %} name="left">
-					<div class="row">
-						<div class="form-check form-check-inline">
-							<strong>Location Type&emsp;</strong>
-							<input class="form-check-input" type="radio" name="loctype" onclick="showLocationOptions();" id="split" value="split" {% if sign.locationType == 'split' %} checked {% endif %}>
-							<label class="form-check-label" for="split">
-							Split Location</label>&emsp;
-							<input class="form-check-input" type="radio" name="loctype" onclick="showLocationOptions();" id="relative" value="relative" {% if sign.locationType == 'relative' %} checked {% endif %}>
-							<label class="form-check-label" for="relative">
-							Hand Constellation</label>
-						</div>
-					</div>
-				</div>
-
-				<!-- Split Location Options -->
-				<div id="split_options">
-
-					<!-- RIGHT HAND LOCATION -->
-					<div class="alert alert-secondary">
-						<div class="row mb-2">
-							<strong>Right Hand Location</strong>
-						</div>
-						<div class="row" id="split_options_right">
-							<!-- Location -->
-							<div class="form-group" style="padding-right: 20px;">
-								<label for="bodypart">Body part</label>
-								{% include 'inventory/sign_bodypart.html' with bodypart=sign.rightLocation name='bodypart' %}
-							</div>
-							<!-- Side -->
-							<div class="form-group" style="padding-right: 10px;">
-								<label for="side">Side</label>
-								{% include 'inventory/sign_side.html' with side=sign.rightLocationSide name='side' %}
-							</div>
-							<!-- Contact -->
-							<div class="form-group">
-								<label for="proximity">Proximity level</label>
-								{% include 'inventory/sign_contact.html' with contact=sign.rightLocationContact name='proximity' %}
-							</div>
-						</div>
-					</div>
-
-					<!-- LEFT HAND LOCATION -->
-					<div class="alert alert-secondary" name="left" hidden="true">
-						<div class="row mb-2">
-							<strong>Left Hand Location</strong>
-						</div>
-						<div class="row" id="split_options_left" name="left" hidden="true">
-							<!-- Location -->
-							<div class="form-group" style="padding-right: 10px;">
-								<label for="lbodypart">Body part</label>
-								{% include 'inventory/sign_bodypart.html' with bodypart=sign.leftLocation name='lbodypart' %}
-							</div>
-							<!-- Side -->
-							<div class="form-group" style="padding-right: 10px;">
-								<label for="lside">Relative location</label>
-								{% include 'inventory/sign_side.html' with side=sign.leftLocationSide name='lside' %}
-							</div>
-							<!-- Contact -->
-							<div class="form-group">
-								<label for="lproximity">Proximity level</label>
-								{% include 'inventory/sign_contact.html' with contact=sign.leftLocationContact name='lproximity' %}
-							</div>
-						</div>
-					</div>
-				</div>
-
-				<!-- Hand Constellation Options-->
-				<div id="relative_options" hidden="true">
-					<div class="alert alert-secondary">
-						<div class="row">
-							<div class="col">
-								<!-- Both Hand Location -->
-								<div class="row mb-2">
-									<strong>Location of Both Hands</strong>
-								</div>
-								<div class="row">
-									<!-- Constellation Location -->
-									<div class="form-group" style="padding-right: 10px;">
-										<label for="lrbodypart">Body Part</label>
-										{% include 'inventory/sign_bodypart.html' with bodypart=sign.constellationLocation name='lrbodypart' %}
-									</div>
-									<!-- Constellation Location Side -->
-									<div class="form-group" style="padding-right: 10px;">
-										<label for="lrside">Side</label>
-										{% include 'inventory/sign_side.html' with side=sign.constellationLocationSide name='lrside' %}
-									</div>
-									<!-- Constellation Location Contact -->
-									<div class="form-group" style="padding-right: 10px;">
-										<label for="lrproximity">Contact to Body Part</label>
-										{% include 'inventory/sign_contact.html' with contact=sign.constellationLocationContact name='lrproximity' %}
-									</div>
-									<!-- Constellation Contact -->
-									<div class="form-group">
-										<label for="lrproximity_rel">Contact Between Hands</label>
-										{% include 'inventory/sign_contact.html' with contact=sign.constellationContact name='lrproximity_rel' %}
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-
-					<!-- RIGHT HAND SITE -->
-					<div class="alert alert-secondary">
-						<div class="row mb-2">
-							<strong>Right Hand Site Type&emsp;</strong>
-							<div class="form-check form-check-inline">
-								<input class="form-check-input" type="radio" id="lhptype1" name="lhptype" onclick="showHandSiteOptionsLeft();reload();" value="fingerpart" {% if sign.leftContactType == "fingerpart" %} checked {% endif %}>
-								<label class="form-check-label" for="lhptype1">
-								Finger Part</label>&emsp;
-								<input class="form-check-input" type="radio" id="lhptype2" name="lhptype" onclick="showHandSiteOptionsLeft();reload();" value="handpart" {% if sign.leftContactType == "handpart" %} checked {% endif %}>
-								<label class="form-check-label" for="lhptype2">
-								Hand Part</label>
-							</div>
-						</div>
-						<!-- Finger Part -->
-						<div class="row" id="lfingerpart_options">
-							<!-- Digits -->
-							<div class="form-group" style="padding-right: 10px;">
-								<label for="ldigits">Finger</label>
-								{% include 'inventory/sign_digits.html' with digits=sign.leftContactFinger name='ldigits' %}
-							</div>
-							<!-- Finger Part -->
-							<div class="form-group" style="padding-right: 10px;">
-								<label for="lfingerpart">Finger Part</label>
-								{% include 'inventory/sign_fingerpart.html' with fingerpart=sign.leftContactPart name='lfingerpart' %}
-							</div>
-							<!-- Finger Side -->
-							<div class="form-group" style="padding-right: 10px;">
-								<label for="lfingerside">Finger Side</label>
-								{% include 'inventory/sign_handside.html' with side=sign.leftContactSide name='lfingerside' %}
-							</div>
-						</div>
-						<!-- Hand Part -->
-						<div class="row" id="lhandpart_options" hidden="true">
-							<div class="form-group" style="padding-right: 10px;">
-								<label for="lhandpart">Hand Part</label>
-								{% include 'inventory/sign_handpart.html' with handpart=sign.leftContactPart name='lhandpart' %}
-
-							</div>
-							<!-- Hand Side -->
-							<div class="form-group" style="padding-right: 10px;">
-								<label for="lhandside">Hand Side</label>
-								{% include 'inventory/sign_handside.html' with side=sign.leftContactSide name='lhandside' %}
-							</div>
-						</div>
-					</div>
-
-					<!-- LEFT HAND SITE -->
-					<div class="alert alert-secondary">
-						<div class="row mb-2">
-							<strong>Left Hand Site Type&emsp;</strong>
-							<div class="form-check form-check-inline">
-								<input class="form-check-input" type="radio" id="hptype1" name="hptype" onclick="showHandSiteOptions();reload();" value="fingerpart" {% if sign.rightContactType == "fingerpart" %} checked {% endif %}>
-								<label class="form-check-label" for="hptype1">
-								Finger Part</label>&emsp;
-								<input class="form-check-input" type="radio" id="hptype2" name="hptype" onclick="showHandSiteOptions();reload();" value="handpart" {% if sign.rightContactType == "handpart" %} checked {% endif %}>
-								<label class="form-check-label" for="hptype2">
-								Hand Part</label>
-							</div>
-						</div>
-						<!-- Finger Part -->
-						<div class="row" id="fingerpart_options">
-							<!-- Digits -->
-							<div class="form-group" style="padding-right: 10px;">
-								<label for="digits">Finger</label>
-								{% include 'inventory/sign_digits.html' with digits=sign.rightContactFinger name='digits' %}
-							</div>
-							<!-- Finger Part -->
-							<div class="form-group" style="padding-right: 10px;">
-								<label for="fingerpart">Finger Part</label>
-								{% include 'inventory/sign_fingerpart.html' with fingerpart=sign.rightContactPart name='fingerpart' %}
-							</div>
-							<!-- Finger Side -->
-							<div class="form-group" style="padding-right: 10px;">
-								<label for="fingerside">Finger Side</label>
-								{% include 'inventory/sign_handside.html' with side=sign.rightContactSide name='fingerside' %}
-							</div>
-						</div>
-						<!-- Hand Part -->
-						<div class="row" id="handpart_options" hidden="true">
-							<!-- Hand Part -->
-							<div class="form-group" style="padding-right: 10px;">
-								<label for="handpart">Hand Part</label>
-								{% include 'inventory/sign_handpart.html' with handpart=sign.rightContactPart name='handpart' %}
-							</div>
-							<!-- Hand Side -->
-							<div class="form-group" style="padding-right: 10px;">
-								<label for="handside">Hand Side</label>
-								{% include 'inventory/sign_handside.html' with side=sign.rightContactSide name='handside' %}
-							</div>
-						</div>
-
-					</div>
-				</div>
-			</div>
-
-			<!-- MOTION SEQUENCE -->
-			<div class="tab-pane fade" id="nav-movement" role="tabpanel" aria-labelledby="nav-movement-tab">
-
-				<!-- MOTION DEFINITION TYPE -->
-				<div class="alert alert-secondary" name="left" hidden>
-					<div class="row">
-						<div class="form-check form-check-inline">
-							<strong>Motion Definition Type&emsp;</strong>
-							<input class="form-check-input" type="radio" name="motiondefinition" id="splitmotion" value="splitmotion" onclick="showSymmetryOptions();" {% if sign.motionType == "splitmotion" %} checked {% endif %}>
-							<label class="form-check-label" for="splitmotion">
-							Split</label>&emsp;
-							<input class="form-check-input" type="radio" name="motiondefinition" id="symmetric" value="symmetric" onclick="showSymmetryOptions();" {% if sign.motionType == "symmetric" %} checked {% endif %}>
-							<label class="form-check-label" for="symmetric">
-							Symmetric</label>&emsp;
-						</div>
-					</div>
-				</div>
-				<div class="alert alert-secondary" id="symmetry_options" name="left" hidden>
-					<div class="row">
-						<strong>Symmetry</strong>
-						<div class="col-6">
-							<select name="symmetry" id="symmetry" class="custom-select" onchange="reload();">
-								<option value="lr_symm" selected>Left-right symmetry</option>
-								<option value="ud_symm" {% if sign.symmetry == "ud_symm" %} selected {% endif %}>Up-down symmetry</option>
-								<option value="oi_symm" {% if sign.symmetry == "oi_symm" %} selected {% endif %}>Out-in symmetry</option>
-							</select>
-						</div>
-						<div class="col"></div>
-						<div class="col-4" style="padding-top: 10px;">
-							<input class="form-check-input" type="checkbox" id="outofphase" name="outofphase" onclick="reload();" value="true"{% if sign.outofphase %} checked {% endif %}>
-							<label class="form-check-label" for="outofphase"> Out of phase (for circular motions)</label>
-						</div>
-					</div>
-				</div>
-
-				<div class="alert">
-
-					<!-- RIGHT HAND MOTION SEQUENCE -->
-					<table class="table table-hover">
-						<thead style="font-size: 0.7rem;">
-							<tr>
-								<th scope="col">#</th>
-								<th scope="col" style="word-wrap:break-word;width:250px;">Right Hand Motion Sequence</th>
-								<th scope="col">Target Hand Config</th>
-								<th scope="col">Target Location</th>
-								<th scope="col" style="width:50px;">Options</th>
-								<th scope="col" hidden>SIGML</th>
-							</tr>
-						</thead>
-						<tbody id="rightSeqTableBody">
-
-							{% for motion,tag,config,loc in rightMotionList %}
-							<tr>
-								<th scope="row">{{ forloop.counter }}</th>
-								<td id="rightSeq{{forloop.counter}}_motion">{{tag}}</td>
-								<td id="rightSeq{{forloop.counter}}_config">{{config}}</td>
-								<td id="rightSeq{{forloop.counter}}_loc">{{loc}}</td>
-								<td>
-									<a href="#" class="text-primary" data-toggle="modal" data-target="#motionModal" name="right" id="rightSeq{{forloop.counter}}_modal" onclick="loadModal(this);">Edit</a>
-									<a href="#" class="text-danger" id="rightSeq{{forloop.counter}}_delete" onclick="deleteMotionSequence(this);">Delete</a>
-									<td hidden>
-										<input name="rightSeq" id="rightSeq{{forloop.counter}}_sigml" value="{{motion}}">
-										<input id="rightSeq{{forloop.counter}}_motion_input" name="rightSeqMotionTag" value="{{tag}}">
-										<input id="rightSeq{{forloop.counter}}_config_input" name="rightSeqTargetConfig" value="{{config}}">
-										<input id="rightSeq{{forloop.counter}}_loc_input" name="rightSeqTargetLoc" value="{{loc}}">
-									</td>
-								</td>
-							</tr>
-							{% endfor %}
-						</tbody>
-					</table>
-					<a href="#" class="btn btn-sm btn-primary" name="right" data-toggle="modal" data-target="#motionModal" id="rightReset" onclick="resetModal(this);">Add new</a>
-					
-				</div>
-
-				<div class="alert" id="left_motion_sequence" name="left" hidden>
-
-					<!-- LEFT HAND MOTION SEQUENCE -->
-					<table class="table table-hover">
-						<thead style="font-size: 0.7rem;">
-							<tr>
-								<th scope="col">#</th>
-								<th scope="col" style="word-wrap:break-word;width:250px;">Left Hand Motion Sequence</th>
-								<th scope="col">Target Hand Config</th>
-								<th scope="col">Target Location</th>
-								<th scope="col" style="width:50px;">Options</th>
-								<th scope="col" hidden>SIGML</th>
-							</tr>
-						</thead>
-						<tbody id="left_SeqTableBody">
-							{% for motion,tag,config,loc in leftMotionList %}
-							<tr>
-								<th scope="row">{{ forloop.counter }}</th>
-								<td id="left_Seq{{forloop.counter}}_motion">{{tag}}</td>
-								<td id="left_Seq{{forloop.counter}}_config">{{config}}</td>
-								<td id="left_Seq{{forloop.counter}}_loc">{{loc}}</td>
-								<td>
-									<a href="#" class="text-primary" data-toggle="modal" data-target="#motionModal" name="right" id="left_Seq{{forloop.counter}}_modal" onclick="loadModal(this);">Edit</a>
-									<a href="#" class="text-danger" id="left_Seq{{forloop.counter}}_delete" onclick="deleteMotionSequence(this);">Delete</a>
-									<td hidden>
-										<input name="left_Seq" id="left_Seq{{forloop.counter}}_sigml" value="{{motion}}">
-										<input id="left_Seq{{forloop.counter}}_motion_input" name="left_SeqMotionTag" value="{{tag}}">
-										<input id="left_Seq{{forloop.counter}}_config_input" name="left_SeqTargetConfig" value="{{config}}">
-										<input id="left_Seq{{forloop.counter}}_loc_input" name="left_SeqTargetLoc" value="{{loc}}">
-									</td>
-								</td>
-							</tr>
-							{% endfor %}
-						</tbody>
-					</table>
-					<a href="#" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#motionModal" id="left_Reset" name="left_" onclick="resetModal(this);">Add new</a>
-					
-				</div>
-
-				{% include 'inventory/sign_modal.html' %}
-		
-			</div>
-
-		</div>
-
 	</div>
+	
 	<input type="text" name="sigml" value="" hidden>
 </form>
 
