@@ -228,7 +228,9 @@ class SIGML{
         handconstellation.setAttribute("contact", contact);
         handconstellation.appendChild(location_hand_1);
         handconstellation.appendChild(location_hand_2);
-        handconstellation.appendChild(location_bodyarm);
+        if (location_bodyarm != null){
+            handconstellation.appendChild(location_bodyarm);    
+        }
         if (initial){
             this.sign_manual.appendChild(handconstellation);
         }
@@ -443,6 +445,9 @@ function showTwoHandedOptions(){
         document.getElementById("relative_options").setAttribute("hidden",true);
         document.getElementById("split_options").removeAttribute("hidden");
         nondom.removeAttribute("hidden");
+        // deactivate seq constellation
+        document.getElementById("seqconstellation").setAttribute("disabled","true");
+        document.getElementById("seqconstellationattributes").setAttribute("hidden","true");
     }
     reload();
 }
@@ -543,9 +548,6 @@ function loadModal(e){
     document.getElementById("saveModalButton").setAttribute("name", prefix.slice(0,5));
     // search for corresponding sigml in document
     var sigml = document.getElementById(prefix+"sigml");
-
-    // write sigml in modal sigml box
-    document.getElementById("modalSigml").innerHTML = sigml.value;
     var motionDoc = parser.parseFromString(sigml.value, "text/xml");
 
     // rpt_motion
@@ -678,8 +680,6 @@ function loadModal(e){
                     break;
                 }
             }
-
-
         }
     }
     
@@ -747,9 +747,10 @@ function loadModal(e){
 
         if (right_hand_site.getAttribute("digits") == null){
 
-            // click handpart option
-            document.getElementById("lhptype2_modal").click();
-            
+            // activate handpart option
+            document.getElementById("lhptype2_modal").checked = true;
+            showHandSiteOptionsLeftModal();
+
             // handpart
             var lhandpart = right_hand_site.getAttribute("location");
             var lhandpartOptions = document.getElementById("lhandpart_modal").options
@@ -772,8 +773,9 @@ function loadModal(e){
         }
         else {
 
-            // click fingerpart option
-            document.getElementById("lhptype1_modal").click();
+            // activate fingerpart option
+            document.getElementById("lhptype1_modal").checked = true;
+            showHandSiteOptionsLeftModal();
 
             // digits
             var ldigits = right_hand_site.getAttribute("digits");
@@ -809,8 +811,9 @@ function loadModal(e){
         var left_hand_site = handconstellation.children[0];
         if (left_hand_site.getAttribute("digits") == null){
 
-            // click handpart option
-            document.getElementById("hptype2_modal").click();
+            // activate handpart option
+            document.getElementById("hptype2_modal").checked = true;
+            showHandSiteOptionsModal();
             
             // handpart
             var handpart = left_hand_site.getAttribute("location");
@@ -834,8 +837,9 @@ function loadModal(e){
         }
         else {
 
-            // click fingerpart option
-            document.getElementById("hptype1_modal").click();
+            // activate fingerpart option
+            document.getElementById("hptype1_modal").checked = true;
+            showHandSiteOptionsModal();
 
             // digits
             var digits = left_hand_site.getAttribute("digits");
@@ -883,6 +887,7 @@ function loadModal(e){
         motionTagString += motionTags[i]
     }
     document.getElementById("motions").value = motionTagString;
+    document.getElementById("modalSigml").textContent = sigml.value;
 }
 
 // on change of values rewrite sigml within modal
@@ -907,7 +912,7 @@ function reloadModal(){
         var handconfig = sigml.singleHandConfig(false, data, document.getElementById("finalextfidir").value, document.getElementById("finalpalmor").value);
 
         // if symmetric split hand config
-        if (document.getElementById("symmetric").checked){
+        if (document.getElementById("symmetric").checked && document.getElementById("twohanded").checked){
             var lfinalhandshape = document.getElementById('lfinalhandshape');
             var ldata = lfinalhandshape.options[lfinalhandshape.selectedIndex].getAttribute('data');
             var split_handconfig = sigml.splitHandConfig(false, data, document.getElementById("finalextfidir").value, document.getElementById("finalpalmor").value, ldata, document.getElementById("lfinalextfidir").value, document.getElementById("lfinalpalmor").value);
@@ -933,7 +938,7 @@ function reloadModal(){
         }
     }
     else {
-        location_bodyarm = sigml.bodyArmLocation(false, "neutralspace", "none", "none");
+        location_bodyarm = null;
     }
 
     if (document.getElementById("seqconstellation").checked){
@@ -960,12 +965,8 @@ function reloadModal(){
             location_hand_2 = sigml.handPartLocation(location, side);
         }
         var contact = document.getElementById("lrproximity_rel_modal").value;
-        console.log(location_bodyarm);
         var handconstellation = sigml.setHandConstellation(false, contact, location_hand_1, location_hand_2, location_bodyarm);
         tgt_motion.appendChild(handconstellation);
-    }
-    else {
-        tgt_motion.appendChild(location_bodyarm);
     }
 
     // directedmotion

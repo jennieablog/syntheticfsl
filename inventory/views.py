@@ -233,6 +233,33 @@ def sign_new(request):
 			leftContactSide=leftContactSide,
 			sigml=sigml,
 		)
+
+		sign.rightMotionSequence = request.POST.getlist("rightSeq");
+		sign.rightMotionTags = request.POST.getlist("rightSeqMotionTag");
+		sign.rightTargetConfigs = request.POST.getlist("rightSeqTargetConfig");
+		sign.rightTargetLocs = request.POST.getlist("rightSeqTargetLoc");
+
+		sign.leftMotionSequence = request.POST.getlist("left_Seq");
+		sign.leftMotionTags = request.POST.getlist("left_SeqMotionTag");
+		sign.leftTargetConfigs = request.POST.getlist("left_SeqTargetConfig");
+		sign.leftTargetLocs = request.POST.getlist("left_SeqTargetLoc");
+
+		nondom = request.POST.get('nondom');
+		if nondom == "true":
+			sign.nondom = True;
+
+		motionType = request.POST.get("motiondefinition");
+		sign.motionType = motionType;
+		if motionType == "symmetric":
+			sign.symmetry = request.POST.get("symmetry");
+			outofphase = request.POST.get("outofphase");
+			if outofphase == "true":
+				sign.outofphase = True;
+			else:
+				sign.outofphase = False;
+		else:
+			sign.symmetry = "none"
+
 		sign.save();
 		return redirect('sign_list')
 	return render(request, 'inventory/sign_new.html', context)
@@ -345,9 +372,10 @@ def sign_edit(request, pk):
 # Delete a sign.
 @login_required
 def sign_delete(request,pk):
+	print("DELETING");
 	sign = get_object_or_404(Sign, id=pk)
 	sign.delete()
-	return redirect('sign_list')
+	return redirect('sign_list');
 
 def translator(request):
 	
