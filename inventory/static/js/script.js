@@ -1272,6 +1272,30 @@ function backspace(){
     document.getElementById('sigml').innerHTML = sigml;
 }
 
+// function saveTextAsFile(){
+//     var textToWrite = formatXml(document.getElementById('sigml').textContent);
+//     var fileNameToSaveAs = "sigml.xml"
+//     var textFileAsBlob = new Blob([textToWrite], {type:'text/plain'}); 
+//     var downloadLink = document.createElement("a");
+//     downloadLink.download = fileNameToSaveAs;
+//     downloadLink.innerHTML = "Download Text";
+//     if (window.webkitURL != null){
+//         // Chrome allows the link to be clicked
+//         // without actually adding it to the DOM.
+//         downloadLink.href = window.webkitURL.createObjectURL(textFileAsBlob);
+//     }
+//     else{
+//         // Firefox requires the link to be added to the DOM
+//         // before it can be clicked.
+//         downloadLink.href = window.URL.createObjectURL(textFileAsBlob);
+//         downloadLink.onclick = destroyClickedElement;
+//         downloadLink.style.display = "none";
+//         document.body.appendChild(downloadLink);
+//     }
+
+//     downloadLink.click();
+// }
+
 var delay = ( function() {
     var timer = 0;
     return function(callback, ms) {
@@ -1294,3 +1318,25 @@ delay(function(){
     document.getElementById("loading").innerHTML = "JASigning Avatar"
     document.getElementById("animate").click();
 }, 3000 ); // end delay
+
+
+// var canvas = document.querySelector("canvas");
+// var video = document.querySelector("video");
+
+// var videoStream = canvas.captureStream(30);
+// var mediaRecorder = new MediaRecorder(videoStream);
+
+// var chunks = [];
+// mediaRecorder.ondataavailable = function(e) {
+//   chunks.push(e.data);
+// };
+
+// mediaRecorder.onstop = function(e) {
+//   var blob = new Blob(chunks, { 'type' : 'video/mp4' });
+//   chunks = [];
+//   var videoURL = URL.createObjectURL(blob);
+//   video.src = videoURL;
+// };
+// mediaRecorder.ondataavailable = function(e) {
+//   chunks.push(e.data);
+// };

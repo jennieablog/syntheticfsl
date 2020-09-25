@@ -12,9 +12,18 @@
 	<div class="card-body" id="sentence" style="height:150px;"></div>
 
 	<div class="card-body text-right" style="height:80px;">
-		<button type="button" class="btn btn-sm btn-success" onclick="generateSentence();"><i class="fas fa-play"></i>&nbsp;</button>
-		<button type="button" class="btn btn-sm btn-danger" onclick="backspace();"><i class="fas fa-backspace"></i>&nbsp;</button>
-		<button type="button" class="btn btn-sm btn-secondary" onclick="clearSentence();">Reset</button>
+		
+		<div class="row justify-content-end">
+			
+			<button type="button" class="btn btn-sm btn-success" onclick="generateSentence();"><i class="fas fa-play"></i> Load to Avatar</button>&nbsp;
+			<button type="button" class="btn btn-sm btn-danger" onclick="backspace();"><i class="fas fa-backspace"></i> Delete</button>&nbsp;
+			<button type="button" class="btn btn-sm btn-secondary" onclick="clearSentence();">Reset</button>&nbsp;
+
+		</div>
+		
+		<!-- <button class="btn btn-sm btn-secondary">
+			
+		</button> -->
 	</div>
 	
 	<div class="card-footer" style="height:350px;">
@@ -25,9 +34,8 @@
 				{% include 'inventory/translator-partial.html' %}
 		</div>
 	</div>
-
-
 </div>
 <script src="{% static 'js/translate.js' %}" type="text/javascript"></script>
+<video id="animation_video" autoplay controls hidden></video>
 
 {% endblock %}

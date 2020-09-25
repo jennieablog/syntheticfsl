@@ -228,7 +228,9 @@ class SIGML{
         handconstellation.setAttribute("contact", contact);
         handconstellation.appendChild(location_hand_1);
         handconstellation.appendChild(location_hand_2);
-        handconstellation.appendChild(location_bodyarm);
+        if (location_bodyarm != null){
+            handconstellation.appendChild(location_bodyarm);    
+        }
         if (initial){
             this.sign_manual.appendChild(handconstellation);
         }
@@ -443,6 +445,9 @@ function showTwoHandedOptions(){
         document.getElementById("relative_options").setAttribute("hidden",true);
         document.getElementById("split_options").removeAttribute("hidden");
         nondom.removeAttribute("hidden");
+        // deactivate seq constellation
+        document.getElementById("seqconstellation").setAttribute("disabled","true");
+        document.getElementById("seqconstellationattributes").setAttribute("hidden","true");
     }
     reload();
 }
@@ -543,9 +548,6 @@ function loadModal(e){
     document.getElementById("saveModalButton").setAttribute("name", prefix.slice(0,5));
     // search for corresponding sigml in document
     var sigml = document.getElementById(prefix+"sigml");
-
-    // write sigml in modal sigml box
-    document.getElementById("modalSigml").innerHTML = sigml.value;
     var motionDoc = parser.parseFromString(sigml.value, "text/xml");
 
     // rpt_motion
@@ -678,8 +680,6 @@ function loadModal(e){
                     break;
                 }
             }
-
-
         }
     }
     
@@ -747,9 +747,10 @@ function loadModal(e){
 
         if (right_hand_site.getAttribute("digits") == null){
 
-            // click handpart option
-            document.getElementById("lhptype2_modal").click();
-            
+            // activate handpart option
+            document.getElementById("lhptype2_modal").checked = true;
+            showHandSiteOptionsLeftModal();
+
             // handpart
             var lhandpart = right_hand_site.getAttribute("location");
             var lhandpartOptions = document.getElementById("lhandpart_modal").options
@@ -772,8 +773,9 @@ function loadModal(e){
         }
         else {
 
-            // click fingerpart option
-            document.getElementById("lhptype1_modal").click();
+            // activate fingerpart option
+            document.getElementById("lhptype1_modal").checked = true;
+            showHandSiteOptionsLeftModal();
 
             // digits
             var ldigits = right_hand_site.getAttribute("digits");
@@ -809,8 +811,9 @@ function loadModal(e){
         var left_hand_site = handconstellation.children[0];
         if (left_hand_site.getAttribute("digits") == null){
 
-            // click handpart option
-            document.getElementById("hptype2_modal").click();
+            // activate handpart option
+            document.getElementById("hptype2_modal").checked = true;
+            showHandSiteOptionsModal();
             
             // handpart
             var handpart = left_hand_site.getAttribute("location");
@@ -834,8 +837,9 @@ function loadModal(e){
         }
         else {
 
-            // click fingerpart option
-            document.getElementById("hptype1_modal").click();
+            // activate fingerpart option
+            document.getElementById("hptype1_modal").checked = true;
+            showHandSiteOptionsModal();
 
             // digits
             var digits = left_hand_site.getAttribute("digits");
@@ -883,6 +887,7 @@ function loadModal(e){
         motionTagString += motionTags[i]
     }
     document.getElementById("motions").value = motionTagString;
+    document.getElementById("modalSigml").textContent = sigml.value;
 }
 
 // on change of values rewrite sigml within modal
@@ -907,7 +912,7 @@ function reloadModal(){
         var handconfig = sigml.singleHandConfig(false, data, document.getElementById("finalextfidir").value, document.getElementById("finalpalmor").value);
 
         // if symmetric split hand config
-        if (document.getElementById("symmetric").checked){
+        if (document.getElementById("symmetric").checked && document.getElementById("twohanded").checked){
             var lfinalhandshape = document.getElementById('lfinalhandshape');
             var ldata = lfinalhandshape.options[lfinalhandshape.selectedIndex].getAttribute('data');
             var split_handconfig = sigml.splitHandConfig(false, data, document.getElementById("finalextfidir").value, document.getElementById("finalpalmor").value, ldata, document.getElementById("lfinalextfidir").value, document.getElementById("lfinalpalmor").value);
@@ -933,7 +938,7 @@ function reloadModal(){
         }
     }
     else {
-        location_bodyarm = sigml.bodyArmLocation(false, "neutralspace", "none", "none");
+        location_bodyarm = null;
     }
 
     if (document.getElementById("seqconstellation").checked){
@@ -960,12 +965,8 @@ function reloadModal(){
             location_hand_2 = sigml.handPartLocation(location, side);
         }
         var contact = document.getElementById("lrproximity_rel_modal").value;
-        console.log(location_bodyarm);
         var handconstellation = sigml.setHandConstellation(false, contact, location_hand_1, location_hand_2, location_bodyarm);
         tgt_motion.appendChild(handconstellation);
-    }
-    else {
-        tgt_motion.appendChild(location_bodyarm);
     }
 
     // directedmotion
@@ -1028,12 +1029,15 @@ function saveModal(e){
         
         var col1 = document.createElement("td");
         col1.setAttribute("id",hand+"Seq"+seqid+"_motion");
+        col1.setAttribute("style","word-wrap:break-word;width:350px;");
         
         var col2 = document.createElement("td");
         col2.setAttribute("id",hand+"Seq"+seqid+"_config")
+        col2.setAttribute("style","word-wrap:break-word;width:150px;");
         
         var col3 = document.createElement("td");
-        col3.setAttribute("id",hand+"Seq"+seqid+"_loc")
+        col3.setAttribute("id",hand+"Seq"+seqid+"_loc");
+        col3.setAttribute("style","word-wrap:break-word;width:150px;");
 
         var col4 = document.createElement("td");
         var editButton = document.createElement("a");
@@ -1268,6 +1272,61 @@ function backspace(){
     document.getElementById('sigml').innerHTML = sigml;
 }
 
+function formatXml(xml) {
+    var formatted = '';
+    var reg = /(>)(<)(\/*)/g;
+    xml = xml.replace(reg, '$1\r\n$2$3');
+    var pad = 0;
+    jQuery.each(xml.split('\r\n'), function(index, node) {
+        var indent = 0;
+        if (node.match( /.+<\/\w[^>]*>$/ )) {
+            indent = 0;
+        } else if (node.match( /^<\/\w/ )) {
+            if (pad != 0) {
+                pad -= 1;
+            }
+        } else if (node.match( /^<\w[^>]*[^\/]>.*$/ )) {
+            indent = 1;
+        } else {
+            indent = 0;
+        }
+
+        var padding = '';
+        for (var i = 0; i < pad; i++) {
+            padding += '  ';
+        }
+
+        formatted += padding + node + '\r\n';
+        pad += indent;
+    });
+
+    return formatted;
+}
+
+function saveTextAsFile(){
+    var textToWrite = formatXml(document.getElementById('sigml').textContent);
+    var fileNameToSaveAs = "sigml.xml"
+    var textFileAsBlob = new Blob([textToWrite], {type:'text/plain'}); 
+    var downloadLink = document.createElement("a");
+    downloadLink.download = fileNameToSaveAs;
+    downloadLink.innerHTML = "Download Text";
+    if (window.webkitURL != null){
+        // Chrome allows the link to be clicked
+        // without actually adding it to the DOM.
+        downloadLink.href = window.webkitURL.createObjectURL(textFileAsBlob);
+    }
+    else{
+        // Firefox requires the link to be added to the DOM
+        // before it can be clicked.
+        downloadLink.href = window.URL.createObjectURL(textFileAsBlob);
+        downloadLink.onclick = destroyClickedElement;
+        downloadLink.style.display = "none";
+        document.body.appendChild(downloadLink);
+    }
+
+    downloadLink.click();
+}
+
 var delay = ( function() {
     var timer = 0;
     return function(callback, ms) {
@@ -1290,3 +1349,25 @@ delay(function(){
     document.getElementById("loading").innerHTML = "JASigning Avatar"
     document.getElementById("animate").click();
 }, 3000 ); // end delay
+
+
+// var canvas = document.querySelector("canvas");
+// var video = document.querySelector("video");
+
+// var videoStream = canvas.captureStream(30);
+// var mediaRecorder = new MediaRecorder(videoStream);
+
+// var chunks = [];
+// mediaRecorder.ondataavailable = function(e) {
+//   chunks.push(e.data);
+// };
+
+// mediaRecorder.onstop = function(e) {
+//   var blob = new Blob(chunks, { 'type' : 'video/mp4' });
+//   chunks = [];
+//   var videoURL = URL.createObjectURL(blob);
+//   video.src = videoURL;
+// };
+// mediaRecorder.ondataavailable = function(e) {
+//   chunks.push(e.data);
+// };

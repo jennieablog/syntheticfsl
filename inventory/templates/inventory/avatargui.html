@@ -14,14 +14,25 @@
 						</div>
 
 						<div class="card-footer bg-transparent" style="height:80px;">
-							
 							<div class="row" style="padding: 1%;">
-								<div class="col-3" style="height:80%;">
-									<button type="button" id="animate" class="btn btn-success bttnPlaySiGMLText av0"><i class="fas fa-play"></i> Replay</button>
+								<div class="col-6 CWASAAvMenu av0 text-capitalize">
 								</div>
-								<div class="col CWASAAvMenu av0 text-capitalize"></div>
+								<div class="btn-group" role="group" aria-label="Button group with nested dropdown">
+									<button type="button" id="animate" class="btn btn-success bttnPlaySiGMLText av0"><i class="fas fa-play"></i> Replay</button>
+									<!-- <a class="btn btn-secondary" id="video_link" href="#" target="blank">MP4</a>
+									<a class="btn btn-secondary" id="text_link" href="#" target="blank">SiGML</a> -->
+
+									<div class="btn-group" role="group">
+										<button id="btnGroupDrop1" type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+											<i class="fas fa-download"></i>
+										</button>
+										<div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+											<a id="video_link" class="dropdown-item" href="#" target="blank">.MP4</a>
+											<a id="text_link" class="dropdown-item" href="#" target="blank">SiGML</a>
+										</div>
+									</div>
+								</div>
 							</div>
-							<!-- </div> -->
 						</div>
 
 					</div>
