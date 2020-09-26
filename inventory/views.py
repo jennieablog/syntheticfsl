@@ -15,6 +15,8 @@ from django.contrib.auth.decorators import login_required
 from django.template.loader import render_to_string
 from django.http import JsonResponse
 
+from django.db.models import Q
+
 # Display index.
 def index(request):
 	return render(request, 'inventory/index.html')
@@ -387,7 +389,7 @@ def translator(request):
 	signs = Sign.objects.all()
 
 	if url_parameter:
-		signs = Sign.objects.filter(name__icontains=url_parameter)
+		signs = Sign.objects.filter( Q(name__icontains=url_parameter) | Q(description__icontains=url_parameter))
 		if not signs:
 			signs = []
 			for c in url_parameter:
@@ -399,10 +401,12 @@ def translator(request):
 						query = query + c.upper()
 
 			if query:
-				query = "SPELLOUT: " + query
+				# query = ": " + query
 				spellout=True;
 
 	if request.is_ajax():
+		print("QUERY: "+query);
+		# dprint(typeof(query));
 		html = render_to_string(template_name="inventory/translator-partial.html",context={'signs' : signs, 'spellout' : spellout, 'sigml' : sigml, 'query' : query})
 		data_dict = {"html_from_view": html}
 		return JsonResponse(data=data_dict, safe=False)
