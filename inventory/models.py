@@ -163,7 +163,7 @@ class Sign(models.Model):
 	leftPalmOrientation = models.CharField(max_length=5, verbose_name='Left Palm Orientation', default='')
 
 	# Location Definition
-	locationType = models.CharField(max_length=10, verbose_name='Location Type', default='')
+	locationType = models.CharField(max_length=20, verbose_name='Location Type', default='')
 
 	# Split Location
 	rightLocation = models.CharField(max_length=20, verbose_name='Right Hand Location', default='')
@@ -207,7 +207,7 @@ class Sign(models.Model):
 	nondom = models.BooleanField(default=False)
 
 	# SYMMETRY
-	motionType = models.CharField(max_length=10, verbose_name='Motion Type', default='split')
+	motionType = models.CharField(max_length=20, verbose_name='Motion Type', default='split')
 	symmetry = models.CharField(max_length=7, verbose_name='Symmetry', default='split')
 	outofphase = models.BooleanField(default=False)
 
