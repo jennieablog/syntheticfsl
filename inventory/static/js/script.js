@@ -927,9 +927,9 @@ function reloadModal(){
     var location_bodyarm;
     var location_hand_1, location_hand_2;
     if (document.getElementById("seqlocation").checked){
-
+        console.log("CHECKED!!!")
         location_bodyarm = sigml.bodyArmLocation(false, document.getElementById("finalbodypart").value, document.getElementById("finalside").value, document.getElementById("finalproximity").value);
-
+        tgt_motion.appendChild(location_bodyarm);
         if (document.getElementById("seqconstellation").checked){
             motionTags.push("change constellation");
         }
