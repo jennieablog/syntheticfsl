@@ -251,6 +251,8 @@ def sign_new(request):
 			sign.nondom = True;
 
 		motionType = request.POST.get("motiondefinition");
+		if motionType == None:
+			motionType = 'split'
 		sign.motionType = motionType;
 		if motionType == "symmetric":
 			sign.symmetry = request.POST.get("symmetry");

@@ -28,21 +28,19 @@
 
 		<!-- Nav Bar -->
 		<nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
-			<a class="navbar-brand" href="/"><kbd>Synthetic FSL</a></kbd>
+			<a class="navbar-brand" href="/"><kbd>Synthetic FSL</kbd></a>
 			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
 				<span class="navbar-toggler-icon"></span>
 			</button>
 			<div class="collapse navbar-collapse" id="navbarNavAltMarkup">
 				<ul class="navbar-nav mr-auto mt-2 mt-lg-0">
-					<li class="nav-item active">
-						<a class="nav-link" href="{% url 'translator' %}">FSL Translator</a>
-					</li>
-					<li class="nav-item dropdown">
-					<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Inventories</a>
-					<div class="dropdown-menu" aria-labelledby="navbarDropdown">
-						<a class="dropdown-item" href="{% url 'handshape_list' %}">Handshapes</a>
-						<a class="dropdown-item" href="{% url 'sign_list' %}">Signs</a>
-					</div>
+					<li class="nav-item active dropdown">
+						<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Modules</a>
+						<div class="dropdown-menu" aria-labelledby="navbarDropdown">
+							<a class="dropdown-item" href="{% url 'handshape_list' %}">Handshape Module</a>
+							<a class="dropdown-item" href="{% url 'sign_list' %}">Sign Module</a>
+							<a class="dropdown-item" href="{% url 'translator' %}">Sign Sentence Module</a>
+						</div>
 					</li>
 				</ul>
 				{% if user.is_authenticated %}
