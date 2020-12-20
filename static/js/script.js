@@ -927,9 +927,9 @@ function reloadModal(){
     var location_bodyarm;
     var location_hand_1, location_hand_2;
     if (document.getElementById("seqlocation").checked){
-
+        console.log("CHECKED!!!")
         location_bodyarm = sigml.bodyArmLocation(false, document.getElementById("finalbodypart").value, document.getElementById("finalside").value, document.getElementById("finalproximity").value);
-
+        tgt_motion.appendChild(location_bodyarm);
         if (document.getElementById("seqconstellation").checked){
             motionTags.push("change constellation");
         }
@@ -1272,60 +1272,29 @@ function backspace(){
     document.getElementById('sigml').innerHTML = sigml;
 }
 
-function formatXml(xml) {
-    var formatted = '';
-    var reg = /(>)(<)(\/*)/g;
-    xml = xml.replace(reg, '$1\r\n$2$3');
-    var pad = 0;
-    jQuery.each(xml.split('\r\n'), function(index, node) {
-        var indent = 0;
-        if (node.match( /.+<\/\w[^>]*>$/ )) {
-            indent = 0;
-        } else if (node.match( /^<\/\w/ )) {
-            if (pad != 0) {
-                pad -= 1;
-            }
-        } else if (node.match( /^<\w[^>]*[^\/]>.*$/ )) {
-            indent = 1;
-        } else {
-            indent = 0;
-        }
+// function saveTextAsFile(){
+//     var textToWrite = formatXml(document.getElementById('sigml').textContent);
+//     var fileNameToSaveAs = "sigml.xml"
+//     var textFileAsBlob = new Blob([textToWrite], {type:'text/plain'}); 
+//     var downloadLink = document.createElement("a");
+//     downloadLink.download = fileNameToSaveAs;
+//     downloadLink.innerHTML = "Download Text";
+//     if (window.webkitURL != null){
+//         // Chrome allows the link to be clicked
+//         // without actually adding it to the DOM.
+//         downloadLink.href = window.webkitURL.createObjectURL(textFileAsBlob);
+//     }
+//     else{
+//         // Firefox requires the link to be added to the DOM
+//         // before it can be clicked.
+//         downloadLink.href = window.URL.createObjectURL(textFileAsBlob);
+//         downloadLink.onclick = destroyClickedElement;
+//         downloadLink.style.display = "none";
+//         document.body.appendChild(downloadLink);
+//     }
 
-        var padding = '';
-        for (var i = 0; i < pad; i++) {
-            padding += '  ';
-        }
-
-        formatted += padding + node + '\r\n';
-        pad += indent;
-    });
-
-    return formatted;
-}
-
-function saveTextAsFile(){
-    var textToWrite = formatXml(document.getElementById('sigml').textContent);
-    var fileNameToSaveAs = "sigml.xml"
-    var textFileAsBlob = new Blob([textToWrite], {type:'text/plain'}); 
-    var downloadLink = document.createElement("a");
-    downloadLink.download = fileNameToSaveAs;
-    downloadLink.innerHTML = "Download Text";
-    if (window.webkitURL != null){
-        // Chrome allows the link to be clicked
-        // without actually adding it to the DOM.
-        downloadLink.href = window.webkitURL.createObjectURL(textFileAsBlob);
-    }
-    else{
-        // Firefox requires the link to be added to the DOM
-        // before it can be clicked.
-        downloadLink.href = window.URL.createObjectURL(textFileAsBlob);
-        downloadLink.onclick = destroyClickedElement;
-        downloadLink.style.display = "none";
-        document.body.appendChild(downloadLink);
-    }
-
-    downloadLink.click();
-}
+//     downloadLink.click();
+// }
 
 var delay = ( function() {
     var timer = 0;
